@@ -53,7 +53,6 @@ services:
 	- Crm\SubscriptionsModule\DataProvider\FilterUsersSelectionDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsSelectionDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsFormDataProvider
-	- Crm\SubscriptionsModule\Length\LengthMethodFactory
 
 	extensionMethodFactory:
 		class: Crm\SubscriptionsModule\Extension\ExtensionMethodFactory
@@ -61,6 +60,11 @@ services:
 			- registerExtension('extend_actual', Crm\SubscriptionsModule\Extension\ExtendActualExtension())
 			- registerExtension('extend_same_actual', Crm\SubscriptionsModule\Extension\ExtendSameActualExtension())
 			- registerExtension('start_now', Crm\SubscriptionsModule\Extension\StartNowExtension())
+
+	lengthMethodFactory:
+		class: Crm\SubscriptionsModule\Length\LengthMethodFactory
+		setup:
+			- registerExtension('fix_days', Crm\SubscriptionsModule\Length\FixDaysLengthMethod())
 
 	filterLoader:
 		setup:
