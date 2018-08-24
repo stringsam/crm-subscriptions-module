@@ -2,8 +2,8 @@
 
 namespace Crm\SubscriptionsModule\Length;
 
+use DateTime;
 use Nette\Database\Table\IRow;
-use Nette\Utils\DateTime;
 
 interface LengthMethodInterface
 {

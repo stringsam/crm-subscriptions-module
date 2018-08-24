@@ -2,7 +2,7 @@
 
 namespace Crm\SubscriptionsModule\Length;
 
-use Nette\Utils\DateTime;
+use DateTime;
 
 class Length
 {
