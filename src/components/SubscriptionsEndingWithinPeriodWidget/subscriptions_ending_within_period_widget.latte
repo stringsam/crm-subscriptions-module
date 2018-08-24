@@ -1,0 +1,43 @@
+<div class="row text-warning">
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.today}: </strong> <a class="text-warning" style="text-decoration: underline;" href="{plink :Subscriptions:SubscriptionsEnds:default startTime => date('00:00:00 d.m.Y', strtotime('today')), endTime => date('23:59:59 d.m.Y', strtotime('today'))}">{$subscriptionsEndToday} ks</a>
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.ending.between.tooltip} {php echo date('d.m.Y', strtotime('today')) } 00:00:00 - 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.tomorrow}: </strong> <a class="text-warning" style="text-decoration: underline;" href="{plink :Subscriptions:SubscriptionsEnds:default startTime => date('00:00:00 d.m.Y', strtotime('tomorrow')), endTime => date('23:59:59 d.m.Y', strtotime('+1 days'))}">{$subscriptionsEndTomorow} ks</a>
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.ending.between.tooltip} {php echo date('d.m.Y', strtotime('tomorrow')) } 00:00:00 - 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.after_tomorrow}: </strong> <a class="text-warning" style="text-decoration: underline;" href="{plink :Subscriptions:SubscriptionsEnds:default startTime => date('00:00:00 d.m.Y', strtotime('+2 days')), endTime => date('23:59:59 d.m.Y', strtotime('+2 days'))}">{$subscriptionsEndAfterTomorow} ks</a>
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.ending.between.tooltip} {php echo date('d.m.Y', strtotime('+2 day')) } 00:00:00 - 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.seven_days}: </strong> <a class="text-warning" style="text-decoration: underline;" href="{plink :Subscriptions:SubscriptionsEnds:default startTime => date('00:00:00 d.m.Y', strtotime('today')), endTime => date('23:59:59 d.m.Y', strtotime('+7 days'))}">{$subscriptionsEndInOneWeek} ks</a>
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.ending.between.tooltip} {php echo date('d.m.Y', strtotime('today')) } 00:00:00 - {php echo date('d.m.Y', strtotime('+7 days')) } 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.fourteen_days}: </strong> <a class="text-warning" style="text-decoration: underline;" href="{plink :Subscriptions:SubscriptionsEnds:default startTime => date('00:00:00 d.m.Y', strtotime('today')), endTime => date('23:59:59 d.m.Y', strtotime('+14 days'))}">{$subscriptionsEndInTwoWeeks} ks</a>
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.ending.between.tooltip} {php echo date('d.m.Y', strtotime('today')) } 00:00:00 - {php echo date('d.m.Y', strtotime('+14 days')) } 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.thirtyone_days}: </strong> <a class="text-warning" style="text-decoration: underline;" href="{plink :Subscriptions:SubscriptionsEnds:default startTime => date('00:00:00 d.m.Y', strtotime('today')), endTime => date('23:59:59 d.m.Y', strtotime('+31 days'))}">{$subscriptionsEndInOneMonth} ks</a>
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.ending.between.tooltip} {php echo date('d.m.Y', strtotime('today')) } 00:00:00 - {php echo date('d.m.Y', strtotime('+31 days')) } 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+</div>

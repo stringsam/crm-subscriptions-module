@@ -1,0 +1,208 @@
+menu:
+	stats: Predplatné a predplatitelia
+	endings: Končiace predplatné
+	my_subscriptions: Moje predplatné
+	subscriptions: Predplatné
+	subscription_types: Typy predplatného
+	subscriptions_generator: Generátor predplatného
+
+data:
+	subscriptions:
+		fields:
+			subscription_type: Typ predplatného
+			payment_gateway: Platobná brána
+			start_time: Začiatok
+			end_time: Koniec
+			type: Typ
+			note: Poznámka
+			address_id: Adresa
+			payment: Platba
+		required:
+			start_time: Začiatok je povinný
+			end_time: Koniec je povinný
+			subscription_type_id: Prekročený limit na užívateľa
+		placeholder:
+			start_time: napríklad 13.2.2015
+			end_time: napríklad 13.2.2015
+			note: Ľubovoľná poznámka k predplatnému
+		errors:
+			end_time_before_start_time: Koniec musí nasledovať po začiatku
+			no_subscription_type_id: Nebol vybraný typ predplatného
+			start_time_before_paid_at: "Začiatok predplatného nemôže začať pred dátumom zaplatenia (%paid_at%)"
+		description:
+			end_time: Nechať prázdne pre automatické vyplnenie podľa vybraného typu predplatného.
+
+	subscription_types:
+		fields:
+			name: Názov
+			code: Identifikátor
+			next_subscription_type_id: Nasledujúce predplatné
+			price: Cena
+			length: "Dĺžka (dni)"
+			extending_length: "Dĺžka (dni) pri predĺžení predplatného"
+			fixed_end: "Fixný koniec predplatného"
+			user_label: Verejný popis
+			type: Typ
+			limit_per_user: "Max. počet predplatných na používateľa"
+			content: Obsah
+			active: Aktívne
+			visible: Viditeľne
+			web: Web
+			print_friday: Print Friday
+			print: Print
+			club: Club
+			mobile: Mobile
+			sorting: Poradie
+			description: Popis
+			default: Default
+			magazines: Magazíny
+			available_upgrades: Dostupné upgrady
+			sales_funnels: Dostupné v oknách
+			stats: Štatistiky
+			ask_address: Vypýtaj adresu
+			disable_notifications: Vypnuté notifikácie
+			extension_method_id: Spôsob predĺženia predplatného
+			length_method_id: Spôsob výpočtu dĺžky predplatného
+			recurrent_charge_before: "Realizácia nasledujúcej platby (počet hodín pred vypršaním)"
+		required:
+			name: Názov je povinný
+			length: "Dĺžka (v dňoch) je povinný"
+			price: Cena je povinná
+		validation:
+			integer:
+				limit_per_user: Musí byť číslo
+			minimum:
+				limit_per_user: Minimálna hodnota 1
+		placeholder:
+			name: napríklad Ročné predplatné
+			code: napríklad year123
+			user_label: napríklad Mesačné predplatné
+			next_subscription_type_id: ID
+			length: napríklad 31
+			extending_length: napríklad 35
+			fixed_end: napríklad 3.5.2020
+			price: "napríklad 12.99"
+		values:
+			active: Aktívne
+			inactive: Neaktívne
+			visible: Viditeľné
+			hidden: Skryté
+
+frontend:
+	my:
+		history: História predplatných
+		actual: Aktuálne predplatné
+		upgrade: Navýšenie predplatného
+		no_subscription: "Nemáte žiadne predplatné"
+		buy_new_subscription: Môžete si ho zakúpiť a získať tak prístup ku obsahu.
+	actual_subscription_widget:
+		active_subscription: 'Vaše predplatné v súčasnosti <span class="label label-success"><b>je aktívne</b></span>'
+		active_recurrent: 'Máte zvolený najpohodlnejší spôsob platby za predplatné s automatickým obnovovaním. Najbližšie sa vaše predplatné obnoví'
+		stopped_recurrent: Vaše automatické predplatné je zastavené.
+		no_subscription: 'Vaše predplatné v súčasnosti <span class="label label-danger"><b>nie je</b></span> aktívne'
+		refresh: Obnoviť predplatné
+		active_without_extension: Vaše predplatné sa skončí <strong>%end_time%</strong> a nebude automaticky obnovené.
+		extend: Predĺžiť predplatné
+
+admin:
+	subscriptions:
+		new:
+			title: Nové predplatné
+			header: Nové predplatné pre %name%
+			back: späť na používateľa
+
+		edit:
+			title: Uprav predplatné %name%
+			header: Uprav predplatné
+			back: späť na používateľa
+
+		messages:
+			subscription_created: Predplatné bolo vytvorené.
+			subscription_updated: Predplatné bolo upravené.
+
+	subscriptions_ends:
+		default:
+			title: Končiace predplatné
+			without_next: Nepredĺžené
+			without_recurrent: Bez recurrentu
+			free_subscriptions: Bezplatné
+
+	subscription_types:
+		default:
+			title: Typ predplatného
+			new: Nový typ predplatného
+			hidden: Skryté - nepoužívané
+		edit:
+			title: Typ predplatného
+			header: Uprav typ predplatného
+			back: späť na typ predplatného
+		new:
+			title: Nový typ predplatného
+			back: späť na typ predplatného
+		show:
+			back: Späť na zoznam
+			edit: Uprav typ predplatného
+			no_magazines_message: Tento typ predplatného nieje spojený so žiadným magazínom
+			no_upgrades_message: Tento typ predplatného neumožňuje upgrade.
+			no_sales_funnels_message: Tento typ predplatného nie je priradený ku žiadnemu platobnému oknu.
+		messages:
+			subscription_type_created: Typ predplatného bol vytvorený.
+			subscription_type_updated: Typ predplatného bol upravený.
+			subscription_type_not_found: Typ predplatného sa nepodarilo nájsť.
+			subscription_types_upgrade_created: Upgrade predplatného bol vytvorený.
+			subscription_types_upgrade_deleted: Upgrade predplatného bol zmazaný.
+
+	subscription_generator:
+		form:
+			header: Generátor predplatného
+			subscriptions_count: Počet predplatných
+			generate: Vygeneruj predplatné
+			send: Odošli
+		description:
+			generate: "Ak sa nezaškrtne tak sa len skontrolujú vstupy a vypiše sa stav."
+			start_time: "Ak nie je zadané, predplatné budú platiť od aktuálneho času."
+			end_time: "Ak nie je zadané, koniec predplatného bude vypočítane podľa počtu dní vybraného predplatného."
+			type: "Pre generované predplatné ktoré majú byť darované je treba použiť 'gift'."
+		errors:
+			unknown_variable_symbol: Nenašla sa platba s variabilným symbolom %variable_symbol%.
+			number: Musí byť číslo
+		required:
+			subscriptions_count: Je potrebné vyplniť počet predplatných
+		placeholder:
+			subscriptions_count: napríklad 14
+		messages:
+			created: "Bolo vytvorených %subscriptions_count% predplatných pre používateľa <a href=\"%link%\" target=\"_blank\">%email%</a>. "
+			creating: "Budeme vytvárať %count% predplatných platných od %start_time% do %end_time%. "
+			payment: "Platba s variabilným symbolom patri používateľovi %email% so sumou %amount% €. "
+			no_payment: "Nebola zadaná platba - predplatné nebudú k žiadnej platbe priradené. "
+			user: "Nové predplatné budú pridané používateľovi %email% #%id%. "
+			new_user: "Bude vytvorený nový používateľ s emailom %email%. "
+
+	# componenty
+
+	actual_user_subscriptions:
+		header: Predplatné
+		no_subscription: Nemá aktuálne predplatné
+		add_subscription: Pridaj predplatné
+
+	user_subscriptions:
+		header: Predplatné
+		no_subscription_header: "Žiaden záznam"
+		no_subscription: "Tento používateľ nemá žiadne predplatné."
+		new_subscription: Pridaj nové predplatné manuálne
+		gift_header: Darované predplatné
+
+	subscription_button:
+		title: Predplatné
+
+	actual_subscription_label:
+		subscription: Predplatné
+		actual: Aktuálne
+
+	filter_users:
+		subscription_type: Typ predplatného
+		actual_subscription: Iba aktuálne
+
+data_provider:
+	delete:
+		three_months_active: Používateľ mal v posledných troch mesiacoch aktívne predplatné a nemôže byť zmazaný

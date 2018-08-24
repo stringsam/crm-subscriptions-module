@@ -1,0 +1,220 @@
+{block #title}{$type->name}{/block}
+
+{block #content}
+
+<div class="row">
+  <div class="col-md-12">
+    <a n:href="default"><i class="fa fa-angle-left"></i> {_subscriptions.admin.subscription_types.show.back}</a>
+
+    <div class="page-header">
+      <h1>
+        <small>[{$type->id}]</small>
+        {$type->name}
+        <a n:href="edit $type->id" class="btn btn-primary btn-lg pull-right"><i class="fa fa-pencil"></i> {_subscriptions.admin.subscription_types.show.edit}</a>
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.code}:</b> <code>{$type->code}</code></li>
+      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.type}:</b> <i>{$type->type}</i></li>
+      <li class="list-group-item">
+        <b>{_subscriptions.data.subscription_types.fields.extension_method_id}:</b>
+        {$type->extension_method->title}
+        <button type="button" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="{$type->extension_method->description}"><i class="fa fa-question-circle"></i></button>
+      </li>
+      <li class="list-group-item">
+        <b>{_subscriptions.data.subscription_types.fields.length_method_id}:</b>
+        {$type->length_method->title}
+        <button type="button" class="btn btn-xs btn-default" data-toggle="tooltip" data-placement="top" title="{$type->length_method->description}"><i class="fa fa-question-circle"></i></button>
+      </li>
+      <li class="list-group-item"><b>{_system.fields.created}:</b> <span class="text-muted">{$type->created_at|userDate}</span></li>
+      <li class="list-group-item"><b>{_system.fields.updated}:</b> <span class="text-muted">{$type->modified_at|userDate}</span></li>
+      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.price}:</b> {$type->price}&nbsp;&euro;</li>
+      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.limit_per_user}:</b> {$type->limit_per_user}</li>
+      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.recurrent_charge_before}:</b> {if $type->recurrent_charge_before}{$type->recurrent_charge_before} hours{else}<small>--</small>{/if}</li>
+      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.next_subscription_type_id}:</b> {if $type->next_subscription_type_id}<a n:href="show $type->next_subscription_type_id">{$type->next_subscription_type->name}</a>{else}<small>--</small>{/if}</li>
+    </ul>
+  </div>
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.content}:</b> {$type|typeContent|noescape}</li>
+      <li class="list-group-item">
+        <b>{_subscriptions.data.subscription_types.fields.active}:</b>
+        {if $type->active}
+          <span class="label label-success">{_subscriptions.data.subscription_types.values.active}</span>
+        {else}
+          <span class="label label-default">{_subscriptions.data.subscription_types.values.inactive}</span>
+        {/if}
+      </li>
+      <li class="list-group-item">
+        <b>{_subscriptions.data.subscription_types.fields.visible}:</b>
+        {if $type->visible}
+          <span class="label label-success">{_subscriptions.data.subscription_types.values.visible}</span>
+        {else}
+          <span class="label label-default">{_subscriptions.data.subscription_types.values.hidden}</span>
+        {/if}
+      </li>
+      <li n:if="$type->ask_address" class="list-group-item">
+        <span class="label label-default">{_subscriptions.data.subscription_types.fields.ask_address}</span>
+      </li>
+      <li n:if="$type->disable_notifications" class="list-group-item">
+        <span class="label label-default">{_subscriptions.data.subscription_types.fields.disable_notifications}</span>
+      </li>
+      <li class="list-group-item">
+        <b>{_subscriptions.data.subscription_types.fields.length}:</b>
+        {if $type->fixed_end}
+          {$type->fixed_end|userDate}
+        {else}
+          {$type->length}
+          {if $type->extending_length}
+            / {_subscriptions.data.subscription_types.fields.extending_length} {$type->extending_length}
+          {/if}
+        {/if}
+      </li>
+      <li class="list-group-item">
+        <b>{_subscriptions.data.subscription_types.fields.default}:</b>
+        {if $type->default}
+          <span class="label label-success">{_system.yes}</span>
+        {else}
+          <span class="label label-default">{_system.no}</span>
+        {/if}
+      </li>
+      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.sorting}:</b> {$type->sorting}</li>
+      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.user_label}:</b> {$type->user_label}</li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.magazines}</h2>
+    {var $pairs = $type->related('subscription_type_magazines')}
+    {if $pairs->count('*')}
+      <ul class="list-group">
+        <li n:foreach="$pairs as $pair" class="list-group-item">
+          <a n:href=":Issues:MagazinesAdmin:show $pair->magazine_id">{$pair->magazine->name}</a>
+          <code>{$pair->magazine->identifier}</code>
+          <small class="text-muted">{$pair->magazine->related('issues')->count('*')} {_issues.data.magazines.fields.issues|lower}</small>
+        </li>
+      </ul>
+    {else}
+      <p class="text-muted well text-center">{_subscriptions.admin.subscription_types.show.no_magazines_message}</p>
+    {/if}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.sales_funnels}</h2>
+    {if $usedSalesFunnels->count('*')}
+      <ul class="list-group">
+        <li n:foreach="$usedSalesFunnels as $funnel" class="list-group-item">
+          <a n:href=":SalesFunnel:SalesFunnelsAdmin:show $funnel->id">{$funnel->name}</a>
+          <code>{$funnel->url_key}</code>
+        </li>
+      </ul>
+    {else}
+      <p class="text-muted well text-center">{_subscriptions.admin.subscription_types.show.no_sales_funnels_message}</p>
+    {/if}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.available_upgrades}</h2>
+    {if $availableUpgrades->count('*') > 0}
+      <ul class="list-group">
+        <li n:foreach="$availableUpgrades as $upgrade" class="list-group-item">
+          <a n:href="show $upgrade->to_subscription_type_id">{$upgrade->to_subscription_type->name}</a>
+          {$upgrade->to_subscription_type|typeContent|noescape}
+          <span class="text-muted">{$upgrade->to_subscription_type->price}&nbsp;&euro;</span>
+          <a n:href="removeUpgrade! $upgrade->from_subscription_type_id, $upgrade->to_subscription_type_id" class="btn btn-default btn-xs pull-right"><i class="fa fa-trash"></i> Zmazať</a>
+          <small class="text-muted pull-right" style="margin-right:20px;">{$upgrade->type}</small>
+        </li>
+      </ul>
+      <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">Pridaj upgrade</a>
+    {else}
+      <p class="text-muted well text-center">
+        {_subscriptions.admin.subscription_types.show.no_upgrades_message}<br>
+        <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">Pridaj upgrade</a>
+      </p>
+    {/if}
+  </div>
+  <div id="subscriptionTypesUpgradeFormDiv" class="col-md-12" style="display:none">
+    {control subscriptionTypesUpgradesForm}
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.stats}</h2>
+    <ul class="nav nav-tabs" role="tablist">
+      {foreach $reportTables as $title => $report}
+        <li role="presentation"{first} class="active"{/first}><a aria-controls="{$title|webalize}" role="tab" data-toggle="tab" href="#{$title|webalize}">{$title}</a></li>
+      {/foreach}
+    </ul>
+
+    <div class="tab-content">
+      {foreach $reportTables as $title => $reports}
+        <div role="tabpanel" class="tab-pane{first} active{/first}" id="{$title|webalize}" style="margin-top:1em">
+
+          {var $cols = []}
+          {foreach $reports as $report}
+            {foreach array_keys($report['data']) as $key}
+              {if !in_array($key, $cols)}{var $cols[] = $key}{/if}
+            {/foreach}
+          {/foreach}
+
+          <table class="table table-bordered table-hover"">
+          <thead>
+            <tr>
+              <th></th>
+              <th n:foreach="$cols as $col">{$col}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr n:foreach="$reports as $report">
+              <td>
+                {$report['label']}
+              </td>
+
+              {foreach $cols as $col}
+                {var $check = false}
+                {ifset $report['check'][$col]}
+                  {var $check = $report['check'][$col]}
+                {/ifset}
+                <td{if $check === 0} class="success"{elseif $check !== false} class="danger"{/if}>
+
+                  {ifset $report['data'][$col]}
+                    {$report['data'][$col]}
+                  {else}
+                    0
+                  {/ifset}
+
+                  {if $check !== false && $check !== 0}
+                    <small class="text-muted">({$check})</small>
+                  {/if}
+                </td>
+              {/foreach}
+            </tr>
+          </tbody>
+          </table>
+        </div>
+      {/foreach}
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12">
+    <hr>
+    {control subscriptionsGraph}
+  </div>
+</div>

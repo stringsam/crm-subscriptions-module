@@ -1,0 +1,68 @@
+services:
+	moduleManager:
+		setup:
+			- addModule(Crm\SubscriptionsModule\SubscriptionsModule())
+
+	- Crm\SubscriptionsModule\Builder\SubscriptionTypeBuilder
+	- Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository
+	- Crm\SubscriptionsModule\Repository\SubscriptionsRepository
+	- Crm\SubscriptionsModule\Repository\PrintSubscriptionsRepository
+	- Crm\SubscriptionsModule\Repository\SubscriptionPaymentsRepository
+	- Crm\SubscriptionsModule\Repository\SubscriptionTypesUpgradesRepository
+	- Crm\SubscriptionsModule\Repository\SubscriptionExtensionMethodsRepository
+	- Crm\SubscriptionsModule\Repository\SubscriptionTypeNamesRepository
+	- Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository
+	- Crm\SubscriptionsModule\Forms\SubscriptionTypesFormFactory
+	- Crm\SubscriptionsModule\Forms\SubscriptionFormFactory
+	- Crm\SubscriptionsModule\Forms\SubscriptionsGeneratorFormFactory
+	- Crm\SubscriptionsModule\Forms\SubscriptionTypesUpgradesFormFactory
+	- Crm\SubscriptionsModule\Events\PaymentStatusChangeHandler
+	- Crm\SubscriptionsModule\Generator\SubscriptionsGenerator
+	- Crm\SubscriptionsModule\Components\SubscriptionButtonFactory
+	- Crm\SubscriptionsModule\Components\ActualUserSubscriptions
+	- Crm\SubscriptionsModule\Components\TotalSubscriptionsStatWidget
+	- Crm\SubscriptionsModule\Components\ActualSubscribersStatWidget
+	- Crm\SubscriptionsModule\Components\ActualSubscriptionsStatWidget
+	- Crm\SubscriptionsModule\Components\TodaySubscriptionsStatWidget
+	- Crm\SubscriptionsModule\Components\MonthSubscriptionsStatWidget
+	- Crm\SubscriptionsModule\Components\MonthToDateSubscriptionsStatWidget
+	- Crm\SubscriptionsModule\Components\EndingSubscriptionsWidget
+	- Crm\SubscriptionsModule\Components\RenewedSubscriptionsEndingWithinPeriodWidget
+	- Crm\SubscriptionsModule\Components\SubscriptionsEndingWithinPeriodWidget
+	- Crm\SubscriptionsModule\Components\MonthSubscriptionsSmallBarGraphWidget
+	- Crm\SubscriptionsModule\Components\ActualSubscriptionLabel
+	- Crm\SubscriptionsModule\Components\UserSubscriptionsListing
+	- Crm\SubscriptionsModule\Components\SubscriptionEndsStatsFactoryInterface
+	- Crm\SubscriptionsModule\Components\ActualSubscriptionWidget
+	- Crm\SubscriptionsModule\Commands\ChangeSubscriptionsStateCommand
+	- Crm\SubscriptionsModule\Commands\CalculateAveragesCommand
+	- Crm\SubscriptionsModule\Api\v1\UsersSubscriptionsHandler
+	- Crm\SubscriptionsModule\Upgrade\Expander
+	- Crm\SubscriptionsModule\Subscription\ActualUserSubscription
+	- Crm\SubscriptionsModule\Events\NewAddressHandler
+	- Crm\SubscriptionsModule\Api\v1\CreateSubscriptionHandler
+	- Crm\SubscriptionsModule\Repository\ContentAccessRepository
+	- Crm\SubscriptionsModule\Upgrade\UpgradeFactory
+	- Crm\SubscriptionsModule\User\SubscriptionsUserDataProvider
+	- Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria
+	- Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder
+	- Crm\SubscriptionsModule\Seeders\SubscriptionTypeNamesSeeder
+	- Crm\SubscriptionsModule\Seeders\SubscriptionLengthMethodSeeder
+	- Crm\SubscriptionsModule\Access\SubscriptionAccessProvider
+	- Crm\SubscriptionsModule\DataProvider\FilterUsersFormDataProvider
+	- Crm\SubscriptionsModule\DataProvider\FilterUsersSelectionDataProvider
+	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsSelectionDataProvider
+	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsFormDataProvider
+	- Crm\SubscriptionsModule\Length\LengthMethodFactory
+
+	extensionMethodFactory:
+		class: Crm\SubscriptionsModule\Extension\ExtensionMethodFactory
+		setup:
+			- registerExtension('extend_actual', Crm\SubscriptionsModule\Extension\ExtendActualExtension())
+			- registerExtension('extend_same_actual', Crm\SubscriptionsModule\Extension\ExtendSameActualExtension())
+			- registerExtension('start_now', Crm\SubscriptionsModule\Extension\StartNowExtension())
+
+	filterLoader:
+		setup:
+			- register('typeContent', [Crm\SubscriptionsModule\Helpers\TypeContentHelper(), process])
+			- register('typeLabel', [Crm\SubscriptionsModule\Helpers\TypeLabel(), process])

@@ -1,0 +1,13 @@
+<div class="panel panel-default">
+  <div class="panel-heading">{_subscriptions.admin.actual_user_subscriptions.header}</div>
+  <div class="panel-body">
+	{if $actualSubscription}
+	  <b>{$actualSubscription->start_time|userDate} - {$actualSubscription->end_time|userDate}</b>
+	  <br>
+	{else}
+	  <p class="bg-warning">{_subscriptions.admin.actual_user_subscriptions.no_subscription}</p>
+	{/if}
+
+	<a href="{plink :Subscriptions:SubscriptionsAdmin:New $userId}" class="btn btn-default"><i class="fa fa-magic"></i> {_subscriptions.admin.actual_user_subscriptions.add_subscription}</a>
+  </div>
+</div>

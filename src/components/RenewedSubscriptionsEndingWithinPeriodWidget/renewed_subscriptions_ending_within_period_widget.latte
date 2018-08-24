@@ -1,0 +1,43 @@
+<div class="row text-success">
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.today}: </strong> {$subscriptionsRenewedToday} ks
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.renewed.between.tooltip} {php echo date('d.m.Y', strtotime('today')) } 00:00:00 - 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.tomorrow}: </strong> {$subscriptionsRenewedTomorow} ks
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.renewed.between.tooltip} {php echo date('d.m.Y', strtotime('tomorrow')) } 00:00:00 - 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.after_tomorrow}: </strong> {$subscriptionsRenewedAfterTomorow} ks
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.renewed.between.tooltip} {php echo date('d.m.Y', strtotime('+2 day')) } 00:00:00 - 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.seven_days}: </strong> {$subscriptionsRenewedInOneWeek} ks
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.renewed.between.tooltip} {php echo date('d.m.Y', strtotime('today')) } 00:00:00 - {php echo date('d.m.Y', strtotime('+7 days')) } 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.fourteen_days}: </strong> {$subscriptionsRenewedInTwoWeeks} ks
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.renewed.between.tooltip} {php echo date('d.m.Y', strtotime('today')) } 00:00:00 - {php echo date('d.m.Y', strtotime('+14 days')) } 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+
+    <div class="col-md-2">
+        <p>
+            <strong>{_dashboard.time.thirtyone_days}: </strong> {$subscriptionsRenewedInOneMonth} ks
+            <i data-toggle="tooltip" data-placement="top" title="{_dashboard.subscriptions.renewed.between.tooltip} {php echo date('d.m.Y', strtotime('today')) } 00:00:00 - {php echo date('d.m.Y', strtotime('+31 days')) } 23:59:59" class="fa fa-question-circle"></i>
+        </p>
+    </div>
+</div>

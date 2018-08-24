@@ -1,0 +1,64 @@
+{block #title}{_subscriptions.admin.subscriptions_ends.default.title}{/block}
+
+{block #content}
+
+<div class="row">
+
+  <div class="col-md-12">
+    <h1>
+      {_subscriptions.admin.subscriptions_ends.default.title}
+      <small>{count($subscriptions)}</small>
+    </h1>
+    <hr>
+  </div>
+
+  <div class="col-md-12">
+    {control adminFilterForm}
+    <hr>
+  </div>
+
+  {control subscriptionEndsStats}
+
+  <div class="col-md-12">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>E-mail</th>
+          <th>{_subscriptions.menu.subscriptions}</th>
+          <th>Payment</th>
+          <th>{_subscriptions.data.subscription_types.fields.content}</th>
+          <th>{_subscriptions.data.subscriptions.fields.start_time}</th>
+          <th>{_subscriptions.data.subscriptions.fields.end_time}</th>
+          <th>{_subscriptions.data.subscriptions.fields.type}</th>
+          <th>{_system.fields.created}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr n:foreach="$subscriptions as $subscription">
+          <td><a n:href=":Users:UsersAdmin:show $subscription->user_id">{$subscription->user->email}</a></td>
+          <td>
+            {$subscription->subscription_type->name}
+            {if $subscription->next_subscription_id}
+              <i class="fa fa-check"></i>
+              <small><i class="fa fa-level-up"></i> {$subscription->next_subscription->subscription_type->name}</small>
+            {/if}
+          </td>
+          <td>
+            {var $payment = $subscription->related('payments')->limit(1)->fetch()}
+            {if $payment}
+              {$payment->payment_gateway->name}
+              <small>{$payment->amount}&nbsp;&euro;</small>
+            {/if}
+         </td>
+          <td>{$subscription->subscription_type|typeContent|noescape}</td>
+          <td>{$subscription->start_time|userDate}</td>
+          <td>{$subscription->end_time|userDate}</td>
+          <td>{$subscription->type|typeLabel}</td>
+          <td>{$subscription->created_at|userDate}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+

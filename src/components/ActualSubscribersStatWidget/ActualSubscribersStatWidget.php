@@ -1,0 +1,48 @@
+<?php
+
+namespace Crm\SubscriptionsModule\Components;
+
+use Crm\ApplicationModule\Widget\BaseWidget;
+use Crm\ApplicationModule\Widget\WidgetManager;
+use Crm\SegmentModule\Repository\SegmentsRepository;
+use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
+
+class ActualSubscribersStatWidget extends BaseWidget
+{
+    private $templateName = 'actual_subscribers_stat_widget.latte';
+
+    private $subscriptionsRepository;
+
+    private $segmentsRepository;
+
+    public function __construct(
+        WidgetManager $widgetManager,
+        SubscriptionsRepository $subscriptionsRepository,
+        SegmentsRepository $segmentsRepository
+    ) {
+        parent::__construct($widgetManager);
+        $this->subscriptionsRepository = $subscriptionsRepository;
+        $this->segmentsRepository = $segmentsRepository;
+    }
+
+    public function identifier()
+    {
+        return 'actualsubscribersstatwidget';
+    }
+
+    public function render()
+    {
+        if ($this->segmentsRepository->exists('users_with_active_subscriptions')) {
+            $this->template->totalSubscribersLink = $this->presenter->link(
+                ':Segment:StoredSegments:show',
+                $this->segmentsRepository->findByCode('users_with_active_subscriptions')->id
+            );
+        }
+
+        $this->template->totalSubscribers = $this->subscriptionsRepository->subscribers()
+            ->select('COUNT(DISTINCT(user.id)) AS total')
+            ->fetch()->total;
+        $this->template->setFile(__DIR__ . DIRECTORY_SEPARATOR . $this->templateName);
+        $this->template->render();
+    }
+}

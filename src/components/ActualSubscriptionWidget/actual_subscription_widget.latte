@@ -1,0 +1,26 @@
+<div class="page-header">
+    <h1>{_subscriptions.frontend.my.actual}</h1>
+</div>
+
+<div class="well-lg well">
+    {if $actualUserSubscription->hasActual()}
+        {_subscriptions.frontend.actual_subscription_widget.active_subscription|noescape}
+        <br>
+
+        {if $actualUserSubscription->isRecurrent()}
+          {if $actualUserSubscription->isActiveRecurrent()}
+            {_subscriptions.frontend.actual_subscription_widget.active_recurrent} {$actualUserSubscription->getRecurrent()->charge_at|userDate}.
+        {else}
+          {_subscriptions.frontend.actual_subscription_widget.stopped_recurrent}
+          <a n:if="$actualUserSubscription->getRecurrent()" href="{plink :Payments:Payments:Reactivate $actualUserSubscription->getRecurrent()->id}" class="btn btn-primary">{_subscriptions.frontend.actual_subscription_widget.refresh}</a>
+        {/if}
+        {else}
+            {_subscriptions.frontend.actual_subscription_widget.active_without_extension, ['end_time' => call_user_func($this->filters->userdate, $actualUserSubscription->getSubscription()->end_time, true)]|noescape}
+        {/if}
+    {else}
+        {_subscriptions.frontend.actual_subscription_widget.no_subscription|noescape}
+        <br>
+        <br>
+        <a href="{plink :Subscriptions:Subscriptions:new}" class="btn btn-green">{_subscriptions.frontend.actual_subscription_widget.extend}</a>
+    {/if}
+</div>

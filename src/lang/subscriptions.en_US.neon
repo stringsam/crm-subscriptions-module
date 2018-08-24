@@ -1,0 +1,208 @@
+menu:
+	stats: Subscriptions and subscribers
+	endings: Ending subscriptions
+	my_subscriptions: My subscriptions
+	subscriptions: Subscriptions
+	subscription_types: Subscription types
+	subscriptions_generator: Subscriptions generator
+
+data:
+	subscriptions:
+		fields:
+			subscription_type: Subscription type
+			payment_gateway: Payment gateway
+			start_time: Start
+			end_time: End
+			type: Type
+			note: Note
+			address_id: Address
+			payment: Payment
+		required:
+			start_time: Start time is required
+			end_time: End time is required
+			subscription_type_id: Limit per user reached
+		placeholder:
+			start_time: for example 13.2.2015
+			end_time: for example 13.2.2015
+			note: Your custom note to subscription
+		errors:
+			end_time_before_start_time: End time must be after start time
+			no_subscription_type_id: No subscription type
+			start_time_before_paid_at: "Subscription start time cannot be before payment paid date (%paid_at%)"
+		description:
+			end_time: Leave empty to calculate automaticaly based on selected subscription type.
+
+	subscription_types:
+		fields:
+			name: Name
+			code: Identifier
+			next_subscription_type_id: Next subscription
+			price: Price
+			length: "Length (days)"
+			extending_length: "Length (days) when continue subscription"
+			fixed_end: "Fixed subscription end time"
+			user_label: User label
+			type: Type
+			limit_per_user: Max. number of subscriptions per user
+			content: Content
+			active: Active
+			visible: Visible
+			web: Web
+			print_friday: Print Friday
+			print: Print
+			club: Club
+			mobile: Mobile
+			sorting: Sorting
+			description: Description
+			default: Default
+			magazines: Magazines
+			available_upgrades: Available upgrades
+			sales_funnels: Available in sales funnels
+			stats: Stats
+			ask_address: Ask address
+			disable_notifications: Disabled notifications
+			extension_method_id: Extension method
+			length_method_id: Subscription length calculcation method
+			recurrent_charge_before: "Recurrent charge before (hours)"
+		required:
+			name: Name is required
+			length: "Length (in days) is required"
+			price: Price is required
+		validation:
+			integer:
+				limit_per_user: Must be number
+			minimum:
+				limit_per_user: Minum value 1
+		placeholder:
+			name: for example Yearly subscription
+			code: for example year123
+			user_label: for example Monthly subscription
+			next_subscription_type_id: ID
+			length: for example 31
+			extending_length: for example 35
+			fixed_end: for example 3.5.2020
+			price: "for example 12.99"
+		values:
+			active: Active
+			inactive: Inactive
+			visible: Visible
+			hidden: Hidden
+
+frontend:
+	my:
+		history: Subscriptions history
+		actual: Actual subscription
+		upgrade: Upgrade subscription
+		no_subscription: "You don't have any subscription."
+		buy_new_subscription: You can buy new subscription.
+	actual_subscription_widget:
+		active_subscription: 'Your subscription <span class="label label-success"><b>is active</b></span>'
+		active_recurrent: 'You have recurrent payment enabled. Next charge will occur'
+		stopped_recurrent: Recurring payment is disabled
+		no_subscription: 'Your subscription <span class="label label-danger"><b>is not</b></span> active now'
+		refresh: Renew subscription
+		active_without_extension: Your subscription will end on <strong>%end_time%</strong> and will not be renewed automatically.
+		extend: Renew subscription
+
+admin:
+	subscriptions:
+		new:
+			title: New subscription
+			header: New subscription for %name%
+			back: back to user
+
+		edit:
+			title: Edit subscription %name%
+			header: Edit subscription
+			back: back to user
+
+		messages:
+			subscription_created: Subscription was created.
+			subscription_updated: Subscription was updated.
+
+	subscriptions_ends:
+		default:
+			title: Subscriptions ends
+			without_next: Without next
+			without_recurrent: Without recurrent
+			free_subscriptions: Free subscriptions
+
+	subscription_types:
+		default:
+			title: Subscription types
+			new: New subscription type
+			hidden: Hidden
+		edit:
+			title: Subscription type
+			header: Edit subscription type
+			back: back to detail
+		new:
+			title: New subscription type
+			back: back to subscription types
+		show:
+			back: back to listing
+			edit: Edit subscription type
+			no_magazines_message: This subscription type isn't associated with any magazine
+			no_upgrades_message: This subscription type doesn't contains any upgrade subscriptions.
+			no_sales_funnels_message: This subscription type isn't used by any sales funnel
+		messages:
+			subscription_type_created: Subscription type was created.
+			subscription_type_updated: Subscription type was updated.
+			subscription_type_not_found: Subscription type not found.
+			subscription_types_upgrade_created: Subscription upgrade was created.
+			subscription_types_upgrade_deleted: Subscription upgrade was deleted.
+
+	subscription_generator:
+		form:
+			header: Subscriptions generator
+			subscriptions_count: Subscriptions count
+			generate: Generate subscriptions
+			send: Send
+		description:
+			generate: "If you don't check this, application will only validate your input a give you feedback."
+			start_time: "If it is filled, subscriptions will be activated from this time. Othervise subscriptions starts now."
+			end_time: "If it is filled, subscriptions will end in provided time. Othervise it will be calculate based on subscription type."
+			type: "For generated subscriptions that are gift you need to select 'gift'."
+		errors:
+			unknown_variable_symbol: Cannot find payment with variable symbol %variable_symbol%.
+			number: Need to be number
+		required:
+			subscriptions_count: You need to fill subscriptions count
+		placeholder:
+			subscriptions_count: for example 14
+		messages:
+			created: "Created %subscriptions_count% subscriptions for user <a href=\"%link%\" target=\"_blank\">%email%</a>. "
+			creating: "We will create %count% subscription available from %start_time% to %end_time%. "
+			payment: "Payment with variable symbol belongs to user %email% with amount %amount% €. "
+			no_payment: "Cannot find payment with provided variable symbol. Subscriptions will not be paired with payment. "
+			user: "Subscription will belongs to user %email% #%id%. "
+			new_user: "We will create new user with email %email%. "
+
+	# componenty
+
+	actual_user_subscriptions:
+		header: Subscription
+		no_subscription: No actual subscription
+		add_subscription: Create new subscription
+
+	user_subscriptions:
+		header: Subscriptions
+		no_subscription_header: "No data"
+		no_subscription: "This user doesn't have any subscriptions."
+		new_subscription: Create new subscription manualy
+		gift_header: Gift subscriptions
+
+	subscription_button:
+		title: Subscription
+
+	actual_subscription_label:
+		subscription: Subscription
+		actual: Actual
+
+	filter_users:
+		subscription_type: Subscription type
+		actual_subscription: Only actual
+
+data_provider:
+	delete:
+		three_months_active: User had an active subscription within last three months and cannot be deleted

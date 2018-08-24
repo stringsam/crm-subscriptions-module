@@ -1,0 +1,20 @@
+{block #title}{_subscriptions.admin.subscription_types.new.title}{/block}
+
+{block #content}
+
+<div class="row">
+  <div class="col-md-12">
+    <a n:href="SubscriptionTypesAdmin:Default"><i class="fa fa-angle-left"></i> {_subscriptions.admin.subscription_types.new.back}</a>
+    <div class="page-header">
+      <h1>
+        {_subscriptions.admin.subscription_types.new.title}
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    {control subscriptionTypeForm}
+  </div>
+</div>

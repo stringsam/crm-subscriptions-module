@@ -1,0 +1,32 @@
+{block #title}Končiace predplatné{/block}
+
+{block #content}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1>Končiace predplatné</h1>
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-md-12">
+        {control dateFilterForm}
+    </div>
+</div>
+
+<hr/>
+
+<div class="row">
+    <div class="col-md-12">
+        {control googleSubscriptionsEndGraph}
+    </div>
+</div>
+
+<div class="row">
+    {control subscriptionEndsStats}
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <a n:href=":Subscriptions:SubscriptionsEnds:default withoutNext => 1, withoutRecurrent => 1" target="_blank" class="btn btn-default">Detail</a>
+    </div>
+</div>

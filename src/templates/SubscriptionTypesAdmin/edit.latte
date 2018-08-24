@@ -1,0 +1,22 @@
+{block #title}{_subscriptions.admin.subscription_types.edit.title} {$type->name}{/block}
+
+{block #content}
+
+<div class="row">
+  <div class="col-md-12">
+    <a n:href="SubscriptionTypesAdmin:Show $type->id"><i class="fa fa-angle-left"></i> {_subscriptions.admin.subscription_types.edit.back}</a>
+    <div class="page-header">
+      <h1>
+        {_subscriptions.admin.subscription_types.edit.header}:
+        <small>[{$type->id}]</small>
+      	{$type->name}
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    {control subscriptionTypeForm}
+  </div>
+</div>

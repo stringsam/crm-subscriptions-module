@@ -1,0 +1,3 @@
+{if $payment->subscription_id}
+   {_subscriptions.admin.subscription_button.title} <a href="{plink :Subscriptions:SubscriptionsAdmin:edit $payment->subscription_id, $payment->user_id}">#{$payment->subscription_id}</a>
+{/if}

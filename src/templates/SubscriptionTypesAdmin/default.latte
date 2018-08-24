@@ -1,0 +1,111 @@
+{block #title}{_subscriptions.admin.subscription_types.default.title}{/block}
+
+{block #content}
+
+<div class="row">
+
+  <div class="col-md-12">
+    <h1>
+      {_subscriptions.admin.subscription_types.default.title}
+      <small>
+        / {_system.total} {$totalSubscriptionTypes}
+      </small>
+      <a n:href="SubscriptionTypesAdmin:new" class="btn btn-success btn-lg pull-right"><i class="fa fa-magic"></i>  {_subscriptions.admin.subscription_types.default.new}</a>
+      <a n:href="SubscriptionTypesAdmin:export" style="margin-right:10px" target="_blank"class="btn btn-default btn-lg pull-right"><i class="fa fa-external-link"></i>  {_system.export}</a>    </h1>
+    <hr>
+  </div>
+  <div class="col-md-12">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <th><small>#ID</small> /({_subscriptions.data.subscription_types.fields.sorting})</th>
+          <th>{_subscriptions.data.subscription_types.fields.name}</th>
+          <th>{_subscriptions.data.subscription_types.fields.type}</th>
+          <th>{_subscriptions.data.subscription_types.fields.price}</th>
+          <th>{_subscriptions.data.subscription_types.fields.length}</th>
+          <th>{_subscriptions.data.subscription_types.fields.content}</th>
+          <th>{_subscriptions.data.subscription_types.fields.active}</th>
+          <th>{_subscriptions.data.subscription_types.fields.visible}</th>
+          <th>{_system.actions}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr n:foreach="$activeSubscriptionTypes as $type">
+          <td><small>{$type->id} /</small> ({$type->sorting})</td>
+          <td>
+            <a n:href="SubscriptionTypesAdmin:Show $type->id">
+              {$type->name}
+            </a>
+            <small>{$type->code}</small>
+            <span n:if="$type->default" class="label label-success">Default</span>
+          </td>
+          <td><i>{$type->type}</i></td>
+          <td>{$type->price}&nbsp;&euro;</td>
+          <td>{$type->length}</td>
+          <td>{$type|typeContent|noescape}</td>
+          <td>
+          	<span n:if="$type->active" class="label label-success">{_subscriptions.data.subscription_types.values.active}</span>
+            <span n:if="!$type->active" class="label label-default">{_subscriptions.data.subscription_types.values.hidden}</span>
+          </td>
+          <td>
+            <span n:if="$type->visible" class="label label-success">{_subscriptions.data.subscription_types.values.visible}</span>
+            <span n:if="!$type->visible" class="label label-default">{_subscriptions.data.subscription_types.values.hidden}</span>
+          </td>
+          <td style="white-space: nowrap">
+            <p class="text-nowrap">
+              <a n:href="SubscriptionTypesAdmin:Show $type->id" class="btn btn-sm btn-info" title="{_system.show}"><i class="fa fa-eye"></i> </a>
+              <a n:href="SubscriptionTypesAdmin:Edit $type->id" class="btn btn-sm btn-primary" title="{_system.edit}"><i class="fa fa-pencil"></i> </a>
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>{_subscriptions.admin.subscription_types.default.hidden}</h3>
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+      <tr>
+        <th><small>#ID</small> / {_subscriptions.data.subscription_types.fields.sorting}</th>
+        <th>{_subscriptions.data.subscription_types.fields.name}</th>
+        <th>{_subscriptions.data.subscription_types.fields.type}</th>
+        <th>{_subscriptions.data.subscription_types.fields.price}</th>
+        <th>{_subscriptions.data.subscription_types.fields.length}</th>
+        <th>{_subscriptions.data.subscription_types.fields.content}</th>
+        <th>{_subscriptions.data.subscription_types.fields.active}</th>
+        <th>{_subscriptions.data.subscription_types.fields.visible}</th>
+        <th>{_system.actions}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr n:foreach="$inactiveSubscriptionTypes as $type">
+        <td><small>{$type->id} /</small> ({$type->sorting})</td>
+        <td>
+          <a n:href="SubscriptionTypesAdmin:Show $type->id">
+            {$type->name}
+          </a>
+          <small>{$type->code}</small>
+          <span n:if="$type->default" class="label label-success">Default</span>
+        </td>
+        <td><i>{$type->type}</i></td>
+        <td>{$type->price}&nbsp;&euro;</td>
+        <td>{$type->length}</td>
+        <td>{$type|typeContent|noescape}</td>
+        <td>
+          <span n:if="$type->active" class="label label-success">{_subscriptions.data.subscription_types.values.active}</span>
+          <span n:if="!$type->active" class="label label-default">{_subscriptions.data.subscription_types.values.hidden}</span>
+        </td>
+        <td>
+          <span n:if="$type->visible" class="label label-success">{_subscriptions.data.subscription_types.values.visible}</span>
+          <span n:if="!$type->visible" class="label label-default">{_subscriptions.data.subscription_types.values.hidden}</span>
+        </td>
+        <td style="white-space: nowrap">
+          <p class="text-nowrap">
+            <a n:href="SubscriptionTypesAdmin:Show $type->id" class="btn btn-sm btn-info" title="{_system.show}"><i class="fa fa-eye"></i> </a>
+            <a n:href="SubscriptionTypesAdmin:Edit $type->id" class="btn btn-sm btn-primary" title="{_system.edit}"><i class="fa fa-pencil"></i> </a>
+          </p>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
