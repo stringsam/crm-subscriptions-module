@@ -5,7 +5,7 @@ namespace Crm\SubscriptionsModule;
 use Crm\ApiModule\Router\ApiIdentifier;
 use Crm\ApiModule\Router\ApiRoute;
 use Crm\ApplicationModule\Access\AccessManager;
-use Crm\ApplicationModule\Api\ApiRoutersContainerInterface;
+use Crm\ApiModule\Api\ApiRoutersContainerInterface;
 use Crm\ApplicationModule\Commands\CommandsContainerInterface;
 use Crm\ApplicationModule\CrmModule;
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
