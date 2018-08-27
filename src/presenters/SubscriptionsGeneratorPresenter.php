@@ -9,7 +9,11 @@ class SubscriptionsGeneratorPresenter extends AdminPresenter
 {
     /** @var SubscriptionsGeneratorFormFactory @inject */
     public $subscriptionsGeneratorFormFactory;
-    
+
+    public function renderDefault()
+    {
+    }
+
     public function createComponentSubscriptionsGeneratorForm()
     {
         $this->subscriptionsGeneratorFormFactory->onSubmit = function ($message) {
