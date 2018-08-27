@@ -40,7 +40,7 @@
             <span n:if="$type->default" class="label label-success">Default</span>
           </td>
           <td><i>{$type->type}</i></td>
-          <td>{$type->price}&nbsp;&euro;</td>
+          <td>{$type->price|price}</td>
           <td>{$type->length}</td>
           <td>{$type|typeContent|noescape}</td>
           <td>
@@ -87,7 +87,7 @@
           <span n:if="$type->default" class="label label-success">Default</span>
         </td>
         <td><i>{$type->type}</i></td>
-        <td>{$type->price}&nbsp;&euro;</td>
+        <td>{$type->price|price}</td>
         <td>{$type->length}</td>
         <td>{$type|typeContent|noescape}</td>
         <td>
