@@ -57,7 +57,6 @@ data:
 			default: Default
 			magazines: Magazíny
 			available_upgrades: Dostupné upgrady
-			sales_funnels: Dostupné v oknách
 			stats: Štatistiky
 			ask_address: Vypýtaj adresu
 			disable_notifications: Vypnuté notifikácie
@@ -144,7 +143,6 @@ admin:
 			edit: Uprav typ predplatného
 			no_magazines_message: Tento typ predplatného nieje spojený so žiadným magazínom
 			no_upgrades_message: Tento typ predplatného neumožňuje upgrade.
-			no_sales_funnels_message: Tento typ predplatného nie je priradený ku žiadnemu platobnému oknu.
 		messages:
 			subscription_type_created: Typ predplatného bol vytvorený.
 			subscription_type_updated: Typ predplatného bol upravený.
