@@ -3,6 +3,7 @@
 namespace Crm\SubscriptionsModule\Segment;
 
 use Crm\ApplicationModule\Criteria\CriteriaInterface;
+use Crm\SegmentModule\Criteria\Fields;
 use Crm\SegmentModule\Params\BooleanParam;
 use Crm\SegmentModule\Params\DateTimeParam;
 use Crm\SegmentModule\Params\NumberArrayParam;
@@ -78,7 +79,7 @@ class ActiveSubscriptionCriteria implements CriteriaInterface
             $where[] = " subscriptions.is_recurrent = {$params->boolean('is_recurrent')->number()} ";
         }
 
-        return "SELECT DISTINCT(subscriptions.user_id) AS id 
+        return "SELECT DISTINCT(subscriptions.user_id) AS id, " . Fields::formatSql($this->fields()) . "
           FROM subscriptions
           INNER JOIN subscription_types ON subscription_types.id = subscriptions.subscription_type_id
           INNER JOIN subscription_type_content_access ON subscription_type_content_access.subscription_type_id = subscription_types.id
@@ -118,5 +119,18 @@ class ActiveSubscriptionCriteria implements CriteriaInterface
         }
 
         return $title;
+    }
+
+    public function fields(): array
+    {
+        return [
+            'subscriptions.id' => 'subscription_id',
+            'subscriptions.start_time' => 'start_time',
+            'subscriptions.end_time' => 'end_time',
+            'subscriptions.type' => 'type',
+            'subscription_types.id' => 'subscription_type_id',
+            'subscription_types.name' => 'subscription_type_name',
+            'subscription_types.price' => 'subscription_type_price',
+        ];
     }
 }
