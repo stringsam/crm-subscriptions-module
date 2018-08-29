@@ -95,11 +95,6 @@ class SubscriptionsModule extends CrmModule
             300
         );
         $widgetManager->registerWidget(
-            'frontend.subscriptions.top',
-            $this->getInstance(\Crm\SubscriptionsModule\Components\ActualSubscriptionWidget::class),
-            100
-        );
-        $widgetManager->registerWidget(
             'dashboard.singlestat.totals',
             $this->getInstance(\Crm\SubscriptionsModule\Components\TotalSubscriptionsStatWidget::class),
             600
