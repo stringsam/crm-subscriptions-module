@@ -66,9 +66,6 @@ class SubscriptionsPresenter extends FrontendPresenter
         }
 
         $showHeader = true;
-        if ($this->applicationConfig->get('layout_name') == 'mediage') {
-            $showHeader = false;
-        }
         $this->template->showHeader = $showHeader;
     }
 }
