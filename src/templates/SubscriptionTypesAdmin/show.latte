@@ -89,24 +89,6 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12">
-    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.magazines}</h2>
-    {var $pairs = $type->related('subscription_type_magazines')}
-    {if $pairs->count('*')}
-      <ul class="list-group">
-        <li n:foreach="$pairs as $pair" class="list-group-item">
-          <a n:href=":Issues:MagazinesAdmin:show $pair->magazine_id">{$pair->magazine->name}</a>
-          <code>{$pair->magazine->identifier}</code>
-          <small class="text-muted">{$pair->magazine->related('issues')->count('*')} {_issues.data.magazines.fields.issues|lower}</small>
-        </li>
-      </ul>
-    {else}
-      <p class="text-muted well text-center">{_subscriptions.admin.subscription_types.show.no_magazines_message}</p>
-    {/if}
-  </div>
-</div>
-
 {control simpleWidget 'subscription_types_admin.show.middle', $type}
 
 <div class="row">
