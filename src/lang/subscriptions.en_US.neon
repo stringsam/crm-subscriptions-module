@@ -94,6 +94,8 @@ frontend:
 		upgrade: Upgrade subscription
 		no_subscription: "You don't have any subscription."
 		buy_new_subscription: You can buy new subscription.
+	new:
+		title: Subscribe to %site_name%
 	actual_subscription_widget:
 		active_subscription: 'Your subscription <span class="label label-success"><b>is active</b></span>'
 		active_recurrent: 'You have recurrent payment enabled. Next charge will occur'
