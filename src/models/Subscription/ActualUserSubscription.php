@@ -5,7 +5,7 @@ namespace Crm\SubscriptionsModule\Subscription;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\PaymentsModule\Repository\RecurrentPaymentsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
-use Crm\SubscriptionsModule\Upgrade\Expander;
+use Crm\PaymentsModule\Upgrade\Expander;
 use Nette\Security\User;
 
 class ActualUserSubscription
