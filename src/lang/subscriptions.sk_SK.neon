@@ -94,6 +94,8 @@ frontend:
 		upgrade: Navýšenie predplatného
 		no_subscription: "Nemáte žiadne predplatné"
 		buy_new_subscription: Môžete si ho zakúpiť a získať tak prístup ku obsahu.
+	new:
+		title: Predplaťte si %site_name%
 	actual_subscription_widget:
 		active_subscription: 'Vaše predplatné v súčasnosti <span class="label label-success"><b>je aktívne</b></span>'
 		active_recurrent: 'Máte zvolený najpohodlnejší spôsob platby za predplatné s automatickým obnovovaním. Najbližšie sa vaše predplatné obnoví'
