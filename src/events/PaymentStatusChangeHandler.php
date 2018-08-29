@@ -6,7 +6,7 @@ use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
-use Crm\SubscriptionsModule\Upgrade\Expander;
+use Crm\PaymentsModule\Upgrade\Expander;
 use Crm\UsersModule\Repository\AddressesRepository;
 use DateTime;
 use League\Event\AbstractListener;
