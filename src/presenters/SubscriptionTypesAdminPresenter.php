@@ -6,7 +6,6 @@ use Crm\ApplicationModule\Components\Graphs\GoogleLineGraphGroupControlFactoryIn
 use Crm\ApplicationModule\Graphs\Criteria;
 use Crm\ApplicationModule\Graphs\GraphDataItem;
 use Crm\AdminModule\Presenters\AdminPresenter;
-use Crm\SalesFunnelModule\Repository\SalesFunnelsRepository;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypesFormFactory;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypesUpgradesFormFactory;
 use Crm\SubscriptionsModule\Report\NoRecurrentChargeReport;
@@ -33,9 +32,6 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
 
     /** @var SubscriptionTypesUpgradesFormFactory @inject */
     public $subscriptionTypesUpgradesFormFactory;
-
-    /** @var SalesFunnelsRepository @inject */
-    public $salesFunnelsRepository;
 
     public function renderDefault()
     {
@@ -70,7 +66,6 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         }
         $this->template->type = $subscriptionType;
         $this->template->availableUpgrades = $this->subscriptionTypesUpgradesRepository->availableUpgrades($subscriptionType);
-        $this->template->usedSalesFunnels = $this->salesFunnelsRepository->getSalesFunnelsBySubscriptionType($subscriptionType);
 
         $reportTable = new ReportTable(
             ['subscription_type_id' => $id],

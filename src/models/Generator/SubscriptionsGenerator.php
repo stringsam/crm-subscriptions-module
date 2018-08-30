@@ -3,7 +3,6 @@
 namespace Crm\SubscriptionsModule\Generator;
 
 use Crm\ApplicationModule\Hermes\HermesMessage;
-use Crm\PaymentsModule\Repository\PaymentGatewaysRepository;
 use Crm\SubscriptionsModule\Events\NewSubscriptionEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionStartsEvent;
 use Crm\SubscriptionsModule\Repository\SubscriptionPaymentsRepository;
@@ -15,8 +14,6 @@ class SubscriptionsGenerator
 {
     private $subscriptionsRepository;
 
-    private $paymentGatewaysRepository;
-
     private $subscriptionPaymentsRepository;
 
     private $emitter;
@@ -25,13 +22,11 @@ class SubscriptionsGenerator
 
     public function __construct(
         SubscriptionsRepository $subscriptionsRepository,
-        PaymentGatewaysRepository $paymentGatewaysRepository,
         SubscriptionPaymentsRepository $subscriptionPaymentsRepository,
         Emitter $emitter,
         \Tomaj\Hermes\Emitter $hermesEmitter
     ) {
         $this->subscriptionsRepository = $subscriptionsRepository;
-        $this->paymentGatewaysRepository = $paymentGatewaysRepository;
         $this->subscriptionPaymentsRepository = $subscriptionPaymentsRepository;
         $this->emitter = $emitter;
         $this->hermesEmitter = $hermesEmitter;
@@ -39,14 +34,12 @@ class SubscriptionsGenerator
 
     public function generate(SubscriptionsParams $params, $count)
     {
-        $paymentGateway = $this->paymentGatewaysRepository->findBy('code', 'custom');
-
         $payment = $params->getPayment();
 
         for ($i = 0; $i < $count; $i++) {
             $subscription = $this->subscriptionsRepository->add(
                 $params->getSubscriptionType(),
-                $paymentGateway ? $paymentGateway->is_recurrent : false,
+                false,
                 $params->getUser(),
                 $params->getType(),
                 $params->getStartTime(),

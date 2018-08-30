@@ -3,7 +3,6 @@
 namespace Crm\SubscriptionsModule\Forms;
 
 use Crm\ApplicationModule\Hermes\HermesMessage;
-use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SubscriptionsModule\Events\NewSubscriptionEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionPreUpdateEvent;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
@@ -23,8 +22,6 @@ class SubscriptionFormFactory
 
     private $subscriptionTypesRepository;
 
-    private $paymentsRepository;
-
     private $usersRepository;
 
     private $addressesRepository;
@@ -42,7 +39,6 @@ class SubscriptionFormFactory
     public function __construct(
         SubscriptionsRepository $subscriptionsRepository,
         SubscriptionTypesRepository $subscriptionTypesRepository,
-        PaymentsRepository $paymentsRepository,
         UsersRepository $usersRepository,
         AddressesRepository $addressesRepository,
         Translator $translator,
@@ -51,7 +47,6 @@ class SubscriptionFormFactory
     ) {
         $this->subscriptionsRepository = $subscriptionsRepository;
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
-        $this->paymentsRepository = $paymentsRepository;
         $this->usersRepository = $usersRepository;
         $this->addressesRepository = $addressesRepository;
         $this->translator = $translator;

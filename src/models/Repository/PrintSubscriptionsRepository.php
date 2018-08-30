@@ -5,10 +5,10 @@ namespace Crm\SubscriptionsModule\Repository;
 use Crm\ApplicationModule\Repository;
 use Crm\UsersModule\Repository\AddressesRepository;
 use Crm\UsersModule\Repository\UsersRepository;
+use DateTime;
 use Nette\Caching\IStorage;
 use Nette\Database\Context;
 use Nette\Database\Table\IRow;
-use Nette\Utils\DateTime;
 
 class PrintSubscriptionsRepository extends Repository
 {
@@ -20,9 +20,9 @@ class PrintSubscriptionsRepository extends Repository
 
     public function __construct(
         Context $database,
-        IStorage $cacheStorage = null,
         AddressesRepository $addressesRepository,
-        UsersRepository $usersRepository
+        UsersRepository $usersRepository,
+        IStorage $cacheStorage = null
     ) {
         parent::__construct($database, $cacheStorage);
         $this->addressesRepository = $addressesRepository;
