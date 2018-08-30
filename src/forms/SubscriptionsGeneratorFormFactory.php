@@ -3,7 +3,6 @@
 namespace Crm\SubscriptionsModule\Forms;
 
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
-use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SubscriptionsModule\DataProvider\PaymentFromVariableSymbolDataProviderInterface;
 use Crm\SubscriptionsModule\Generator\SubscriptionsGenerator;
 use Crm\SubscriptionsModule\Generator\SubscriptionsParams;
@@ -26,9 +25,6 @@ class SubscriptionsGeneratorFormFactory
     /** @var UserManager  */
     private $userManager;
 
-    /** @var PaymentsRepository  */
-    private $paymentsRepository;
-
     /** @var UsersRepository  */
     private $usersRepository;
 
@@ -48,7 +44,6 @@ class SubscriptionsGeneratorFormFactory
     public function __construct(
         DataProviderManager $dataProviderManager,
         UserManager $userManager,
-        PaymentsRepository $paymentsRepository,
         UsersRepository $usersRepository,
         SubscriptionsGenerator $subscriptionsGenerator,
         SubscriptionTypesRepository $subscriptionTypesRepository,
@@ -57,7 +52,6 @@ class SubscriptionsGeneratorFormFactory
     ) {
         $this->dataProviderManager = $dataProviderManager;
         $this->userManager = $userManager;
-        $this->paymentsRepository = $paymentsRepository;
         $this->usersRepository = $usersRepository;
         $this->subscriptionsGenerator = $subscriptionsGenerator;
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
