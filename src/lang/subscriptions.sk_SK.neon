@@ -57,7 +57,6 @@ data:
 			default: Default
 			magazines: Magazíny
 			available_upgrades: Dostupné upgrady
-			sales_funnels: Dostupné v oknách
 			stats: Štatistiky
 			ask_address: Vypýtaj adresu
 			disable_notifications: Vypnuté notifikácie
@@ -95,6 +94,8 @@ frontend:
 		upgrade: Navýšenie predplatného
 		no_subscription: "Nemáte žiadne predplatné"
 		buy_new_subscription: Môžete si ho zakúpiť a získať tak prístup ku obsahu.
+	new:
+		title: Predplaťte si %site_name%
 	actual_subscription_widget:
 		active_subscription: 'Vaše predplatné v súčasnosti <span class="label label-success"><b>je aktívne</b></span>'
 		active_recurrent: 'Máte zvolený najpohodlnejší spôsob platby za predplatné s automatickým obnovovaním. Najbližšie sa vaše predplatné obnoví'
@@ -144,7 +145,6 @@ admin:
 			edit: Uprav typ predplatného
 			no_magazines_message: Tento typ predplatného nieje spojený so žiadným magazínom
 			no_upgrades_message: Tento typ predplatného neumožňuje upgrade.
-			no_sales_funnels_message: Tento typ predplatného nie je priradený ku žiadnemu platobnému oknu.
 		messages:
 			subscription_type_created: Typ predplatného bol vytvorený.
 			subscription_type_updated: Typ predplatného bol upravený.

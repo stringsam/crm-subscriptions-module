@@ -57,7 +57,6 @@ data:
 			default: Default
 			magazines: Magazines
 			available_upgrades: Available upgrades
-			sales_funnels: Available in sales funnels
 			stats: Stats
 			ask_address: Ask address
 			disable_notifications: Disabled notifications
@@ -95,6 +94,8 @@ frontend:
 		upgrade: Upgrade subscription
 		no_subscription: "You don't have any subscription."
 		buy_new_subscription: You can buy new subscription.
+	new:
+		title: Subscribe to %site_name%
 	actual_subscription_widget:
 		active_subscription: 'Your subscription <span class="label label-success"><b>is active</b></span>'
 		active_recurrent: 'You have recurrent payment enabled. Next charge will occur'
@@ -144,7 +145,6 @@ admin:
 			edit: Edit subscription type
 			no_magazines_message: This subscription type isn't associated with any magazine
 			no_upgrades_message: This subscription type doesn't contains any upgrade subscriptions.
-			no_sales_funnels_message: This subscription type isn't used by any sales funnel
 		messages:
 			subscription_type_created: Subscription type was created.
 			subscription_type_updated: Subscription type was updated.
