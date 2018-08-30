@@ -154,11 +154,6 @@ class SubscriptionsModule extends CrmModule
     public function registerEventHandlers(Emitter $emitter)
     {
         $emitter->addListener(
-            \Crm\PaymentsModule\Events\PaymentChangeStatusEvent::class,
-            $this->getInstance(\Crm\SubscriptionsModule\Events\PaymentStatusChangeHandler::class),
-            500
-        );
-        $emitter->addListener(
             \Crm\UsersModule\Events\NewAddressEvent::class,
             $this->getInstance(\Crm\SubscriptionsModule\Events\NewAddressHandler::class),
             600

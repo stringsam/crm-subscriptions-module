@@ -16,7 +16,6 @@ services:
 	- Crm\SubscriptionsModule\Forms\SubscriptionFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionsGeneratorFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionTypesUpgradesFormFactory
-	- Crm\SubscriptionsModule\Events\PaymentStatusChangeHandler
 	- Crm\SubscriptionsModule\Generator\SubscriptionsGenerator
 	- Crm\SubscriptionsModule\Components\SubscriptionButtonFactory
 	- Crm\SubscriptionsModule\Components\ActualUserSubscriptions
