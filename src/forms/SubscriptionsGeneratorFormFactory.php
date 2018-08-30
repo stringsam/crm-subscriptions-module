@@ -2,7 +2,9 @@
 
 namespace Crm\SubscriptionsModule\Forms;
 
+use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\PaymentsModule\Repository\PaymentsRepository;
+use Crm\SubscriptionsModule\DataProvider\PaymentFromVariableSymbolDataProviderInterface;
 use Crm\SubscriptionsModule\Generator\SubscriptionsGenerator;
 use Crm\SubscriptionsModule\Generator\SubscriptionsParams;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
@@ -18,6 +20,9 @@ use Tomaj\Form\Renderer\BootstrapRenderer;
 
 class SubscriptionsGeneratorFormFactory
 {
+    /** @var DataProviderManager */
+    public $dataProviderManager;
+
     /** @var UserManager  */
     private $userManager;
 
@@ -41,6 +46,7 @@ class SubscriptionsGeneratorFormFactory
     public $onCreate;
 
     public function __construct(
+        DataProviderManager $dataProviderManager,
         UserManager $userManager,
         PaymentsRepository $paymentsRepository,
         UsersRepository $usersRepository,
@@ -49,6 +55,7 @@ class SubscriptionsGeneratorFormFactory
         LinkGenerator $linkGenerator,
         Translator $translator
     ) {
+        $this->dataProviderManager = $dataProviderManager;
         $this->userManager = $userManager;
         $this->paymentsRepository = $paymentsRepository;
         $this->usersRepository = $usersRepository;
@@ -159,14 +166,24 @@ class SubscriptionsGeneratorFormFactory
         }
 
         $user = $this->userManager->loadUserByEmail($values['user_email']);
-        $payment = $this->paymentsRepository->findByVs($values['variable_symbol']);
-        if ($values['variable_symbol'] && !$payment) {
-            $form['variable_symbol']->addError($this->translator->translate('subscriptions.admin.subscription_generator.errors.unknown_variable_symbol', ['variable_symbol' => $values['variable_symbol']]));
-            return;
+
+        $payment = null;
+        if ($values['variable_symbol']) {
+            /** @var PaymentFromVariableSymbolDataProviderInterface[] $providers */
+            $providers = $this->dataProviderManager->getProviders('subscriptions.dataprovider.payment_from_variable_symbol', PaymentFromVariableSymbolDataProviderInterface::class);
+            foreach ($providers as $sorting => $provider) {
+                $payment = $provider->provide(['variableSymbol' => $values['variable_symbol']]);
+                if ($payment) {
+                    break;
+                }
+            }
+
+            if (is_null($payment)) {
+                $form['variable_symbol']->addError($this->translator->translate('subscriptions.admin.subscription_generator.errors.unknown_variable_symbol', ['variable_symbol' => $values['variable_symbol']]));
+                return;
+            }
         }
-        if (!$payment) {
-            $payment = null;
-        }
+
         $count = intval($values['subscriptions_count']);
 
         if ($values['generate'] == 1) {
