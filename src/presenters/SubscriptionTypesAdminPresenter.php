@@ -57,6 +57,10 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         return $this->subscriptionTypesRepository->all($this->text)->order('sorting ASC');
     }
 
+    public function renderNew()
+    {
+    }
+
     public function renderShow($id)
     {
         $subscriptionType = $this->subscriptionTypesRepository->find($id);
