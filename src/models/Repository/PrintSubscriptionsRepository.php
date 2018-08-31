@@ -217,6 +217,8 @@ class PrintSubscriptionsRepository extends Repository
         $oldDate = clone $printExportDate;
         $oldDate->sub(new \DateInterval('P8D'));
 
+
+
         $rows = $this->getDatabase()->query("
 SELECT
   today.id,
@@ -227,6 +229,8 @@ INNER JOIN subscriptions AS today_subscription ON today_subscription.id = today.
 INNER JOIN print_subscriptions AS yesterday ON yesterday.export_date >= '{$oldDate->format('Y-m-d H:i:s')}' AND yesterday.export_date < '{$printExportDate->format('Y-m-d H:i:s')}' AND yesterday.user_id = today.user_id AND yesterday.type='{$type}'
 INNER JOIN subscriptions AS yesterday_subscription ON yesterday_subscription.id = yesterday.subscription_id
 WHERE today.export_date = '{$printExportDate->format('Y-m-d H:i:s')}' AND yesterday.status = 'recurrent' AND today.status = 'new' AND today.type='{$type}'
+ -- vyradime tie ktore uz boli 'removed' aby ich nedalo znovu ako rekurentne lebo musia byt ako nove
+ AND yesterday.subscription_id NOT IN (SELECT subscription_id FROM print_subscriptions WHERE subscription_id = yesterday.subscription_id AND status='removed')
 GROUP BY today.id
 ");
 
@@ -263,7 +267,6 @@ GROUP BY today.id
               LIMIT 1
             ) IS NULL
         ");
-        echo "TRA LALA";
 
         foreach ($rows as $row) {
             $user = $this->usersRepository->find($row->user_id);
