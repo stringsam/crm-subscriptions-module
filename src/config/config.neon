@@ -41,6 +41,7 @@ services:
 	- Crm\SubscriptionsModule\Repository\ContentAccessRepository
 	- Crm\SubscriptionsModule\User\SubscriptionsUserDataProvider
 	- Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria
+	- Crm\SubscriptionsModule\Seeders\ContentAccessSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionTypeNamesSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionLengthMethodSeeder
