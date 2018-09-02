@@ -38,10 +38,6 @@ CREATE TABLE IF NOT EXISTS `subscription_type_content_access` (
   CONSTRAINT `subscription_type_content_access_ibfk_2` FOREIGN KEY (`content_access_id`) REFERENCES `content_access` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO content_access (name,description,class,sorting,created_at,updated_at) VALUES
-('web', 'Web access', 'label label-primary', 100, NOW(), NOW()),
-('print', 'Print', 'label label-info', 200, NOW(), NOW()),
-('mobile', 'Mobile access', 'label label-warning', 300, NOW(), NOW());
 
 -- 2018-08-31 07:42:42
 SQL;
