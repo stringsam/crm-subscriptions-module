@@ -43,7 +43,7 @@ class ContentAccessSeeder implements ISeeder
 
     private function seedContentAccess($name, $description, $class = '', $sorting = 100)
     {
-        if(!$this->contentAccessRepository->exists($name)) {
+        if (!$this->contentAccessRepository->exists($name)) {
             $this->contentAccessRepository->add(
                 $name,
                 $description,
