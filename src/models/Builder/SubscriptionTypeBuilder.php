@@ -4,6 +4,8 @@ namespace Crm\SubscriptionsModule\Builder;
 
 use Crm\ApplicationModule\Builder\Builder;
 use Nette\Database\Table\IRow;
+use Nette\Utils\DateTime;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class SubscriptionTypeBuilder extends Builder
 {
@@ -11,7 +13,11 @@ class SubscriptionTypeBuilder extends Builder
 
     private $magazinesSubscriptionTypesTable = 'subscription_type_magazines';
 
+    private $subscriptionTypeItemsTable = 'subscription_type_items';
+
     private $magazines = [];
+
+    private $subscriptionTypeItems = [];
 
     public function isValid()
     {
@@ -67,6 +73,14 @@ class SubscriptionTypeBuilder extends Builder
     {
         if ($fixedEnd) {
             return $this->set('fixed_end', $fixedEnd);
+        }
+        return $this;
+    }
+
+    public function setFixedStart($fixedStart)
+    {
+        if ($fixedStart) {
+            return $this->set('fixed_start', $fixedStart);
         }
         return $this;
     }
@@ -182,6 +196,16 @@ class SubscriptionTypeBuilder extends Builder
         return $this;
     }
 
+    public function addSubscriptionTypeItem($name, $amount, $vat)
+    {
+        $this->subscriptionTypeItems[] = [
+            'name' => $name,
+            'amount' => $amount,
+            'vat' => $vat,
+        ];
+        return $this;
+    }
+
     public function setContentAccess($contentAccess)
     {
         foreach ($contentAccess as $key => $value) {
@@ -199,6 +223,31 @@ class SubscriptionTypeBuilder extends Builder
                 $this->database->table($this->magazinesSubscriptionTypesTable)
                     ->insert(['magazine_id' => $magazine->id, 'subscription_type_id' => $subscriptionType->id]);
             }
+        }
+        if (count($this->subscriptionTypeItems)) {
+            $sorting = 100;
+            foreach ($this->subscriptionTypeItems as $item) {
+                $this->database->table($this->subscriptionTypeItemsTable)->insert([
+                    'subscription_type_id' => $subscriptionType->id,
+                    'name' => $item['name'],
+                    'amount' => $item['price'],
+                    'vat' => $item['vat'],
+                    'sorting' => $sorting,
+                    'created_at' => new DateTime(),
+                    'updated_at' => new DateTime(),
+                ]);
+                $sorting += 100;
+            }
+        } else {
+            $this->database->table($this->subscriptionTypeItemsTable)->insert([
+                'subscription_type_id' => $subscriptionType->id,
+                'name' => $this->get('user_label') ? $this->get('user_label') : $this->get('name'),
+                'amount' => $this->get('price'),
+                'vat' => 0, // TODO in future maybe set default VAT
+                'sorting' => 100,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime(),
+            ]);
         }
         return $subscriptionType;
     }

@@ -6,6 +6,7 @@ use Crm\ApplicationModule\Components\Graphs\GoogleLineGraphGroupControlFactoryIn
 use Crm\ApplicationModule\Graphs\Criteria;
 use Crm\ApplicationModule\Graphs\GraphDataItem;
 use Crm\AdminModule\Presenters\AdminPresenter;
+use Crm\SubscriptionsModule\Forms\SubscriptionTypeItemsFormFactory;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypesFormFactory;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypesUpgradesFormFactory;
 use Crm\SubscriptionsModule\Report\NoRecurrentChargeReport;
@@ -16,22 +17,39 @@ use Crm\SubscriptionsModule\Report\ReportTable;
 use Crm\SubscriptionsModule\Report\StoppedOnFirstSubscriptionReport;
 use Crm\SubscriptionsModule\Report\TotalRecurrentSubscriptionsReport;
 use Crm\SubscriptionsModule\Report\TotalSubscriptionsReport;
+use Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesUpgradesRepository;
 
 class SubscriptionTypesAdminPresenter extends AdminPresenter
 {
-    /** @var SubscriptionTypesRepository @inject */
-    public $subscriptionTypesRepository;
+    private $subscriptionTypesRepository;
 
-    /** @var SubscriptionTypesUpgradesRepository @inject */
-    public $subscriptionTypesUpgradesRepository;
+    private $subscriptionTypesUpgradesRepository;
 
-    /** @var SubscriptionTypesFormFactory @inject */
-    public $subscriptionTypeFactory;
+    private $subscriptionTypeFactory;
 
-    /** @var SubscriptionTypesUpgradesFormFactory @inject */
-    public $subscriptionTypesUpgradesFormFactory;
+    private $subscriptionTypesUpgradesFormFactory;
+
+    private $subscriptionTypeItemsRepository;
+
+    private $subscriptionTypeItemsFormFactory;
+
+    public function __construct(
+        SubscriptionTypesRepository $subscriptionTypesRepository,
+        SubscriptionTypesUpgradesRepository $subscriptionTypesUpgradesRepository,
+        SubscriptionTypesFormFactory $subscriptionTypeFactory,
+        SubscriptionTypesUpgradesFormFactory $subscriptionTypesUpgradesFormFactory,
+        SubscriptionTypeItemsRepository $subscriptionTypeItemsRepository,
+        SubscriptionTypeItemsFormFactory $subscriptionTypeItemsFormFactory
+    ) {
+        $this->subscriptionTypesRepository = $subscriptionTypesRepository;
+        $this->subscriptionTypesUpgradesRepository = $subscriptionTypesUpgradesRepository;
+        $this->subscriptionTypeFactory = $subscriptionTypeFactory;
+        $this->subscriptionTypesUpgradesFormFactory = $subscriptionTypesUpgradesFormFactory;
+        $this->subscriptionTypeItemsRepository = $subscriptionTypeItemsRepository;
+        $this->subscriptionTypeItemsFormFactory = $subscriptionTypeItemsFormFactory;
+    }
 
     public function renderDefault()
     {
@@ -70,6 +88,7 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         }
         $this->template->type = $subscriptionType;
         $this->template->availableUpgrades = $this->subscriptionTypesUpgradesRepository->availableUpgrades($subscriptionType);
+        $this->template->subscriptionTypeItems = $this->subscriptionTypeItemsRepository->subscriptionTypeItems($subscriptionType);
 
         $reportTable = new ReportTable(
             ['subscription_type_id' => $id],
@@ -89,6 +108,25 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         $this->template->reportTables = [
             'Zdroj pouzivatelov' => $reportTable->getData(),
         ];
+    }
+
+    protected function createComponentSubscriptionTypeItemsForm()
+    {
+        $form = $this->subscriptionTypeItemsFormFactory->create($this->params['id']);
+        $this->subscriptionTypeItemsFormFactory->onSave = function ($subscriptionTypeItem) {
+            $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_types.messages.subscription_type_item_created'));
+            $this->redirect('SubscriptionTypesAdmin:Show', $subscriptionTypeItem->subscription_type_id);
+        };
+        return $form;
+    }
+
+    public function handleRemoveSubscriptionTypeItem($itemId)
+    {
+        $item = $this->subscriptionTypeItemsRepository->find($itemId);
+        $subscriptionTypeId = $item->subscription_type_id;
+        $this->subscriptionTypeItemsRepository->delete($item);
+        $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_type.messages.subscription_type_item_deleted'));
+        $this->redirect('show', $subscriptionTypeId);
     }
 
     protected function createComponentSubscriptionTypesUpgradesForm()

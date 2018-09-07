@@ -63,6 +63,10 @@ class SubscriptionsRepository extends Repository
             $isExtending = $extension->isExtending();
         }
 
+        if (!$isExtending && $subscriptionType->fixed_start) {
+            $startTime = $subscriptionType->fixed_start;
+        }
+
         $subscriptionLength = $isExtending && $subscriptionType->extending_length ? $subscriptionType->extending_length : $subscriptionType->length;
         if ($endTime == null) {
             $lengthMethod = $this->lengthMethodFactory->getExtension($subscriptionType->length_method_id);
