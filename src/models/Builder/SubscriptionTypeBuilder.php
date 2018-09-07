@@ -3,12 +3,16 @@
 namespace Crm\SubscriptionsModule\Builder;
 
 use Crm\ApplicationModule\Builder\Builder;
+use Crm\ApplicationModule\Config\ApplicationConfig;
+use Nette\Database\Context;
 use Nette\Database\Table\IRow;
 use Nette\Utils\DateTime;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class SubscriptionTypeBuilder extends Builder
 {
+    private $applicationConfig;
+
     protected $tableName = 'subscription_types';
 
     private $magazinesSubscriptionTypesTable = 'subscription_type_magazines';
@@ -18,6 +22,12 @@ class SubscriptionTypeBuilder extends Builder
     private $magazines = [];
 
     private $subscriptionTypeItems = [];
+
+    public function __construct(Context $database, ApplicationConfig $applicationConfig)
+    {
+        parent::__construct($database);
+        $this->applicationConfig = $applicationConfig;
+    }
 
     public function isValid()
     {
@@ -243,7 +253,7 @@ class SubscriptionTypeBuilder extends Builder
                 'subscription_type_id' => $subscriptionType->id,
                 'name' => $this->get('user_label') ? $this->get('user_label') : $this->get('name'),
                 'amount' => $this->get('price'),
-                'vat' => 0, // TODO in future maybe set default VAT
+                'vat' => $this->applicationConfig->get('vat_normal_level') ? $this->applicationConfig->get('vat_normal_level') : 0,
                 'sorting' => 100,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
