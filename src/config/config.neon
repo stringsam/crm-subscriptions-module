@@ -12,10 +12,12 @@ services:
 	- Crm\SubscriptionsModule\Repository\SubscriptionExtensionMethodsRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionTypeNamesRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository
+	- Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository
 	- Crm\SubscriptionsModule\Forms\SubscriptionTypesFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionsGeneratorFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionTypesUpgradesFormFactory
+	- Crm\SubscriptionsModule\Forms\SubscriptionTypeItemsFormFactory
 	- Crm\SubscriptionsModule\Generator\SubscriptionsGenerator
 	- Crm\SubscriptionsModule\Components\SubscriptionButtonFactory
 	- Crm\SubscriptionsModule\Components\ActualUserSubscriptions

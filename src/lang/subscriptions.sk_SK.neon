@@ -40,6 +40,7 @@ data:
 			price: Cena
 			length: "Dĺžka (dni)"
 			extending_length: "Dĺžka (dni) pri predĺžení predplatného"
+			fixed_start: "Fixný začiatok predplatného"
 			fixed_end: "Fixný koniec predplatného"
 			user_label: Verejný popis
 			type: Typ
@@ -63,6 +64,7 @@ data:
 			extension_method_id: Spôsob predĺženia predplatného
 			length_method_id: Spôsob výpočtu dĺžky predplatného
 			recurrent_charge_before: "Realizácia nasledujúcej platby (počet hodín pred vypršaním)"
+			subscription_type_items: Položky predplatného
 		required:
 			name: Názov je povinný
 			length: "Dĺžka (v dňoch) je povinný"
@@ -79,6 +81,7 @@ data:
 			next_subscription_type_id: ID
 			length: napríklad 31
 			extending_length: napríklad 35
+			fixed_start: napríklad 3.4.2020
 			fixed_end: napríklad 3.5.2020
 			price: "napríklad 12.99"
 		values:
@@ -86,6 +89,19 @@ data:
 			inactive: Neaktívne
 			visible: Viditeľné
 			hidden: Skryté
+	subscription_type_items:
+		fields:
+			name: Názov
+			amount: Suma
+			vat: 'DPH (%)'
+		placeholder:
+			name: napríklad 'Printové predplatné magazínu'
+			amount: napríklad '123.45'
+			vat: napríklad 20
+		required:
+			name: Názov je povinný
+			amount: Suma je povinná
+			vat: DPH je povinná
 
 frontend:
 	my:
@@ -151,6 +167,10 @@ admin:
 			subscription_type_not_found: Typ predplatného sa nepodarilo nájsť.
 			subscription_types_upgrade_created: Upgrade predplatného bol vytvorený.
 			subscription_types_upgrade_deleted: Upgrade predplatného bol zmazaný.
+			subscription_type_item_created: Položka predplatného bola vytvorená
+			subscription_type_item_deleted: Položka predplatného bola vymazaná
+			subscription_types_wrong_amount: 'Nesedi suma za polozky so sumou predplatneho. Rozdiel <strong>%price%</strong>'
+			no_subscription_type_items: Žiadne položky k predplatnému zatiaľ neboli vytvorené
 
 	subscription_generator:
 		form:
