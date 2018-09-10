@@ -169,7 +169,7 @@ admin:
 			subscription_types_upgrade_deleted: Upgrade predplatného bol zmazaný.
 			subscription_type_item_created: Položka predplatného bola vytvorená
 			subscription_type_item_deleted: Položka predplatného bola vymazaná
-			subscription_types_wrong_amount: 'Nesedi suma za polozky so sumou predplatneho. Rozdiel <strong>%price%</strong>'
+			subscription_types_wrong_amount: 'Nesedí suma za položky so sumou predplatného. Rozdiel <strong>%price%</strong>'
 			no_subscription_type_items: Žiadne položky k predplatnému zatiaľ neboli vytvorené
 
 	subscription_generator:
