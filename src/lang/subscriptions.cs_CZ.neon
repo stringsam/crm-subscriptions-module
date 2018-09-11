@@ -27,7 +27,7 @@ data:
 		errors:
 			end_time_before_start_time: Konec musí následovat po začátku
 			no_subscription_type_id: Nebyl vybraný typ předplatného
-			start_time_before_paid_at: Začátek předplatného nemůže předcházet datu zaplacení (%paid_at%)
+			start_time_before_paid_at: "Začátek předplatného nemůže předcházet datu zaplacení (%paid_at%)"
 		description:
 			end_time: Nechat prázdné pro automatické vyplnění podle vybraného typu předplatného
 	subscription_types:
@@ -36,8 +36,8 @@ data:
 			code: Identifikátor
 			next_subscription_type_id: Následující předplatné
 			price: Cena
-			length: Délka (dny)
-			extending_length: Délka (dny) při prodloužení předplatného
+			length: "Délka (dny)"
+			extending_length: "Délka (dny) při prodloužení předplatného"
 			fixed_start: Fixní začátek předplatného
 			fixed_end: Fixní konec předplatného
 			user_label: Veřejný popis
@@ -61,10 +61,10 @@ data:
 			ask_address: Vyžádej adresu
 			disable_notifications: Vypnuté notifikace
 			extension_method_id: Způsob prodloužení předplatného
-			recurrent_charge_before: Realizace následující platby (počet hodin před vypršením)
+			recurrent_charge_before: "Realizace následující platby (počet hodin před vypršením)"
 		required:
 			name: Název je povinný
-			length: Délka (ve dnech) je povinná
+			length: "Délka (ve dnech) je povinná"
 			price: Cena je povinná
 		validation:
 			integer:
