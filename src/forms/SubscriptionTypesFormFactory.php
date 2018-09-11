@@ -99,6 +99,9 @@ class SubscriptionTypesFormFactory
         $form->addText('extending_length', 'subscriptions.data.subscription_types.fields.extending_length')
             ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.extending_length');
 
+        $form->addText('fixed_start', 'subscriptions.data.subscription_types.fields.fixed_start')
+            ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.fixed_start');
+
         $form->addText('fixed_end', 'subscriptions.data.subscription_types.fields.fixed_end')
             ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.fixed_end');
 
@@ -202,6 +205,7 @@ class SubscriptionTypesFormFactory
                 ->setExtensionMethod($values['extension_method_id'])
                 ->setLengthMethod($values['length_method_id'])
                 ->setExtendingLength($values['extending_length'])
+                ->setFixedStart($values['fixed_start'])
                 ->setFixedEnd($values['fixed_end'])
                 ->setType($values['type'])
                 ->setLimitPerUser($values['limit_per_user'])
