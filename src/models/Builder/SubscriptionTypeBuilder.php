@@ -7,7 +7,6 @@ use Crm\ApplicationModule\Config\ApplicationConfig;
 use Nette\Database\Context;
 use Nette\Database\Table\IRow;
 use Nette\Utils\DateTime;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class SubscriptionTypeBuilder extends Builder
 {
