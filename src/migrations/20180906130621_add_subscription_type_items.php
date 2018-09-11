@@ -18,12 +18,6 @@ class AddSubscriptionTypeItems extends AbstractMigration
             ->addIndex(['subscription_type_id', 'sorting'])
             ->create();
 
-        $subscriptionTypes = $this->query("SELECT * FROM subscription_types");
-        foreach ($subscriptionTypes as $st) {
-            $name = $st['user_label'] ? $st['user_label'] : $st['name'];
-            $this->query("INSERT INTO subscription_type_items (subscription_type_id,name,amount,vat,sorting,created_at,updated_at) VALUES ({$st['id']}, '{$name}', {$st['price']}, 20, 100, NOW(), NOW())");
-        }
-
         $this->table('subscription_types')
             ->addColumn('fixed_start', 'datetime', ['null' => true, 'after' => 'extending_length'])
             ->update();
