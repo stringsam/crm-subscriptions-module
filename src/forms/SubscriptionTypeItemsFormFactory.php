@@ -4,8 +4,8 @@ namespace Crm\SubscriptionsModule\Forms;
 
 use Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
-use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
+use Nette\Localization\ITranslator;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
 class SubscriptionTypeItemsFormFactory
@@ -14,7 +14,6 @@ class SubscriptionTypeItemsFormFactory
 
     private $subscriptionTypeItemsRepository;
 
-    /** @var Translator  */
     private $translator;
 
     public $onSave;
@@ -22,7 +21,7 @@ class SubscriptionTypeItemsFormFactory
     public function __construct(
         SubscriptionTypesRepository $subscriptionTypesRepository,
         SubscriptionTypeItemsRepository $subscriptionTypeItemsRepository,
-        Translator $translator
+        ITranslator $translator
     ) {
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->subscriptionTypeItemsRepository = $subscriptionTypeItemsRepository;
@@ -38,6 +37,7 @@ class SubscriptionTypeItemsFormFactory
         $form->setRenderer(new BootstrapRenderer());
         $form->setTranslator($this->translator);
         $form->addProtection();
+        $form->getElementPrototype()->addAttributes(['class' => 'ajax']);
 
         $form->addGroup();
 
@@ -60,10 +60,6 @@ class SubscriptionTypeItemsFormFactory
             ->getControlPrototype()
             ->setName('button')
             ->setHtml('<i class="fa fa-save"></i> ' . $this->translator->translate('system.save'));
-
-//        if ($id) {
-//            $form->addHidden('from_subscription_type_id', $id);
-//        }
 
         $form->setDefaults($defaults);
 

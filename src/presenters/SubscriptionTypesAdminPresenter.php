@@ -115,7 +115,11 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         $form = $this->subscriptionTypeItemsFormFactory->create($this->params['id']);
         $this->subscriptionTypeItemsFormFactory->onSave = function ($subscriptionTypeItem) {
             $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_types.messages.subscription_type_item_created'));
-            $this->redirect('SubscriptionTypesAdmin:Show', $subscriptionTypeItem->subscription_type_id);
+            if ($this->isAjax()) {
+                $this->redrawControl('subscriptionTypeItemsSnippet');
+            } else {
+                $this->redirect('SubscriptionTypesAdmin:Show', $subscriptionTypeItem->subscription_type_id);
+            }
         };
         return $form;
     }
@@ -126,7 +130,11 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         $subscriptionTypeId = $item->subscription_type_id;
         $this->subscriptionTypeItemsRepository->delete($item);
         $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_type.messages.subscription_type_item_deleted'));
-        $this->redirect('show', $subscriptionTypeId);
+        if ($this->isAjax()) {
+            $this->redrawControl('subscriptionTypeItemsSnippet');
+        } else {
+            $this->redirect('show', $subscriptionTypeId);
+        }
     }
 
     protected function createComponentSubscriptionTypesUpgradesForm()

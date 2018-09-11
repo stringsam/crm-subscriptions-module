@@ -95,6 +95,8 @@
 
 {control simpleWidget 'subscription_types_admin.show.middle', $type}
 
+{snippet subscriptionTypeItemsSnippet}
+
 {var $calculatedItemsSum = 0}
 {foreach $subscriptionTypeItems as $item}
   {var $calculatedItemsSum = $calculatedItemsSum + $item->amount}
@@ -117,7 +119,7 @@
           {$item->name}
           <span class="label label-default">{$item->vat} % {_'system.vat'}</span>
           <strong>{$item->amount|price}</strong>
-          <a n:href="RemoveSubscriptionTypeItem! $item->id" class="pull-right btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+          <a n:href="RemoveSubscriptionTypeItem! $item->id" class="pull-right btn btn-xs btn-danger ajax"><i class="fa fa-trash"></i></a>
           <small class="text-muted pull-right" style="margin-right:20px;">{$item->created_at}</small>
         </li>
       </ul>
@@ -132,11 +134,12 @@
     </p>
   </div>
 
-
   <div id="subscriptionTypeItemsFormDiv" class="col-md-12" style="display:none">
     {control subscriptionTypeItemsForm}
   </div>
 </div>
+
+{/snippet}
 
 <div class="row">
   <div class="col-md-12">
