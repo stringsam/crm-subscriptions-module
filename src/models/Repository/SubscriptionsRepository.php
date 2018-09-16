@@ -398,4 +398,13 @@ class SubscriptionsRepository extends Repository
             'next_subscription_id NOT' => null,
         ]);
     }
+
+    public function subscriptionTypesCounts($email)
+    {
+        return $this->getTable()
+            ->where(['user.email' => $email])
+            ->group('subscription_type_id')
+            ->select('subscription_type_id, COUNT(*) AS count')
+            ->fetchPairs('subscription_type_id', 'count');
+    }
 }
