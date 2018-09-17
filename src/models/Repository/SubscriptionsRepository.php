@@ -399,10 +399,10 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function userSubscriptionTypesCounts($email)
+    public function userSubscriptionTypesCounts($userId)
     {
         return $this->getTable()
-            ->where(['user.email' => $email])
+            ->where(['user.id' => $userId])
             ->group('subscription_type_id')
             ->select('subscription_type_id, COUNT(*) AS count')
             ->fetchPairs('subscription_type_id', 'count');
