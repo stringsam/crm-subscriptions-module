@@ -399,7 +399,7 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function subscriptionTypesCounts($email)
+    public function userSubscriptionTypesCounts($email)
     {
         return $this->getTable()
             ->where(['user.email' => $email])
