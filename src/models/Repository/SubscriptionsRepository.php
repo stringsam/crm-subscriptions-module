@@ -49,7 +49,7 @@ class SubscriptionsRepository extends Repository
         IRow $subscriptionType,
         bool $isRecurrent,
         IRow $user,
-        $type = 'regular',
+        $type = self::TYPE_REGULAR,
         DateTime $startTime = null,
         DateTime $endTime = null,
         $note = null,
