@@ -178,6 +178,12 @@ class SubscriptionTypesFormFactory
             $values['limit_per_user'] = null;
         }
 
+        if ($values['fixed_start'] == '') {
+            $values['fixed_start'] = null;
+        } else {
+            $values['fixed_start'] = DateTime::from(strtotime($values['fixed_start']));
+        }
+
         if ($values['fixed_end'] == '') {
             $values['fixed_end'] = null;
         } else {
