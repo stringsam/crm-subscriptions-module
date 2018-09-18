@@ -44,11 +44,11 @@ class ActiveSubscriptionCriteria implements CriteriaInterface
     public function params(): array
     {
         return [
-            new DateTimeParam('active_at', false),
-            new StringArrayParam('contains', false, null, null, $this->contentAccessRepository->all()->fetchPairs(null, 'name')),
-            new StringArrayParam('type', false, null, null, array_keys($this->subscriptionsRepository->availableTypes())),
-            new NumberArrayParam('subscription_type', false, null, null, $this->subscriptionTypesRepository->all()->fetchPairs('id', 'name')),
-            new BooleanParam('is_recurrent'),
+            new DateTimeParam('active_at', "Active at", "Filter only subscriptions active within selected period", false),
+            new StringArrayParam('contains', "Content types", "Users who have access to selected content types", false, null, null, $this->contentAccessRepository->all()->fetchPairs(null, 'name')),
+            new StringArrayParam('type', "Types of subscription", "Users who have access to selected types of subscription", false, null, null, array_keys($this->subscriptionsRepository->availableTypes())),
+            new NumberArrayParam('subscription_type', "Subscription types", "Users who have access to selected subscription types", false, null, null, $this->subscriptionTypesRepository->all()->fetchPairs('id', 'name')),
+            new BooleanParam('is_recurrent', "Recurrent subscriptions", "Users who had at least one recurrent subscription"),
         ];
     }
 
