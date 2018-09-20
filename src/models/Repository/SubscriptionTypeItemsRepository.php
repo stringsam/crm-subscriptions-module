@@ -3,10 +3,7 @@
 namespace Crm\SubscriptionsModule\Repository;
 
 use Crm\ApplicationModule\Repository;
-use Crm\ApplicationModule\Repository\AuditLogRepository;
-use Nette\Database\Context;
 use Nette\Database\Table\IRow;
-use Nette\Database\Table\Selection;
 use Nette\Utils\DateTime;
 
 class SubscriptionTypeItemsRepository extends Repository
