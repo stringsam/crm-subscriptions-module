@@ -56,7 +56,6 @@ data:
 			sorting: Poradie
 			description: Popis
 			default: Default
-			magazines: Magazíny
 			available_upgrades: Dostupné upgrady
 			stats: Štatistiky
 			ask_address: Vypýtaj adresu
@@ -159,7 +158,6 @@ admin:
 		show:
 			back: Späť na zoznam
 			edit: Uprav typ predplatného
-			no_magazines_message: Tento typ predplatného nieje spojený so žiadným magazínom
 			no_upgrades_message: Tento typ predplatného neumožňuje upgrade.
 		messages:
 			subscription_type_created: Typ predplatného bol vytvorený.
