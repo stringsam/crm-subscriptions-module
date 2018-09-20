@@ -54,7 +54,6 @@ data:
 			sorting: Pořadí
 			description: Popis
 			default: Default
-			magazines: Magazíny
 			available_upgrades: Dostupné upgrady
 			sales_funnels: Dostupné v oknech
 			stats: Statistiky
@@ -134,7 +133,6 @@ admin:
 		show:
 			back: Zpět na seznam
 			edit: Uprav typ předplatného
-			no_magazines_message: Tento typ předplatného není spojený s žádným magazínem
 			no_upgrades_message: Tento typ předplatného neumožňuje upgrade.
 		messages:
 			subscription_type_created: Typ předplatného byl vytvořen.

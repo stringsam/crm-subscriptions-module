@@ -56,7 +56,6 @@ data:
 			sorting: Sorting
 			description: Description
 			default: Default
-			magazines: Magazines
 			available_upgrades: Available upgrades
 			stats: Stats
 			ask_address: Ask address
@@ -159,7 +158,6 @@ admin:
 		show:
 			back: back to listing
 			edit: Edit subscription type
-			no_magazines_message: This subscription type isn't associated with any magazine
 			no_upgrades_message: This subscription type doesn't contains any upgrade subscriptions.
 		messages:
 			subscription_type_created: Subscription type was created.
