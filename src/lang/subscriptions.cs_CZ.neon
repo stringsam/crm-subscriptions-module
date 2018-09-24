@@ -136,7 +136,6 @@ admin:
 			edit: Uprav typ předplatného
 			no_magazines_message: Tento typ předplatného není spojený s žádným magazínem
 			no_upgrades_message: Tento typ předplatného neumožňuje upgrade.
-			no_sales_funnels_message: Tento typ předplatného není přiřazený k žádnému platebnímu oknu.
 		messages:
 			subscription_type_created: Typ předplatného byl vytvořen.
 			subscription_type_updated: Typ předplatného byl upraven.
