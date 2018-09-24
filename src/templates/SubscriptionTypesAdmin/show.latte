@@ -130,7 +130,7 @@
     {/if}
 
     <p class="text-center">
-      <a class="btn btn-default btn-xs" href="#subscriptionTypeItemsFormDiv" onclick="$('#subscriptionTypeItemsFormDiv').show(); return false;"><i class="fa fa-plus-circle"></i></i></a>
+      <a class="btn btn-default btn-xs" href="#subscriptionTypeItemsFormDiv" onclick="$('#subscriptionTypeItemsFormDiv').show(); return false;"><i class="fa fa-plus-circle"></i></a>
     </p>
   </div>
 
@@ -150,15 +150,21 @@
           <a n:href="show $upgrade->to_subscription_type_id">{$upgrade->to_subscription_type->name}</a>
           {$upgrade->to_subscription_type|typeContent|noescape}
           <span class="text-muted">{$upgrade->to_subscription_type->price|price}</span>
-          <a n:href="removeUpgrade! $upgrade->from_subscription_type_id, $upgrade->to_subscription_type_id" class="btn btn-default btn-xs pull-right"><i class="fa fa-trash"></i> Zmazať</a>
+          <a n:href="removeUpgrade! $upgrade->from_subscription_type_id, $upgrade->to_subscription_type_id" class="btn btn-default btn-xs pull-right">
+              <i class="fa fa-trash"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.remove_upgrade}
+          </a>
           <small class="text-muted pull-right" style="margin-right:20px;">{$upgrade->type}</small>
         </li>
       </ul>
-      <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">Pridaj upgrade</a>
+      <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">
+          <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.add_upgrade}
+      </a>
     {else}
       <p class="text-muted well text-center">
-        {_subscriptions.admin.subscription_types.show.no_upgrades_message}<br>
-        <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">Pridaj upgrade</a>
+        {_subscriptions.admin.subscription_types.show.no_upgrades_message}<br><br>
+        <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">
+            <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.add_upgrade}
+        </a>
       </p>
     {/if}
   </div>
