@@ -159,6 +159,8 @@ admin:
 			back: back to listing
 			edit: Edit subscription type
 			no_upgrades_message: This subscription type doesn't contains any upgrade subscriptions.
+			add_upgrade: Add upgrade
+			remove_upgrade: Remove
 		messages:
 			subscription_type_created: Subscription type was created.
 			subscription_type_updated: Subscription type was updated.

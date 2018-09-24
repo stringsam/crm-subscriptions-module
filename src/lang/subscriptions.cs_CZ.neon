@@ -134,6 +134,8 @@ admin:
 			back: Zpět na seznam
 			edit: Uprav typ předplatného
 			no_upgrades_message: Tento typ předplatného neumožňuje upgrade.
+			add_upgrade: Přidat upgrade
+			remove_upgrade: Smazat
 		messages:
 			subscription_type_created: Typ předplatného byl vytvořen.
 			subscription_type_updated: Typ předplatného byl upraven.
