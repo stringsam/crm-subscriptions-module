@@ -4,8 +4,8 @@ namespace Crm\SubscriptionsModule\Components;
 
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
-use Kdyby\Translation\Translator;
 use Nette\Application\UI;
+use Nette\Localization\ITranslator;
 use Nette\Utils\DateTime;
 
 class SubscriptionEndsStats extends UI\Control
@@ -18,7 +18,6 @@ class SubscriptionEndsStats extends UI\Control
     /** @var SubscriptionTypesRepository  */
     private $subscriptionTypesRepository;
 
-    /** @var Translator  */
     private $translator;
 
     private $startTime;
@@ -31,8 +30,11 @@ class SubscriptionEndsStats extends UI\Control
 
     private $freeSubscriptions = true;
 
-    public function __construct(SubscriptionsRepository $subscriptionsRepository, SubscriptionTypesRepository $subscriptionTypesRepository, Translator $translator)
-    {
+    public function __construct(
+        SubscriptionsRepository $subscriptionsRepository,
+        SubscriptionTypesRepository $subscriptionTypesRepository,
+        ITranslator $translator
+    ) {
         $this->subscriptionsRepository = $subscriptionsRepository;
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->translator = $translator;
@@ -60,6 +62,8 @@ class SubscriptionEndsStats extends UI\Control
         list($typesCounts, $contents) = $this->getCounts($data);
         $this->template->typesCounts = $typesCounts;
         $this->template->contents = $contents;
+
+        $this->template->setTranslator($this->translator);
 
         $this->template->setFile(__DIR__ . '/' . $this->templateName);
         $this->template->render();

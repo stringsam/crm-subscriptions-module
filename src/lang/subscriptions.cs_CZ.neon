@@ -185,6 +185,11 @@ admin:
 	filter_users:
 		subscription_type: Typ předplatného
 		actual_subscription: Jen aktuální
+
+	subscription_end_stats:
+		subscription_types: Typy předplatného
+		content_access_types: Typy přístupu k obsahu
+
 data_provider:
 	delete:
 		three_months_active: 'Uživatel měl během posledních tří měsíců aktivní předplatné a nemůže být smazán. '
