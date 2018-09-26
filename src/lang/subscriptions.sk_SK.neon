@@ -227,6 +227,9 @@ admin:
 		subscription_types: Typy predplatného
 		content_access_types: Typy prístupu k obsahu
 
+	month_subscriptions_small_bar_graph_widget:
+		title: Predplatné
+
 data_provider:
 	delete:
 		three_months_active: Používateľ mal v posledných troch mesiacoch aktívne predplatné a nemôže byť zmazaný

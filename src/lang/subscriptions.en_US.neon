@@ -227,6 +227,9 @@ admin:
 		subscription_types: Subscription types
 		content_access_types: Content access types
 
+	month_subscriptions_small_bar_graph_widget:
+		title: Subscriptions
+
 data_provider:
 	delete:
 		three_months_active: User had an active subscription within last three months and cannot be deleted

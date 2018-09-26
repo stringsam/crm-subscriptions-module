@@ -190,6 +190,9 @@ admin:
 		subscription_types: Typy předplatného
 		content_access_types: Typy přístupu k obsahu
 
+	month_subscriptions_small_bar_graph_widget:
+		title: Předplatné
+
 data_provider:
 	delete:
 		three_months_active: 'Uživatel měl během posledních tří měsíců aktivní předplatné a nemůže být smazán. '
