@@ -6,7 +6,6 @@ services:
 	- Crm\SubscriptionsModule\Builder\SubscriptionTypeBuilder
 	- Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionsRepository
-	- Crm\SubscriptionsModule\Repository\PrintSubscriptionsRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionPaymentsRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionTypesUpgradesRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionExtensionMethodsRepository
