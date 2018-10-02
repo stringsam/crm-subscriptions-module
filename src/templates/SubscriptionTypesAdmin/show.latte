@@ -119,7 +119,7 @@
           {$item->name}
           <span class="label label-default">{$item->vat} % {_'system.vat'}</span>
           <strong>{$item->amount|price}</strong>
-          <a n:href="RemoveSubscriptionTypeItem! $item->id" class="pull-right btn btn-xs btn-danger ajax"><i class="fa fa-trash"></i></a>
+          <a n:href="removeSubscriptionTypeItem! $item->id" class="pull-right btn btn-xs btn-danger ajax"><i class="fa fa-trash"></i></a>
           <small class="text-muted pull-right" style="margin-right:20px;">{$item->created_at}</small>
         </li>
       </ul>
