@@ -169,7 +169,6 @@ class SubscriptionsModule extends CrmModule
     public function registerCommands(CommandsContainerInterface $commandsContainer)
     {
         $commandsContainer->registerCommand($this->getInstance(\Crm\SubscriptionsModule\Commands\ChangeSubscriptionsStateCommand::class));
-        $commandsContainer->registerCommand($this->getInstance(\Crm\SubscriptionsModule\Commands\CalculateAveragesCommand::class));
     }
 
     public function registerApiCalls(ApiRoutersContainerInterface $apiRoutersContainer)
