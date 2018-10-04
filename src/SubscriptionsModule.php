@@ -2,11 +2,12 @@
 
 namespace Crm\SubscriptionsModule;
 
+use Crm\ApiModule\Api\ApiRoutersContainerInterface;
 use Crm\ApiModule\Router\ApiIdentifier;
 use Crm\ApiModule\Router\ApiRoute;
 use Crm\ApplicationModule\Access\AccessManager;
-use Crm\ApiModule\Api\ApiRoutersContainerInterface;
 use Crm\ApplicationModule\Commands\CommandsContainerInterface;
+use Crm\ApplicationModule\Criteria\CriteriaStorage;
 use Crm\ApplicationModule\CrmModule;
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Menu\MenuContainerInterface;
@@ -14,7 +15,7 @@ use Crm\ApplicationModule\Menu\MenuItem;
 use Crm\ApplicationModule\SeederManager;
 use Crm\ApplicationModule\User\UserDataRegistrator;
 use Crm\ApplicationModule\Widget\WidgetManagerInterface;
-use Crm\ApplicationModule\Criteria\CriteriaStorage;
+use Crm\SubscriptionsModule\Seeders\ContentAccessSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionLengthMethodSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionTypeNamesSeeder;
@@ -95,11 +96,6 @@ class SubscriptionsModule extends CrmModule
             300
         );
         $widgetManager->registerWidget(
-            'frontend.subscriptions.top',
-            $this->getInstance(\Crm\SubscriptionsModule\Components\ActualSubscriptionWidget::class),
-            100
-        );
-        $widgetManager->registerWidget(
             'dashboard.singlestat.totals',
             $this->getInstance(\Crm\SubscriptionsModule\Components\TotalSubscriptionsStatWidget::class),
             600
@@ -159,11 +155,6 @@ class SubscriptionsModule extends CrmModule
     public function registerEventHandlers(Emitter $emitter)
     {
         $emitter->addListener(
-            \Crm\PaymentsModule\Events\PaymentChangeStatusEvent::class,
-            $this->getInstance(\Crm\SubscriptionsModule\Events\PaymentStatusChangeHandler::class),
-            500
-        );
-        $emitter->addListener(
             \Crm\UsersModule\Events\NewAddressEvent::class,
             $this->getInstance(\Crm\SubscriptionsModule\Events\NewAddressHandler::class),
             600
@@ -178,7 +169,6 @@ class SubscriptionsModule extends CrmModule
     public function registerCommands(CommandsContainerInterface $commandsContainer)
     {
         $commandsContainer->registerCommand($this->getInstance(\Crm\SubscriptionsModule\Commands\ChangeSubscriptionsStateCommand::class));
-        $commandsContainer->registerCommand($this->getInstance(\Crm\SubscriptionsModule\Commands\CalculateAveragesCommand::class));
     }
 
     public function registerApiCalls(ApiRoutersContainerInterface $apiRoutersContainer)
@@ -209,6 +199,7 @@ class SubscriptionsModule extends CrmModule
 
     public function registerSeeders(SeederManager $seederManager)
     {
+        $seederManager->addSeeder($this->getInstance(ContentAccessSeeder::class));
         $seederManager->addSeeder($this->getInstance(SubscriptionExtensionMethodsSeeder::class));
         $seederManager->addSeeder($this->getInstance(SubscriptionLengthMethodSeeder::class));
         $seederManager->addSeeder($this->getInstance(SubscriptionTypeNamesSeeder::class));

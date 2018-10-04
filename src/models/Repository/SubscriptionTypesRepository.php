@@ -70,15 +70,6 @@ class SubscriptionTypesRepository extends Repository
         ];
     }
 
-    public function setMagazines(IRow $subscriptionType, $magazinesIdsArray)
-    {
-        $pairTable = $this->database->table('subscription_type_magazines');
-        $pairTable->where(['subscription_type_id' => $subscriptionType->id])->delete();
-        foreach ($magazinesIdsArray as $id) {
-            $pairTable->insert(['subscription_type_id' => $subscriptionType->id, 'magazine_id' => $id]);
-        }
-    }
-
     public function getSalesFunnelSubscriptionTypes(IRow $funnel)
     {
         return $this->getTable()->where(['id' => array_keys($funnel->related('sales_funnels_subscription_types')->fetchPairs('subscription_type_id', 'subscription_type_id'))]);

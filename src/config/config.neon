@@ -6,17 +6,17 @@ services:
 	- Crm\SubscriptionsModule\Builder\SubscriptionTypeBuilder
 	- Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionsRepository
-	- Crm\SubscriptionsModule\Repository\PrintSubscriptionsRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionPaymentsRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionTypesUpgradesRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionExtensionMethodsRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionTypeNamesRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository
+	- Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository
 	- Crm\SubscriptionsModule\Forms\SubscriptionTypesFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionsGeneratorFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionTypesUpgradesFormFactory
-	- Crm\SubscriptionsModule\Events\PaymentStatusChangeHandler
+	- Crm\SubscriptionsModule\Forms\SubscriptionTypeItemsFormFactory
 	- Crm\SubscriptionsModule\Generator\SubscriptionsGenerator
 	- Crm\SubscriptionsModule\Components\SubscriptionButtonFactory
 	- Crm\SubscriptionsModule\Components\ActualUserSubscriptions
@@ -33,18 +33,15 @@ services:
 	- Crm\SubscriptionsModule\Components\ActualSubscriptionLabel
 	- Crm\SubscriptionsModule\Components\UserSubscriptionsListing
 	- Crm\SubscriptionsModule\Components\SubscriptionEndsStatsFactoryInterface
-	- Crm\SubscriptionsModule\Components\ActualSubscriptionWidget
 	- Crm\SubscriptionsModule\Commands\ChangeSubscriptionsStateCommand
-	- Crm\SubscriptionsModule\Commands\CalculateAveragesCommand
 	- Crm\SubscriptionsModule\Api\v1\UsersSubscriptionsHandler
-	- Crm\SubscriptionsModule\Upgrade\Expander
 	- Crm\SubscriptionsModule\Subscription\ActualUserSubscription
 	- Crm\SubscriptionsModule\Events\NewAddressHandler
 	- Crm\SubscriptionsModule\Api\v1\CreateSubscriptionHandler
 	- Crm\SubscriptionsModule\Repository\ContentAccessRepository
-	- Crm\SubscriptionsModule\Upgrade\UpgradeFactory
 	- Crm\SubscriptionsModule\User\SubscriptionsUserDataProvider
 	- Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria
+	- Crm\SubscriptionsModule\Seeders\ContentAccessSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionTypeNamesSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionLengthMethodSeeder

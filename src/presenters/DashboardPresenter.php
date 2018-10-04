@@ -50,6 +50,10 @@ class DashboardPresenter extends AdminPresenter
     {
     }
 
+    public function renderEndings()
+    {
+    }
+
     public function createComponentDateFilterForm(DateFilterFormFactory $dateFilterFormFactory)
     {
         $form = $dateFilterFormFactory->create($this->dateFrom, $this->dateTo);

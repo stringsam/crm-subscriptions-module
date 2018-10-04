@@ -40,6 +40,7 @@ data:
 			price: Cena
 			length: "Dĺžka (dni)"
 			extending_length: "Dĺžka (dni) pri predĺžení predplatného"
+			fixed_start: "Fixný začiatok predplatného"
 			fixed_end: "Fixný koniec predplatného"
 			user_label: Verejný popis
 			type: Typ
@@ -55,15 +56,14 @@ data:
 			sorting: Poradie
 			description: Popis
 			default: Default
-			magazines: Magazíny
 			available_upgrades: Dostupné upgrady
-			sales_funnels: Dostupné v oknách
 			stats: Štatistiky
 			ask_address: Vypýtaj adresu
 			disable_notifications: Vypnuté notifikácie
 			extension_method_id: Spôsob predĺženia predplatného
 			length_method_id: Spôsob výpočtu dĺžky predplatného
 			recurrent_charge_before: "Realizácia nasledujúcej platby (počet hodín pred vypršaním)"
+			subscription_type_items: Položky predplatného
 		required:
 			name: Názov je povinný
 			length: "Dĺžka (v dňoch) je povinný"
@@ -80,6 +80,7 @@ data:
 			next_subscription_type_id: ID
 			length: napríklad 31
 			extending_length: napríklad 35
+			fixed_start: napríklad 3.4.2020
 			fixed_end: napríklad 3.5.2020
 			price: "napríklad 12.99"
 		values:
@@ -87,6 +88,19 @@ data:
 			inactive: Neaktívne
 			visible: Viditeľné
 			hidden: Skryté
+	subscription_type_items:
+		fields:
+			name: Názov
+			amount: Suma
+			vat: 'DPH (%)'
+		placeholder:
+			name: napríklad 'Printové predplatné magazínu'
+			amount: napríklad '123.45'
+			vat: napríklad 20
+		required:
+			name: Názov je povinný
+			amount: Suma je povinná
+			vat: DPH je povinná
 
 frontend:
 	my:
@@ -95,6 +109,8 @@ frontend:
 		upgrade: Navýšenie predplatného
 		no_subscription: "Nemáte žiadne predplatné"
 		buy_new_subscription: Môžete si ho zakúpiť a získať tak prístup ku obsahu.
+	new:
+		title: Predplaťte si %site_name%
 	actual_subscription_widget:
 		active_subscription: 'Vaše predplatné v súčasnosti <span class="label label-success"><b>je aktívne</b></span>'
 		active_recurrent: 'Máte zvolený najpohodlnejší spôsob platby za predplatné s automatickým obnovovaním. Najbližšie sa vaše predplatné obnoví'
@@ -142,15 +158,19 @@ admin:
 		show:
 			back: Späť na zoznam
 			edit: Uprav typ predplatného
-			no_magazines_message: Tento typ predplatného nieje spojený so žiadným magazínom
 			no_upgrades_message: Tento typ predplatného neumožňuje upgrade.
-			no_sales_funnels_message: Tento typ predplatného nie je priradený ku žiadnemu platobnému oknu.
+			add_upgrade: Pridať upgrade
+			remove_upgrade: Zmazať
 		messages:
 			subscription_type_created: Typ predplatného bol vytvorený.
 			subscription_type_updated: Typ predplatného bol upravený.
 			subscription_type_not_found: Typ predplatného sa nepodarilo nájsť.
 			subscription_types_upgrade_created: Upgrade predplatného bol vytvorený.
 			subscription_types_upgrade_deleted: Upgrade predplatného bol zmazaný.
+			subscription_type_item_created: Položka predplatného bola vytvorená
+			subscription_type_item_deleted: Položka predplatného bola vymazaná
+			subscription_types_wrong_amount: 'Nesedí suma za položky so sumou predplatného. Rozdiel <strong>%price%</strong>'
+			no_subscription_type_items: Žiadne položky k predplatnému zatiaľ neboli vytvorené
 
 	subscription_generator:
 		form:
@@ -202,6 +222,13 @@ admin:
 	filter_users:
 		subscription_type: Typ predplatného
 		actual_subscription: Iba aktuálne
+
+	subscription_end_stats:
+		subscription_types: Typy predplatného
+		content_access_types: Typy prístupu k obsahu
+
+	month_subscriptions_small_bar_graph_widget:
+		title: Predplatné
 
 data_provider:
 	delete:

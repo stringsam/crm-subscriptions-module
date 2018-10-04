@@ -2,8 +2,9 @@
 
 namespace Crm\SubscriptionsModule\Components;
 
+use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Widget\WidgetInterface;
-use Crm\PaymentsModule\Repository\PaymentGiftCouponsRepository;
+use Crm\SubscriptionsModule\DataProvider\FilterGiftedSubscriptionsDataProviderInterface;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI;
@@ -12,23 +13,23 @@ class UserSubscriptionsListing extends UI\Control implements WidgetInterface
 {
     private $templateName = 'user_subscriptions_listing.latte';
 
+    /** @var DataProviderManager */
+    private $dataProviderManager;
+
     /** @var SubscriptionsRepository */
     private $subscriptionsRepository;
 
     /** @var Translator  */
     private $translator;
 
-    /** @var PaymentGiftCouponsRepository */
-    private $paymentGiftCouponsRepository;
-
     public function __construct(
+        DataProviderManager $dataProviderManager,
         SubscriptionsRepository $subscriptionsRepository,
-        PaymentGiftCouponsRepository $paymentGiftCouponsRepository,
         Translator $translator
     ) {
+        $this->dataProviderManager = $dataProviderManager;
         $this->subscriptionsRepository = $subscriptionsRepository;
         $this->translator = $translator;
-        $this->paymentGiftCouponsRepository = $paymentGiftCouponsRepository;
     }
 
     public function header($id = '')
@@ -50,14 +51,17 @@ class UserSubscriptionsListing extends UI\Control implements WidgetInterface
         $subscriptions = $this->subscriptionsRepository->userSubscriptions($id);
         $givenByEmail = [];
 
-        foreach ($subscriptions as $subscription) {
-            if ($subscription->type === SubscriptionsRepository::TYPE_GIFT) {
-                $giftCoupon = $this->paymentGiftCouponsRepository->findBy('subscription_id', $subscription->id);
-                if ($giftCoupon) {
-                    $givenByEmail[$subscription->id] = $giftCoupon->payment->user->email;
-                }
-            }
+        // transforms Nette Selection to array & selects only IDs
+        // iterator_to_array won't be needed when we start using proper objects for models
+        $subscriptionIDs = array_column(iterator_to_array($subscriptions), 'id');
+
+        /** @var FilterGiftedSubscriptionsDataProviderInterface[] $providers */
+        $providers = $this->dataProviderManager->getProviders('subscriptions.dataprovider.filter_gifted_subscriptions', FilterGiftedSubscriptionsDataProviderInterface::class);
+        foreach ($providers as $sorting => $provider) {
+            // using += operator because array_merge would reindex array and remove keys (subscription IDs)
+            $givenByEmail += $provider->provide($subscriptionIDs);
         }
+
         $this->template->totalSubscriptions = $this->totalCount($id);
         $this->template->subscriptions = $subscriptions;
         $this->template->givenByEmail = $givenByEmail;

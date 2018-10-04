@@ -33,7 +33,7 @@
       </li>
       <li class="list-group-item"><b>{_system.fields.created}:</b> <span class="text-muted">{$type->created_at|userDate}</span></li>
       <li class="list-group-item"><b>{_system.fields.updated}:</b> <span class="text-muted">{$type->modified_at|userDate}</span></li>
-      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.price}:</b> {$type->price}&nbsp;&euro;</li>
+      <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.price}:</b> {$type->price|price}</li>
       <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.limit_per_user}:</b> {$type->limit_per_user}</li>
       <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.recurrent_charge_before}:</b> {if $type->recurrent_charge_before}{$type->recurrent_charge_before} hours{else}<small>--</small>{/if}</li>
       <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.next_subscription_type_id}:</b> {if $type->next_subscription_type_id}<a n:href="show $type->next_subscription_type_id">{$type->next_subscription_type->name}</a>{else}<small>--</small>{/if}</li>
@@ -64,6 +64,10 @@
       <li n:if="$type->disable_notifications" class="list-group-item">
         <span class="label label-default">{_subscriptions.data.subscription_types.fields.disable_notifications}</span>
       </li>
+      <li n:if="$type->fixed_start" class="list-group-item">
+        <b>{_subscriptions.data.subscription_types.fields.fixed_start}:</b>
+        {$type->fixed_start|userDate}
+      </li>
       <li class="list-group-item">
         <b>{_subscriptions.data.subscription_types.fields.length}:</b>
         {if $type->fixed_end}
@@ -89,39 +93,53 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12">
-    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.magazines}</h2>
-    {var $pairs = $type->related('subscription_type_magazines')}
-    {if $pairs->count('*')}
-      <ul class="list-group">
-        <li n:foreach="$pairs as $pair" class="list-group-item">
-          <a n:href=":Issues:MagazinesAdmin:show $pair->magazine_id">{$pair->magazine->name}</a>
-          <code>{$pair->magazine->identifier}</code>
-          <small class="text-muted">{$pair->magazine->related('issues')->count('*')} {_issues.data.magazines.fields.issues|lower}</small>
-        </li>
-      </ul>
-    {else}
-      <p class="text-muted well text-center">{_subscriptions.admin.subscription_types.show.no_magazines_message}</p>
-    {/if}
-  </div>
-</div>
+{control simpleWidget 'subscription_types_admin.show.middle', $type}
+
+{snippet subscriptionTypeItemsSnippet}
+
+{var $calculatedItemsSum = 0}
+{foreach $subscriptionTypeItems as $item}
+  {var $calculatedItemsSum = $calculatedItemsSum + $item->amount}
+{/foreach}
 
 <div class="row">
   <div class="col-md-12">
-    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.sales_funnels}</h2>
-    {if $usedSalesFunnels->count('*')}
+    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.subscription_type_items}</h2>
+
+    {if $calculatedItemsSum != $type->price}
+      <div class="alert alert-danger">
+        <h4><i class="fa fa-exclamation-circle"></i> {_'system.message.warning'}</h4>
+        <p>{_'subscriptions.admin.subscription_types.messages.subscription_types_wrong_amount', ['price' => $type->price-$calculatedItemsSum]|noescape}</p>
+      </div>
+    {/if}
+
+    {if $subscriptionTypeItems->count('*') > 0}
       <ul class="list-group">
-        <li n:foreach="$usedSalesFunnels as $funnel" class="list-group-item">
-          <a n:href=":SalesFunnel:SalesFunnelsAdmin:show $funnel->id">{$funnel->name}</a>
-          <code>{$funnel->url_key}</code>
+        <li n:foreach="$subscriptionTypeItems as $item" class="list-group-item">
+          {$item->name}
+          <span class="label label-default">{$item->vat} % {_'system.vat'}</span>
+          <strong>{$item->amount|price}</strong>
+          <a n:href="removeSubscriptionTypeItem! $item->id" class="pull-right btn btn-xs btn-danger ajax"><i class="fa fa-trash"></i></a>
+          <small class="text-muted pull-right" style="margin-right:20px;">{$item->created_at}</small>
         </li>
       </ul>
     {else}
-      <p class="text-muted well text-center">{_subscriptions.admin.subscription_types.show.no_sales_funnels_message}</p>
+      <p class="text-muted well text-center">
+        {_subscriptions.admin.subscription_types.show.no_subscription_type_items}<br>
+      </p>
     {/if}
+
+    <p class="text-center">
+      <a class="btn btn-default btn-xs" href="#subscriptionTypeItemsFormDiv" onclick="$('#subscriptionTypeItemsFormDiv').show(); return false;"><i class="fa fa-plus-circle"></i></a>
+    </p>
+  </div>
+
+  <div id="subscriptionTypeItemsFormDiv" class="col-md-12" style="display:none">
+    {control subscriptionTypeItemsForm}
   </div>
 </div>
+
+{/snippet}
 
 <div class="row">
   <div class="col-md-12">
@@ -131,16 +149,22 @@
         <li n:foreach="$availableUpgrades as $upgrade" class="list-group-item">
           <a n:href="show $upgrade->to_subscription_type_id">{$upgrade->to_subscription_type->name}</a>
           {$upgrade->to_subscription_type|typeContent|noescape}
-          <span class="text-muted">{$upgrade->to_subscription_type->price}&nbsp;&euro;</span>
-          <a n:href="removeUpgrade! $upgrade->from_subscription_type_id, $upgrade->to_subscription_type_id" class="btn btn-default btn-xs pull-right"><i class="fa fa-trash"></i> Zmazať</a>
+          <span class="text-muted">{$upgrade->to_subscription_type->price|price}</span>
+          <a n:href="removeUpgrade! $upgrade->from_subscription_type_id, $upgrade->to_subscription_type_id" class="btn btn-default btn-xs pull-right">
+              <i class="fa fa-trash"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.remove_upgrade}
+          </a>
           <small class="text-muted pull-right" style="margin-right:20px;">{$upgrade->type}</small>
         </li>
       </ul>
-      <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">Pridaj upgrade</a>
+      <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">
+          <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.add_upgrade}
+      </a>
     {else}
       <p class="text-muted well text-center">
-        {_subscriptions.admin.subscription_types.show.no_upgrades_message}<br>
-        <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">Pridaj upgrade</a>
+        {_subscriptions.admin.subscription_types.show.no_upgrades_message}<br><br>
+        <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">
+            <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.add_upgrade}
+        </a>
       </p>
     {/if}
   </div>

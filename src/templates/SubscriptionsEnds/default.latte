@@ -47,7 +47,7 @@
             {var $payment = $subscription->related('payments')->limit(1)->fetch()}
             {if $payment}
               {$payment->payment_gateway->name}
-              <small>{$payment->amount}&nbsp;&euro;</small>
+              <small>{$payment->amount|price}</small>
             {/if}
          </td>
           <td>{$subscription->subscription_type|typeContent|noescape}</td>

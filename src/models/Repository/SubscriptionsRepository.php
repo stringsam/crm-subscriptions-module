@@ -49,7 +49,7 @@ class SubscriptionsRepository extends Repository
         IRow $subscriptionType,
         bool $isRecurrent,
         IRow $user,
-        $type = 'regular',
+        $type = self::TYPE_REGULAR,
         DateTime $startTime = null,
         DateTime $endTime = null,
         $note = null,
@@ -61,6 +61,10 @@ class SubscriptionsRepository extends Repository
             $extension = $extensionMethod->getStartTime($user, $subscriptionType);
             $startTime = $extension->getDate();
             $isExtending = $extension->isExtending();
+        }
+
+        if (!$isExtending && $subscriptionType->fixed_start) {
+            $startTime = $subscriptionType->fixed_start;
         }
 
         $subscriptionLength = $isExtending && $subscriptionType->extending_length ? $subscriptionType->extending_length : $subscriptionType->length;
@@ -170,21 +174,6 @@ class SubscriptionsRepository extends Repository
         ])->order('subscription_type.mobile DESC, end_time DESC')->fetch();
     }
 
-    public function actualUserSubscriptionIsClub($userId) : bool
-    {
-        $result = $this->getTable()->where([
-            'user_id' => $userId,
-            'start_time <= ?' => new DateTime,
-            'end_time > ?' => new DateTime,
-            'subscription_type.club = 1',
-        ])->fetch();
-
-        if ($result) {
-            return true;
-        }
-        return false;
-    }
-
     public function hasSubscriptionEndAfter($userId, DateTime $endTime)
     {
         return $this->getTable()->where(['user_id' => $userId, 'end_time > ?' => $endTime])->count('*') > 0;
@@ -222,41 +211,13 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function actualPrintSubscriptions(DateTime $date = null)
+    public function actualSubscriptionsByContentAccess(DateTime $date, string ...$contentAccess)
     {
-        if ($date == null) {
-            $date = new DateTime();
-        }
         return $this->getTable()->where([
-            'subscription_type.print' => true,
+            'subscription_type:subscription_type_content_access.content_access.name' => $contentAccess,
             'start_time <= ?' => $date,
             'end_time > ?' => $date,
-        ]);
-    }
-
-    public function actualFridayPrintSubscriptions(DateTime $date = null)
-    {
-        if ($date == null) {
-            $date = new DateTime();
-        }
-        return $this->getTable()->where([
-            'subscription_type.print_friday' => true,
-            'start_time <= ?' => $date,
-            'end_time > ?' => $date,
-        ]);
-    }
-
-    public function actualClubPrintSubscriptions(DateTime $date = null)
-    {
-        if ($date == null) {
-            $date = new DateTime();
-        }
-
-        return $this->getTable()->where([
-            'subscription_type.club' => true,
-            'start_time <= ?' => $date,
-            'end_time > ?' => $date,
-        ]);
+        ])->group('user_id');
     }
 
     public function createdOrModifiedSubscriptions(DateTime $fromTime, DateTime $toTime)
@@ -286,20 +247,11 @@ class SubscriptionsRepository extends Repository
 //          ->where('end_time > ?', $date->format(DateTime::ATOM));
     }
 
-    public function printSubscriptions()
+    public function subscriptionsByContentAccess(string ...$contentAccess)
     {
-        return $this->getTable()->where(['subscription_type.print = ? OR subscription_type.print_friday = ?' => [1, 1]])->group('user_id');
-    }
-
-    // todo by som navrhol premenovat, je tam napevno 10:00:00
-    // cize to ma nejaky bisniz ucel, a z nazvu funkcie to neni velmi jasne
-    public function actualUserMobileSubscriptions($userId)
-    {
-        $now = new DateTime();
-        return $this->getTable()->where('subscription_type.mobile', true)
-            ->where('user_id', $userId)
-            ->where('start_time <= ?', $now->format('Y-m-d 10:00:00'))
-            ->where('end_time > ?', $now->format('Y-m-d 10:00:00'));
+        return $this->getTable()->where([
+            'subscription_type:subscription_type_content_access.content_access.name' => $contentAccess,
+        ])->group('user_id');
     }
 
     public function subscriptionsEndBetween(DateTime $endTimeFrom, DateTime $endTimeTo, $withNextSubscription = null)

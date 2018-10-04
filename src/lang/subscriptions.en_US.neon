@@ -40,6 +40,7 @@ data:
 			price: Price
 			length: "Length (days)"
 			extending_length: "Length (days) when continue subscription"
+			fixed_start: "Fixed subscription start time"
 			fixed_end: "Fixed subscription end time"
 			user_label: User label
 			type: Type
@@ -55,15 +56,14 @@ data:
 			sorting: Sorting
 			description: Description
 			default: Default
-			magazines: Magazines
 			available_upgrades: Available upgrades
-			sales_funnels: Available in sales funnels
 			stats: Stats
 			ask_address: Ask address
 			disable_notifications: Disabled notifications
 			extension_method_id: Extension method
 			length_method_id: Subscription length calculcation method
 			recurrent_charge_before: "Recurrent charge before (hours)"
+			subscription_type_items: Subscripton items
 		required:
 			name: Name is required
 			length: "Length (in days) is required"
@@ -80,6 +80,7 @@ data:
 			next_subscription_type_id: ID
 			length: for example 31
 			extending_length: for example 35
+			fixed_start: for example 3.4.2020
 			fixed_end: for example 3.5.2020
 			price: "for example 12.99"
 		values:
@@ -87,6 +88,19 @@ data:
 			inactive: Inactive
 			visible: Visible
 			hidden: Hidden
+	subscription_type_items:
+		fields:
+			name: Name
+			amount: Amount
+			vat: 'VAT (%)'
+		placeholder:
+			name: for example 'Print subscriptions'
+			amount: for example '123.45'
+			vat: for example 20
+		required:
+			name: Name is required
+			amount: Amount is required
+			vat: VAT is required
 
 frontend:
 	my:
@@ -95,6 +109,8 @@ frontend:
 		upgrade: Upgrade subscription
 		no_subscription: "You don't have any subscription."
 		buy_new_subscription: You can buy new subscription.
+	new:
+		title: Subscribe to %site_name%
 	actual_subscription_widget:
 		active_subscription: 'Your subscription <span class="label label-success"><b>is active</b></span>'
 		active_recurrent: 'You have recurrent payment enabled. Next charge will occur'
@@ -142,15 +158,19 @@ admin:
 		show:
 			back: back to listing
 			edit: Edit subscription type
-			no_magazines_message: This subscription type isn't associated with any magazine
 			no_upgrades_message: This subscription type doesn't contains any upgrade subscriptions.
-			no_sales_funnels_message: This subscription type isn't used by any sales funnel
+			add_upgrade: Add upgrade
+			remove_upgrade: Remove
 		messages:
 			subscription_type_created: Subscription type was created.
 			subscription_type_updated: Subscription type was updated.
 			subscription_type_not_found: Subscription type not found.
 			subscription_types_upgrade_created: Subscription upgrade was created.
 			subscription_types_upgrade_deleted: Subscription upgrade was deleted.
+			subscription_type_item_created: Subscription item was created.
+			subscription_type_item_deleted: Subscription item was deleted.
+			subscription_types_wrong_amount: 'Wrong subscription items amounts sum. Difference <strong>%price%</strong>'
+			no_subscription_type_items: This subscripton type doesn't contains any items.
 
 	subscription_generator:
 		form:
@@ -202,6 +222,13 @@ admin:
 	filter_users:
 		subscription_type: Subscription type
 		actual_subscription: Only actual
+
+	subscription_end_stats:
+		subscription_types: Subscription types
+		content_access_types: Content access types
+
+	month_subscriptions_small_bar_graph_widget:
+		title: Subscriptions
 
 data_provider:
 	delete:
