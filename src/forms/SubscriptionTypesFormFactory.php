@@ -173,7 +173,7 @@ class SubscriptionTypesFormFactory
 
             $subscriptionType = $this->subscriptionTypesRepository->find($subscriptionTypeId);
             $this->subscriptionTypesRepository->update($subscriptionType, $values);
-            $this->processContentTypes($subscriptionType, $values);
+            $this->subscriptionTypeBuilder->processContentTypes($subscriptionType, (array) $values);
             $this->onUpdate->__invoke($subscriptionType);
         } else {
             $subscriptionType = $this->subscriptionTypeBuilder->createNew()
@@ -202,30 +202,15 @@ class SubscriptionTypesFormFactory
             foreach ($contentAccesses as $contentAccess) {
                 $contentAccessValues[$contentAccess->name] = $values[$contentAccess->name];
             }
-            $subscriptionType->setContentAccess($contentAccessValues);
+            $subscriptionType->setContentAccessOption($contentAccessValues);
 
             $subscriptionType = $subscriptionType->save();
 
             if (!$subscriptionType) {
                 $form['name']->addError(implode("\n", $this->subscriptionTypeBuilder->getErrors()));
             } else {
-                $this->processContentTypes($subscriptionType, $values);
+                $this->subscriptionTypeBuilder->processContentTypes($subscriptionType, (array) $values);
                 $this->onSave->__invoke($subscriptionType);
-            }
-        }
-    }
-
-    private function processContentTypes(IRow $subscriptionType, $values)
-    {
-        $access = $this->contentAccessRepository->all()->fetchPairs('name', 'name');
-
-        foreach ($access as $key) {
-            if ($values->{$key}) {
-                if (!$this->contentAccessRepository->hasAccess($subscriptionType, $key)) {
-                    $this->contentAccessRepository->addAccess($subscriptionType, $key);
-                }
-            } else {
-                $this->contentAccessRepository->removeAccess($subscriptionType, $key);
             }
         }
     }

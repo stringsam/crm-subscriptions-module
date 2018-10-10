@@ -4,6 +4,7 @@ namespace Crm\SubscriptionsModule\Builder;
 
 use Crm\ApplicationModule\Builder\Builder;
 use Crm\ApplicationModule\Config\ApplicationConfig;
+use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Nette\Database\Context;
 use Nette\Database\Table\IRow;
 use Nette\Utils\DateTime;
@@ -22,10 +23,16 @@ class SubscriptionTypeBuilder extends Builder
 
     private $subscriptionTypeItems = [];
 
-    public function __construct(Context $database, ApplicationConfig $applicationConfig)
-    {
+    private $contentAccessRepository;
+
+    public function __construct(
+        Context $database,
+        ApplicationConfig $applicationConfig,
+        ContentAccessRepository $contentAccessRepository
+    ) {
         parent::__construct($database);
         $this->applicationConfig = $applicationConfig;
+        $this->contentAccessRepository = $contentAccessRepository;
     }
 
     public function isValid()
@@ -109,34 +116,9 @@ class SubscriptionTypeBuilder extends Builder
         return $this->set('visible', $visible);
     }
 
-    public function setWeb($web)
+    public function setContentAccessOption(...$contentAccess)
     {
-        return $this->set('web', $web);
-    }
-
-    public function setPrint($print)
-    {
-        return $this->set('print', $print);
-    }
-
-    public function setPrintFriday($print_friday)
-    {
-        return $this->set('print_friday', $print_friday);
-    }
-
-    public function setAdFree($adFree)
-    {
-        return $this->set('ad_free', $adFree);
-    }
-
-    public function setClub($club)
-    {
-        return $this->set('club', $club);
-    }
-
-    public function setMobile($mobile)
-    {
-        return $this->set('mobile', $mobile);
+        return $this->setOption('content_access', array_fill_keys($contentAccess, 1));
     }
 
     public function setDefault($default)
@@ -223,9 +205,36 @@ class SubscriptionTypeBuilder extends Builder
         return $this;
     }
 
+    public function processContentTypes($subscriptionType, array $values)
+    {
+        $values = array_filter($values);
+        $access = $this->contentAccessRepository->all()->fetchPairs('name', 'name');
+
+        foreach ($access as $key) {
+            if (isset($values[$key])) {
+                if (!$this->contentAccessRepository->hasAccess($subscriptionType, $key)) {
+                    $this->contentAccessRepository->addAccess($subscriptionType, $key);
+                }
+            } else {
+                $this->contentAccessRepository->removeAccess($subscriptionType, $key);
+            }
+        }
+    }
+
     protected function store($tableName)
     {
+        $contentAccess = $this->getOption('content_access');
+
+        // content access legacy
+        foreach ($contentAccess as $key => $_) {
+            if (in_array($key, ['web', 'print', 'club', 'mobile', 'print_friday', 'ad_free'])) {
+                $this->set($key, 1);
+            }
+        }
+
         $subscriptionType = parent::store($tableName);
+        $this->processContentTypes($subscriptionType, $contentAccess);
+
         foreach ($this->magazines as $magazine) {
             $exists = $this->database->table($this->magazinesSubscriptionTypesTable)->where(['magazine_id' => $magazine->id, 'subscription_type_id' => $subscriptionType->id])->count('*') > 0;
             if (!$exists) {
