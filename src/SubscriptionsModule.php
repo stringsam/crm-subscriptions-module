@@ -174,7 +174,7 @@ class SubscriptionsModule extends CrmModule
     public function registerApiCalls(ApiRoutersContainerInterface $apiRoutersContainer)
     {
         $apiRoutersContainer->attachRouter(
-            new ApiRoute(new ApiIdentifier('1', 'users', 'subscriptions'), 'Crm\SubscriptionsModule\Api\v1\UsersSubscriptionsHandler', 'Crm\UsersModule\Auth\LoggedUserTokenAuthorization')
+            new ApiRoute(new ApiIdentifier('1', 'users', 'subscriptions'), 'Crm\SubscriptionsModule\Api\v1\UsersSubscriptionsHandler', 'Crm\UsersModule\Auth\UserTokenAuthorization')
         );
 
         $apiRoutersContainer->attachRouter(
