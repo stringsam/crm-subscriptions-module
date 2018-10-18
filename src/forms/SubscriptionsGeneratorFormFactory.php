@@ -31,6 +31,9 @@ class SubscriptionsGeneratorFormFactory
     /** @var SubscriptionTypesRepository  */
     private $subscriptionTypesRepository;
 
+    /** @var SubscriptionsGenerator  */
+    private $subscriptionsGenerator;
+
     /** @var LinkGenerator  */
     private $linkGenerator;
 
