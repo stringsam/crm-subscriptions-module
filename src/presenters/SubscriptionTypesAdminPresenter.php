@@ -43,6 +43,7 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         SubscriptionTypeItemsRepository $subscriptionTypeItemsRepository,
         SubscriptionTypeItemsFormFactory $subscriptionTypeItemsFormFactory
     ) {
+        parent::__construct();
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->subscriptionTypesUpgradesRepository = $subscriptionTypesUpgradesRepository;
         $this->subscriptionTypeFactory = $subscriptionTypeFactory;
