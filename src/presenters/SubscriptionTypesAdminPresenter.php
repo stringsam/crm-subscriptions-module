@@ -18,6 +18,7 @@ use Crm\SubscriptionsModule\Report\StoppedOnFirstSubscriptionReport;
 use Crm\SubscriptionsModule\Report\TotalRecurrentSubscriptionsReport;
 use Crm\SubscriptionsModule\Report\TotalSubscriptionsReport;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository;
+use Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesUpgradesRepository;
 
@@ -35,13 +36,16 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
 
     private $subscriptionTypeItemsFormFactory;
 
+    private $subscriptionTypesMetaRepository;
+
     public function __construct(
         SubscriptionTypesRepository $subscriptionTypesRepository,
         SubscriptionTypesUpgradesRepository $subscriptionTypesUpgradesRepository,
         SubscriptionTypesFormFactory $subscriptionTypeFactory,
         SubscriptionTypesUpgradesFormFactory $subscriptionTypesUpgradesFormFactory,
         SubscriptionTypeItemsRepository $subscriptionTypeItemsRepository,
-        SubscriptionTypeItemsFormFactory $subscriptionTypeItemsFormFactory
+        SubscriptionTypeItemsFormFactory $subscriptionTypeItemsFormFactory,
+        SubscriptionTypesMetaRepository $subscriptionTypesMetaRepository
     ) {
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->subscriptionTypesUpgradesRepository = $subscriptionTypesUpgradesRepository;
@@ -49,6 +53,7 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         $this->subscriptionTypesUpgradesFormFactory = $subscriptionTypesUpgradesFormFactory;
         $this->subscriptionTypeItemsRepository = $subscriptionTypeItemsRepository;
         $this->subscriptionTypeItemsFormFactory = $subscriptionTypeItemsFormFactory;
+        $this->subscriptionTypesMetaRepository = $subscriptionTypesMetaRepository;
     }
 
     public function renderDefault()
@@ -89,6 +94,7 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         $this->template->type = $subscriptionType;
         $this->template->availableUpgrades = $this->subscriptionTypesUpgradesRepository->availableUpgrades($subscriptionType);
         $this->template->subscriptionTypeItems = $this->subscriptionTypeItemsRepository->subscriptionTypeItems($subscriptionType);
+        $this->template->meta = $this->subscriptionTypesMetaRepository->subscriptionTypeMeta($subscriptionType);
 
         $reportTable = new ReportTable(
             ['subscription_type_id' => $id],
