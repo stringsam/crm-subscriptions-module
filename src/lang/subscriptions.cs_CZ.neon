@@ -86,7 +86,7 @@ data:
 			hidden: Skryté
 frontend:
 	my:
-		history: Historie přeplatných
+		history: Historie předplatných
 		actual: Aktuální předplatné
 		upgrade: Navýšení předplatného
 		no_subscription: Nemáte žádné předplatné
