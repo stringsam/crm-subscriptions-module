@@ -35,6 +35,7 @@ class SubscriptionEndsStats extends UI\Control
         SubscriptionTypesRepository $subscriptionTypesRepository,
         ITranslator $translator
     ) {
+        parent::__construct();
         $this->subscriptionsRepository = $subscriptionsRepository;
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->translator = $translator;

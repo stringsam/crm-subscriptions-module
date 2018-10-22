@@ -27,6 +27,7 @@ class UserSubscriptionsListing extends UI\Control implements WidgetInterface
         SubscriptionsRepository $subscriptionsRepository,
         Translator $translator
     ) {
+        parent::__construct();
         $this->dataProviderManager = $dataProviderManager;
         $this->subscriptionsRepository = $subscriptionsRepository;
         $this->translator = $translator;
