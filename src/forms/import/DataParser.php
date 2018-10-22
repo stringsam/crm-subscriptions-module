@@ -14,6 +14,7 @@ class DataParser
     public function getData($data)
     {
         $rows = explode("\n", $data);
+        $keys = [];
         if (count($rows) > 0) {
             $keys = explode($this->delimiter, $rows[0]);
         }
