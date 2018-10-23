@@ -20,6 +20,7 @@ services:
 	- Crm\SubscriptionsModule\Generator\SubscriptionsGenerator
 	- Crm\SubscriptionsModule\Components\SubscriptionButtonFactory
 	- Crm\SubscriptionsModule\Components\ActualUserSubscriptions
+	- Crm\SubscriptionsModule\Components\ActualSubscribersRegistrationSourceStatsWidget
 	- Crm\SubscriptionsModule\Components\TotalSubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\ActualSubscribersStatWidget
 	- Crm\SubscriptionsModule\Components\ActualSubscriptionsStatWidget
