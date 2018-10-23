@@ -38,7 +38,7 @@ class SubscriptionTypesMetaRepository extends Repository
     {
         if ($this->exists($subscriptionType, $key)) {
             $this->getTable()->where(['subscription_type_id' => $subscriptionType->id, 'key' => $key])->update(['value' => $value]);
-            return $this->getTable()->where(['subscription_type_id', 'keu' => $key])->limit(1)->fetch();
+            return $this->getTable()->where(['subscription_type_id', 'key' => $key])->limit(1)->fetch();
         } else {
             return $this->add($subscriptionType, $key, $value);
         }
