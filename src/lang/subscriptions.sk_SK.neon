@@ -64,6 +64,7 @@ data:
 			length_method_id: Spôsob výpočtu dĺžky predplatného
 			recurrent_charge_before: "Realizácia nasledujúcej platby (počet hodín pred vypršaním)"
 			subscription_type_items: Položky predplatného
+			meta: Meta
 		required:
 			name: Názov je povinný
 			length: "Dĺžka (v dňoch) je povinný"
