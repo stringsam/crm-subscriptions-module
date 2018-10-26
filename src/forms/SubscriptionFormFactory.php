@@ -59,11 +59,11 @@ class SubscriptionFormFactory
      * @param IRow $user
      * @return Form
      */
-    public function create($subscriptionId, IRow $user = null)
+    public function create(int $subscriptionId = null, IRow $user = null)
     {
         $defaults = [];
         $subscription = false;
-        if (isset($subscriptionId)) {
+        if ($subscriptionId != null) {
             $subscription = $this->subscriptionsRepository->find($subscriptionId);
             $defaults = $subscription->toArray();
         }

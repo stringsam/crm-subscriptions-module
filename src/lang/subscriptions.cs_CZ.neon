@@ -61,6 +61,7 @@ data:
 			disable_notifications: Vypnuté notifikace
 			extension_method_id: Způsob prodloužení předplatného
 			recurrent_charge_before: "Realizace následující platby (počet hodin před vypršením)"
+			meta: Meta
 		required:
 			name: Název je povinný
 			length: "Délka (ve dnech) je povinná"
@@ -86,7 +87,7 @@ data:
 			hidden: Skryté
 frontend:
 	my:
-		history: Historie přeplatných
+		history: Historie předplatných
 		actual: Aktuální předplatné
 		upgrade: Navýšení předplatného
 		no_subscription: Nemáte žádné předplatné
