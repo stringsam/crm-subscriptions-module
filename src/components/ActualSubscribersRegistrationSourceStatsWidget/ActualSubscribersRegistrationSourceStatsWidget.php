@@ -73,4 +73,3 @@ class ActualSubscribersRegistrationSourceStatsWidget extends BaseWidget
         return $control;
     }
 }
-
