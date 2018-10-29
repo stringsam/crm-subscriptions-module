@@ -2,13 +2,12 @@
 
 namespace Crm\SubscriptionsModule\Components;
 
-use Crm\ApplicationModule\Components\Graphs\GoogleBarGraphGroupControlFactoryInterface;
-use Crm\ApplicationModule\Graphs\Criteria;
+use Crm\ApplicationModule\Components\Graphs\GoogleBarGraphControlFactoryInterface;
 use Crm\ApplicationModule\Graphs\GraphData;
-use Crm\ApplicationModule\Graphs\GraphDataItem;
 use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
+use Nette\Database\Context;
 use Nette\Localization\ITranslator;
 use Nette\Utils\DateTime;
 
@@ -26,16 +25,21 @@ class ActualSubscribersRegistrationSourceStatsWidget extends BaseWidget
 
     private $dateTo;
 
+    private $database;
+
     public function __construct(
         WidgetManager $widgetManager,
-        GoogleBarGraphGroupControlFactoryInterface $factory,
+        GoogleBarGraphControlFactoryInterface $factory,
         GraphData $graphData,
-        ITranslator $translator
+        ITranslator $translator,
+        Context $database
     ) {
         parent::__construct($widgetManager);
+
         $this->factory = $factory;
         $this->graphData = $graphData;
         $this->translator = $translator;
+        $this->database = $database;
     }
 
     public function render($params)
@@ -48,45 +52,23 @@ class ActualSubscribersRegistrationSourceStatsWidget extends BaseWidget
 
     public function createComponentGoogleUserSubscribersRegistrationSourceStatsGraph()
     {
-        $graphDataItem = new GraphDataItem();
-        $graphDataItem->setCriteria(
-
-            (new Criteria())->setTableName('subscriptions')
-                ->setJoin('JOIN users ON subscriptions.user_id = users.id')
-                ->setWhere("AND subscriptions.internal_status = '" . SubscriptionsRepository::INTERNAL_STATUS_ACTIVE . "'")
-                ->setTimeField('created_at')
-                ->setGroupBy('users.source')
-                ->setSeries('users.source')
-                ->setValueField('count(*)')
-                ->setStart(DateTime::from($this->dateFrom))
-                ->setEnd(DateTime::from($this->dateTo))
-
-
-//            (new Criteria())->setTableName('subscriptions')
-//                ->setJoin('JOIN users ON subscriptions.user_id = users.id')
-//                ->setWhere("AND subscriptions.internal_status = '" . SubscriptionsRepository::INTERNAL_STATUS_ACTIVE . "'")
-//                ->setTimeField('created_at')
-//                ->setGroupBy('users.source')
-//                ->setSeries('users.source')
-//                ->setValueField('count(*)')
-//                ->setStart(DateTime::from($this->dateFrom))
-//                ->setEnd(DateTime::from($this->dateTo))
-//
-//            (new Criteria())->setTableName('users')
-//                ->setJoin('JOIN subscriptions ON subscriptions.user_id = users.id')
-//                ->setWhere("AND subscriptions.internal_status = '" . SubscriptionsRepository::INTERNAL_STATUS_ACTIVE . "'")
-//                ->setTimeField('created_at')
-//                ->setGroupBy('users.source')
-//                ->setSeries('users.source')
-//                ->setValueField('count(*)')
-//                ->setStart(DateTime::from($this->dateFrom))
-//                ->setEnd(DateTime::from($this->dateTo))
-        );
-
         $control = $this->factory->create();
-        $control->setGraphTitle($this->translator->translate('dashboard.users.active_sub_registrations.title'))
-            ->setGraphHelp($this->translator->translate('dashboard.users.active_sub_registrations.tooltip'))
-            ->addGraphDataItem($graphDataItem);
+
+        $results = $this->database->table('subscriptions')
+            ->where('subscriptions.internal_status', SubscriptionsRepository::INTERNAL_STATUS_ACTIVE)
+            ->where('subscriptions.created_at > ?', DateTime::from($this->dateFrom))
+            ->where('subscriptions.created_at < ?', DateTime::from($this->dateTo))
+            ->group('user.source')
+            ->select('user.source, count(*) AS count')
+            ->fetchAll();
+
+        $data = [];
+
+        foreach ($results as $row) {
+            $data[$row['source']] = $row['count'];
+        }
+
+        $control->addSerie($this->translator->translate('dashboard.users.active_sub_registrations.title'), $data);
 
         return $control;
     }
