@@ -164,6 +164,14 @@ class SubscriptionsModule extends CrmModule
             $this->getInstance(\Crm\ApplicationModule\Events\RefreshUserDataTokenHandler::class),
             600
         );
+        $emitter->addListener(
+            \Crm\SubscriptionsModule\Events\NewSubscriptionEvent::class,
+            $this->getInstance(\Crm\SubscriptionsModule\Events\SubscriptionUpdatedHandler::class)
+        );
+        $emitter->addListener(
+            \Crm\SubscriptionsModule\Events\SubscriptionUpdatedEvent::class,
+            $this->getInstance(\Crm\SubscriptionsModule\Events\SubscriptionUpdatedHandler::class)
+        );
     }
 
     public function registerCommands(CommandsContainerInterface $commandsContainer)
