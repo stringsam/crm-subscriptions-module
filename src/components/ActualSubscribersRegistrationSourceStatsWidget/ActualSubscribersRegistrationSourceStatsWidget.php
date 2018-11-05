@@ -60,6 +60,7 @@ class ActualSubscribersRegistrationSourceStatsWidget extends BaseWidget
             ->where('subscriptions.created_at < ?', DateTime::from($this->dateTo))
             ->group('user.source')
             ->select('user.source, count(*) AS count')
+            ->order('count DESC')
             ->fetchAll();
 
         $data = [];
@@ -68,7 +69,7 @@ class ActualSubscribersRegistrationSourceStatsWidget extends BaseWidget
             $data[$row['source']] = $row['count'];
         }
 
-        $control->addSerie($this->translator->translate('dashboard.users.active_sub_registrations.title'), $data);
+        $control->addSerie($this->translator->translate('dashboard.users.active_sub_registrations.serie'), $data);
 
         return $control;
     }
