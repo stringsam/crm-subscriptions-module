@@ -45,17 +45,17 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
     {
         $listUsers = [];
 
-        $usrs = $this->database->table('subscriptions')
+        $users = $this->database->table('subscriptions')
             ->where('subscriptions.internal_status', SubscriptionsRepository::INTERNAL_STATUS_ACTIVE)
             ->where('subscription_type.print', 1)
             ->select('user.id, user.email')
             ->fetchAll();
 
 
-        foreach ($usrs as $usr) {
-            $address = $this->addressesRepository->address($usr, 'print');
+        foreach ($users as $user) {
+            $address = $this->addressesRepository->address($user, 'print');
             if (!$address) {
-                $listUsers[] = $usr;
+                $listUsers[] = $user;
             }
         }
 
