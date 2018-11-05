@@ -9,7 +9,6 @@ use Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
-use Nette\Database\Table\IRow;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
@@ -200,9 +199,11 @@ class SubscriptionTypesFormFactory
             $contentAccesses = $this->contentAccessRepository->all();
             $contentAccessValues = [];
             foreach ($contentAccesses as $contentAccess) {
-                $contentAccessValues[$contentAccess->name] = $values[$contentAccess->name];
+                if ($values[$contentAccess->name]) {
+                    $contentAccessValues[] = $contentAccess->name;
+                }
             }
-            $subscriptionType->setContentAccessOption($contentAccessValues);
+            $subscriptionType->setContentAccessOption(...$contentAccessValues);
 
             $subscriptionType = $subscriptionType->save();
 
