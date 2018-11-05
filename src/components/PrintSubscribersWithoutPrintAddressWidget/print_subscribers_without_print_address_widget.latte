@@ -1,0 +1,4 @@
+<div n:if="count($listUsers) > 0" class="bs-callout bs-callout-warning">
+    <h4>Používatelia s aktívnym print-ovým predplatným bez vyplnenej adresy</h4>
+    <a n:foreach="$listUsers as $listUser" href="{plink :Users:UsersAdmin:show id => $listUser['id']}">{$listUser['email']}{sep},{/sep}</a>
+</div>
