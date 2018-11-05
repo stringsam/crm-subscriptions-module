@@ -231,6 +231,9 @@ admin:
 	month_subscriptions_small_bar_graph_widget:
 		title: Subscriptions
 
+	print_subscribers_without_print_address_widget:
+		title: Users with active print subscription without filled print address
+
 data_provider:
 	delete:
 		three_months_active: User had an active subscription within last three months and cannot be deleted

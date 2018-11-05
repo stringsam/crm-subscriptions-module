@@ -196,6 +196,9 @@ admin:
 	month_subscriptions_small_bar_graph_widget:
 		title: Předplatné
 
+	print_subscribers_without_print_address_widget:
+		title: Užívatelé s aktivním print-ovým předplatným bez vyplněné adresy
+
 data_provider:
 	delete:
 		three_months_active: 'Uživatel měl během posledních tří měsíců aktivní předplatné a nemůže být smazán. '
