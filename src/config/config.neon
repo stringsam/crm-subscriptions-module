@@ -26,6 +26,7 @@ services:
 	- Crm\SubscriptionsModule\Components\TodaySubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\MonthSubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\MonthToDateSubscriptionsStatWidget
+	- Crm\SubscriptionsModule\Components\PrintSubscribersWithoutPrintAddressWidget
 	- Crm\SubscriptionsModule\Components\EndingSubscriptionsWidget
 	- Crm\SubscriptionsModule\Components\RenewedSubscriptionsEndingWithinPeriodWidget
 	- Crm\SubscriptionsModule\Components\SubscriptionsEndingWithinPeriodWidget

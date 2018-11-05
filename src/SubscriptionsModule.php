@@ -150,6 +150,11 @@ class SubscriptionsModule extends CrmModule
             $this->getInstance(\Crm\SubscriptionsModule\Components\ActualSubscriptionLabel::class),
             600
         );
+        $widgetManager->registerWidget(
+            'admin.subscriptions.missing.address',
+            $this->getInstance(\Crm\SubscriptionsModule\Components\PrintSubscribersWithoutPrintAddressWidget::class),
+            1000
+        );
     }
 
     public function registerEventHandlers(Emitter $emitter)
