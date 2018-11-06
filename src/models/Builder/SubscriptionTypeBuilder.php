@@ -223,7 +223,7 @@ class SubscriptionTypeBuilder extends Builder
 
     protected function store($tableName)
     {
-        $contentAccess = $this->getOption('content_access');
+        $contentAccess = $this->getOption('content_access') ?? [];
 
         // content access legacy
         foreach ($contentAccess as $key => $_) {
