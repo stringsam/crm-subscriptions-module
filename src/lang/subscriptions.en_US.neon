@@ -64,6 +64,7 @@ data:
 			length_method_id: Subscription length calculcation method
 			recurrent_charge_before: "Recurrent charge before (hours)"
 			subscription_type_items: Subscripton items
+			meta: Meta
 		required:
 			name: Name is required
 			length: "Length (in days) is required"

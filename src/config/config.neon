@@ -38,6 +38,8 @@ services:
 	- Crm\SubscriptionsModule\Api\v1\UsersSubscriptionsHandler
 	- Crm\SubscriptionsModule\Subscription\ActualUserSubscription
 	- Crm\SubscriptionsModule\Events\NewAddressHandler
+	- Crm\SubscriptionsModule\Events\SubscriptionUpdatedHandler
+	- Crm\SubscriptionsModule\Events\NewSubscriptionHandler
 	- Crm\SubscriptionsModule\Api\v1\CreateSubscriptionHandler
 	- Crm\SubscriptionsModule\Repository\ContentAccessRepository
 	- Crm\SubscriptionsModule\User\SubscriptionsUserDataProvider
@@ -51,6 +53,7 @@ services:
 	- Crm\SubscriptionsModule\DataProvider\FilterUsersSelectionDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsSelectionDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsFormDataProvider
+	- Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository
 
 	extensionMethodFactory:
 		class: Crm\SubscriptionsModule\Extension\ExtensionMethodFactory
