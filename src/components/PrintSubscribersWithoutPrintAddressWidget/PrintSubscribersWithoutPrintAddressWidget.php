@@ -45,9 +45,11 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
         $listUsers = $this->database->table('subscriptions')
             ->where('subscriptions.start_time < ?', $this->database::literal('NOW()'))
             ->where('subscriptions.end_time > ?', $this->database::literal('NOW()'))
-            ->where('subscription_type.print', 1)
-            ->where('user.id NOT IN (SELECT user_id FROM addresses WHERE `type` = ?)', 'print')
-            ->select('user.id, user.email')
+            ->where(
+                'subscription_type:subscription_type_content_access.content_access.name = ?',
+                'print'
+            )->where('user.id NOT IN (SELECT user_id FROM addresses WHERE `type` = ?)', 'print')
+            ->select('user.*')
             ->fetchAll();
 
         if (!empty($listUsers)) {
