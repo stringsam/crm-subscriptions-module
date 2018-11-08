@@ -57,8 +57,6 @@ class ActualSubscribersRegistrationSourceStatsWidget extends BaseWidget
         $results = $this->database->table('subscriptions')
             ->where('subscriptions.start_time < ?', $this->database::literal('NOW()'))
             ->where('subscriptions.end_time > ?', $this->database::literal('NOW()'))
-            ->where('subscriptions.created_at > ?', DateTime::from($this->dateFrom))
-            ->where('subscriptions.created_at < ?', DateTime::from($this->dateTo))
             ->group('user.source')
             ->select('user.source, count(*) AS count')
             ->order('count DESC')
