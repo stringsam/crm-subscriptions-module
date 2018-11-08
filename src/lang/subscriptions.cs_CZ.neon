@@ -197,7 +197,7 @@ admin:
 		title: Předplatné
 
 	print_subscribers_without_print_address_widget:
-		title: Užívatelé s aktivním print-ovým předplatným bez vyplněné adresy
+		title: Užívatelé s aktivním printovým předplatným bez vyplněné adresy
 
 data_provider:
 	delete:
