@@ -232,7 +232,7 @@ admin:
 		title: Predplatné
 
 	print_subscribers_without_print_address_widget:
-		title: Používatelia s aktívnym print-ovým predplatným bez vyplnenej adresy
+		title: Používatelia s aktívnym printovým predplatným bez vyplnenej adresy
 
 data_provider:
 	delete:

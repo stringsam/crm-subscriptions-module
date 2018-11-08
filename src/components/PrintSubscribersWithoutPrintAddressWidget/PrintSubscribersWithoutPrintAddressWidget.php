@@ -6,7 +6,6 @@ use Nette\Database\Context;
 use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\UsersModule\Repository\AddressesRepository;
-use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 
 class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
 {
@@ -46,11 +45,11 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
         $listUsers = [];
 
         $users = $this->database->table('subscriptions')
-            ->where('subscriptions.internal_status', SubscriptionsRepository::INTERNAL_STATUS_ACTIVE)
+            ->where('subscriptions.start_time < ?', $this->database::literal('NOW()'))
+            ->where('subscriptions.end_time > ?', $this->database::literal('NOW()'))
             ->where('subscription_type.print', 1)
             ->select('user.id, user.email')
             ->fetchAll();
-
 
         foreach ($users as $user) {
             $address = $this->addressesRepository->address($user, 'print');
