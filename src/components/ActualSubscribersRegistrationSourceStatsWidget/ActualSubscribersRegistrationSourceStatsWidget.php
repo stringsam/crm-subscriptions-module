@@ -55,7 +55,8 @@ class ActualSubscribersRegistrationSourceStatsWidget extends BaseWidget
         $control = $this->factory->create();
 
         $results = $this->database->table('subscriptions')
-            ->where('subscriptions.internal_status', SubscriptionsRepository::INTERNAL_STATUS_ACTIVE)
+            ->where('subscriptions.start_time < ?', $this->database::literal('NOW()'))
+            ->where('subscriptions.end_time > ?', $this->database::literal('NOW()'))
             ->where('subscriptions.created_at > ?', DateTime::from($this->dateFrom))
             ->where('subscriptions.created_at < ?', DateTime::from($this->dateTo))
             ->group('user.source')
