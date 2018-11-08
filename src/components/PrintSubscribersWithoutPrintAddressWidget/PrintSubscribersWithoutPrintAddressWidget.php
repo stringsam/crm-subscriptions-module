@@ -40,27 +40,21 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
         return 'printsubscriberswithoutprintaddresswidget';
     }
 
-    public function render($id = '')
+    public function render()
     {
-        $listUsers = [];
-
-        $users = $this->database->table('subscriptions')
+        $listUsers = $this->database->table('subscriptions')
             ->where('subscriptions.start_time < ?', $this->database::literal('NOW()'))
             ->where('subscriptions.end_time > ?', $this->database::literal('NOW()'))
             ->where('subscription_type.print', 1)
+            ->where('user.id NOT IN (SELECT user_id FROM addresses WHERE `type` = ?)', 'print')
             ->select('user.id, user.email')
             ->fetchAll();
 
-        foreach ($users as $user) {
-            $address = $this->addressesRepository->address($user, 'print');
-            if (!$address) {
-                $listUsers[] = $user;
-            }
+        if (!empty($listUsers)) {
+            $this->template->listUsers = $listUsers;
+
+            $this->template->setFile(__DIR__ . '/' . $this->templateName);
+            $this->template->render();
         }
-
-        $this->template->listUsers = $listUsers;
-
-        $this->template->setFile(__DIR__ . '/' . $this->templateName);
-        $this->template->render();
     }
 }
