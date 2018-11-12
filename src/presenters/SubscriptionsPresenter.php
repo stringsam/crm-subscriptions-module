@@ -3,9 +3,19 @@
 namespace Crm\SubscriptionsModule\Presenters;
 
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
+use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 
 class SubscriptionsPresenter extends FrontendPresenter
 {
+    /** @var SubscriptionsRepository */
+    public $subscriptionsRepository;
+
+    public function __construct(SubscriptionsRepository $subscriptionsRepository)
+    {
+        parent::__construct();
+        $this->subscriptionsRepository = $subscriptionsRepository;
+    }
+
     public function renderMy()
     {
         $this->onlyLoggedIn();
@@ -34,5 +44,27 @@ class SubscriptionsPresenter extends FrontendPresenter
 
         $showHeader = true;
         $this->template->showHeader = $showHeader;
+    }
+
+    public function renderSwitchShowingAdds()
+    {
+        if ($this->user->isLoggedIn()) {
+            $userId = $this->user->getId();
+
+            $hasClubAccess = $this->subscriptionsRepository->hasAccess($userId, 'club');
+            if ($hasClubAccess) {
+                $this->redirect(':Users:Users:settings');
+                return;
+            }
+
+            $hasWebAccess = $this->subscriptionsRepository->hasAccess($userId, 'web');
+            if ($hasWebAccess) {
+                $this->redirect(':SalesFunnel:SalesFunnel:upgrade');
+                return;
+            }
+        }
+
+        $this->redirect(':SalesFunnel:SalesFunnelFrontend:default', 'klub');
+        return;
     }
 }
