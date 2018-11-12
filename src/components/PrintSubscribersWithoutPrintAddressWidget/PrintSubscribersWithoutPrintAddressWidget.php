@@ -4,8 +4,8 @@ namespace Crm\SubscriptionsModule\Components;
 
 use Nette\Database\Context;
 use Crm\ApplicationModule\Widget\BaseWidget;
+use Crm\UsersModule\Repository\UsersRepository;
 use Crm\ApplicationModule\Widget\WidgetManager;
-use Crm\UsersModule\Repository\AddressesRepository;
 
 class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
 {
@@ -14,20 +14,16 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
     /** @var WidgetManager */
     protected $widgetManager;
 
-    /** @var Context */
-    protected $database;
-
-    /** @var AddressesRepository */
-    protected $addressesRepository;
+    /** @var UsersRepository */
+    protected $usersRepository;
 
     public function __construct(
         WidgetManager $widgetManager,
-        Context $database,
-        AddressesRepository $addressesRepository
+        UsersRepository $usersRepository
     ) {
         parent::__construct($widgetManager);
-        $this->database = $database;
-        $this->addressesRepository = $addressesRepository;
+
+        $this->usersRepository = $usersRepository;
     }
 
     public function header($id = '')
@@ -42,14 +38,13 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
 
     public function render()
     {
-        $listUsers = $this->database->table('subscriptions')
-            ->where('subscriptions.start_time < ?', $this->database::literal('NOW()'))
-            ->where('subscriptions.end_time > ?', $this->database::literal('NOW()'))
+        $listUsers = $this->usersRepository->getTable()
+            ->where(':subscriptions.start_time < ?', Context::literal('NOW()'))
+            ->where(':subscriptions.end_time > ?', Context::literal('NOW()'))
             ->where(
-                'subscription_type:subscription_type_content_access.content_access.name = ?',
+                ':subscriptions.subscription_type:subscription_type_content_access.content_access.name = ?',
                 'print'
-            )->where('user.id NOT IN (SELECT user_id FROM addresses WHERE `type` = ?)', 'print')
-            ->select('user.*')
+            )->where('users.id NOT IN (SELECT user_id FROM addresses WHERE `type` = ?)', 'print')
             ->fetchAll();
 
         if (!empty($listUsers)) {
