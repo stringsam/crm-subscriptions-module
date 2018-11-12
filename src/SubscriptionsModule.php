@@ -155,6 +155,11 @@ class SubscriptionsModule extends CrmModule
             $this->getInstance(\Crm\SubscriptionsModule\Components\ActualSubscriptionLabel::class),
             600
         );
+        $widgetManager->registerWidget(
+            'admin.payments.top',
+            $this->getInstance(\Crm\SubscriptionsModule\Components\PrintSubscribersWithoutPrintAddressWidget::class),
+            2000
+        );
     }
 
     public function registerEventHandlers(Emitter $emitter)
