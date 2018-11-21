@@ -39,6 +39,7 @@ class ActualUserSubscription
 
         $this->actualSubscription = $this->subscriptionsRepository->actualUserSubscription($this->user->getId());
         if (!$this->actualSubscription) {
+            $this->nextSubscription = false;
             return;
         }
 
