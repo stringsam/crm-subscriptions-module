@@ -15,6 +15,8 @@ class ActualUserSubscription
 
     private $actualSubscription;
 
+    private $nextSubscription;
+
     public function __construct(
         User $user,
         SubscriptionsRepository $subscriptionsRepository
@@ -39,6 +41,8 @@ class ActualUserSubscription
         if (!$this->actualSubscription) {
             return;
         }
+
+        $this->nextSubscription = $this->subscriptionsRepository->find($this->actualSubscription->next_subscription_id);
     }
 
     public function hasActual()
@@ -51,5 +55,17 @@ class ActualUserSubscription
     {
         $this->init();
         return $this->actualSubscription;
+    }
+
+    public function hasNextSubscription()
+    {
+        $this->init();
+        return $this->nextSubscription ? true : false;
+    }
+
+    public function getNextSubscription()
+    {
+        $this->init();
+        return $this->nextSubscription;
     }
 }
