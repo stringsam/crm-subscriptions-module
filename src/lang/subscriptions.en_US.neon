@@ -119,6 +119,7 @@ frontend:
 		no_subscription: 'Your subscription <span class="label label-danger"><b>is not</b></span> active now'
 		refresh: Renew subscription
 		active_without_extension: Your subscription will end on <strong>%end_time%</strong> and will not be renewed automatically.
+		active_with_next: Your subscription %access_actual% access will end at <strong>%end_time%</strong> and subscription with access %access_next% will continue.
 		extend: Renew subscription
 
 admin:
