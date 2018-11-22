@@ -56,7 +56,6 @@ data:
 			sorting: Poradie
 			description: Popis
 			default: Default
-			magazines: Magazíny
 			available_upgrades: Dostupné upgrady
 			stats: Štatistiky
 			ask_address: Vypýtaj adresu
@@ -65,6 +64,7 @@ data:
 			length_method_id: Spôsob výpočtu dĺžky predplatného
 			recurrent_charge_before: "Realizácia nasledujúcej platby (počet hodín pred vypršaním)"
 			subscription_type_items: Položky predplatného
+			meta: Meta
 		required:
 			name: Názov je povinný
 			length: "Dĺžka (v dňoch) je povinný"
@@ -159,8 +159,9 @@ admin:
 		show:
 			back: Späť na zoznam
 			edit: Uprav typ predplatného
-			no_magazines_message: Tento typ predplatného nieje spojený so žiadným magazínom
 			no_upgrades_message: Tento typ predplatného neumožňuje upgrade.
+			add_upgrade: Pridať upgrade
+			remove_upgrade: Zmazať
 		messages:
 			subscription_type_created: Typ predplatného bol vytvorený.
 			subscription_type_updated: Typ predplatného bol upravený.
@@ -222,6 +223,16 @@ admin:
 	filter_users:
 		subscription_type: Typ predplatného
 		actual_subscription: Iba aktuálne
+
+	subscription_end_stats:
+		subscription_types: Typy predplatného
+		content_access_types: Typy prístupu k obsahu
+
+	month_subscriptions_small_bar_graph_widget:
+		title: Predplatné
+
+	print_subscribers_without_print_address_widget:
+		title: Používatelia s aktívnym printovým predplatným bez vyplnenej adresy
 
 data_provider:
 	delete:

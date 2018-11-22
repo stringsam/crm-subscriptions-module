@@ -56,7 +56,6 @@ data:
 			sorting: Sorting
 			description: Description
 			default: Default
-			magazines: Magazines
 			available_upgrades: Available upgrades
 			stats: Stats
 			ask_address: Ask address
@@ -65,6 +64,7 @@ data:
 			length_method_id: Subscription length calculcation method
 			recurrent_charge_before: "Recurrent charge before (hours)"
 			subscription_type_items: Subscripton items
+			meta: Meta
 		required:
 			name: Name is required
 			length: "Length (in days) is required"
@@ -159,8 +159,9 @@ admin:
 		show:
 			back: back to listing
 			edit: Edit subscription type
-			no_magazines_message: This subscription type isn't associated with any magazine
 			no_upgrades_message: This subscription type doesn't contains any upgrade subscriptions.
+			add_upgrade: Add upgrade
+			remove_upgrade: Remove
 		messages:
 			subscription_type_created: Subscription type was created.
 			subscription_type_updated: Subscription type was updated.
@@ -222,6 +223,16 @@ admin:
 	filter_users:
 		subscription_type: Subscription type
 		actual_subscription: Only actual
+
+	subscription_end_stats:
+		subscription_types: Subscription types
+		content_access_types: Content access types
+
+	month_subscriptions_small_bar_graph_widget:
+		title: Subscriptions
+
+	print_subscribers_without_print_address_widget:
+		title: Users with active print subscription without filled print address
 
 data_provider:
 	delete:

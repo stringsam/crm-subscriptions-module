@@ -3,9 +3,19 @@
 namespace Crm\SubscriptionsModule\Presenters;
 
 use Crm\ApplicationModule\Presenters\FrontendPresenter;
+use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 
 class SubscriptionsPresenter extends FrontendPresenter
 {
+    /** @var SubscriptionsRepository */
+    public $subscriptionsRepository;
+
+    public function __construct(SubscriptionsRepository $subscriptionsRepository)
+    {
+        parent::__construct();
+        $this->subscriptionsRepository = $subscriptionsRepository;
+    }
+
     public function renderMy()
     {
         $this->onlyLoggedIn();

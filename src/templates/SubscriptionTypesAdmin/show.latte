@@ -95,6 +95,19 @@
 
 {control simpleWidget 'subscription_types_admin.show.middle', $type}
 
+<div n:if="count($meta) > 0" class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.meta}</h2>
+    <ul class="list-group">
+      <li n:foreach="$meta as $key => $value" class="list-group-item">
+        {$key}
+        <span class="text-muted pull-right" style="margin-right:20px;">{$value}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
 {snippet subscriptionTypeItemsSnippet}
 
 {var $calculatedItemsSum = 0}
@@ -119,7 +132,7 @@
           {$item->name}
           <span class="label label-default">{$item->vat} % {_'system.vat'}</span>
           <strong>{$item->amount|price}</strong>
-          <a n:href="RemoveSubscriptionTypeItem! $item->id" class="pull-right btn btn-xs btn-danger ajax"><i class="fa fa-trash"></i></a>
+          <a n:href="removeSubscriptionTypeItem! $item->id" class="pull-right btn btn-xs btn-danger ajax"><i class="fa fa-trash"></i></a>
           <small class="text-muted pull-right" style="margin-right:20px;">{$item->created_at}</small>
         </li>
       </ul>
@@ -130,7 +143,7 @@
     {/if}
 
     <p class="text-center">
-      <a class="btn btn-default btn-xs" href="#subscriptionTypeItemsFormDiv" onclick="$('#subscriptionTypeItemsFormDiv').show(); return false;"><i class="fa fa-plus-circle"></i></i></a>
+      <a class="btn btn-default btn-xs" href="#subscriptionTypeItemsFormDiv" onclick="$('#subscriptionTypeItemsFormDiv').show(); return false;"><i class="fa fa-plus-circle"></i></a>
     </p>
   </div>
 
@@ -150,15 +163,21 @@
           <a n:href="show $upgrade->to_subscription_type_id">{$upgrade->to_subscription_type->name}</a>
           {$upgrade->to_subscription_type|typeContent|noescape}
           <span class="text-muted">{$upgrade->to_subscription_type->price|price}</span>
-          <a n:href="removeUpgrade! $upgrade->from_subscription_type_id, $upgrade->to_subscription_type_id" class="btn btn-default btn-xs pull-right"><i class="fa fa-trash"></i> Zmazať</a>
+          <a n:href="removeUpgrade! $upgrade->from_subscription_type_id, $upgrade->to_subscription_type_id" class="btn btn-default btn-xs pull-right">
+              <i class="fa fa-trash"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.remove_upgrade}
+          </a>
           <small class="text-muted pull-right" style="margin-right:20px;">{$upgrade->type}</small>
         </li>
       </ul>
-      <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">Pridaj upgrade</a>
+      <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">
+          <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.add_upgrade}
+      </a>
     {else}
       <p class="text-muted well text-center">
-        {_subscriptions.admin.subscription_types.show.no_upgrades_message}<br>
-        <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">Pridaj upgrade</a>
+        {_subscriptions.admin.subscription_types.show.no_upgrades_message}<br><br>
+        <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">
+            <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.add_upgrade}
+        </a>
       </p>
     {/if}
   </div>

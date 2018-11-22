@@ -2,7 +2,6 @@
 
 namespace Crm\SubscriptionsModule\Forms;
 
-use Crm\IssuesModule\Repository\MagazinesRepository;
 use Crm\SubscriptionsModule\Builder\SubscriptionTypeBuilder;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionExtensionMethodsRepository;
@@ -10,7 +9,6 @@ use Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
-use Nette\Database\Table\IRow;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
@@ -21,8 +19,6 @@ class SubscriptionTypesFormFactory
     private $subscriptionTypeBuilder;
 
     private $translator;
-
-    private $magazinesRepository;
 
     private $subscriptionExtensionMethodsRepository;
 
@@ -39,7 +35,6 @@ class SubscriptionTypesFormFactory
         SubscriptionTypeBuilder $subscriptionTypeBuilder,
         SubscriptionExtensionMethodsRepository $subscriptionExtensionMethodsRepository,
         SubscriptionLengthMethodsRepository $subscriptionLengthMethodsRepository,
-        MagazinesRepository $magazinesRepository,
         ContentAccessRepository $contentAccess,
         Translator $translator
     ) {
@@ -47,7 +42,6 @@ class SubscriptionTypesFormFactory
         $this->subscriptionTypeBuilder = $subscriptionTypeBuilder;
         $this->subscriptionExtensionMethodsRepository = $subscriptionExtensionMethodsRepository;
         $this->subscriptionLengthMethodsRepository = $subscriptionLengthMethodsRepository;
-        $this->magazinesRepository = $magazinesRepository;
         $this->contentAccessRepository = $contentAccess;
         $this->translator = $translator;
     }
@@ -61,10 +55,6 @@ class SubscriptionTypesFormFactory
         if (isset($subscriptionTypeId)) {
             $subscriptionType = $this->subscriptionTypesRepository->find($subscriptionTypeId);
             $defaults = $subscriptionType->toArray();
-
-            foreach ($subscriptionType->related('subscription_type_magazines') as $pair) {
-                $defaults['magazine_' . $pair->magazine_id] = true;
-            }
         }
 
         $form = new Form;
@@ -138,13 +128,6 @@ class SubscriptionTypesFormFactory
 
         $form->addtext('sorting', 'subscriptions.data.subscription_types.fields.sorting');
 
-        $form->addGroup('subscriptions.data.subscription_types.fields.magazines');
-
-        $magazines = $this->magazinesRepository->all();
-        foreach ($magazines as $magazine) {
-            $form->addCheckbox('magazine_'.$magazine->id, $magazine->name);
-        }
-
         $form->addSubmit('send', 'system.save')
             ->getControlPrototype()
             ->setName('button')
@@ -163,19 +146,14 @@ class SubscriptionTypesFormFactory
 
     public function formSucceeded($form, $values)
     {
-        $magazines = [];
-        foreach ($values as $key => $value) {
-            if (substr($key, 0, 9) == 'magazine_') {
-                if ($value) {
-                    $id = intval(str_replace('magazine_', '', $key));
-                    $magazines[] = $id;
-                }
-                unset($values[$key]);
-            }
-        }
-
         if ($values['limit_per_user'] == '') {
             $values['limit_per_user'] = null;
+        }
+
+        if ($values['fixed_start'] == '') {
+            $values['fixed_start'] = null;
+        } else {
+            $values['fixed_start'] = DateTime::from(strtotime($values['fixed_start']));
         }
 
         if ($values['fixed_end'] == '') {
@@ -194,8 +172,7 @@ class SubscriptionTypesFormFactory
 
             $subscriptionType = $this->subscriptionTypesRepository->find($subscriptionTypeId);
             $this->subscriptionTypesRepository->update($subscriptionType, $values);
-            $this->subscriptionTypesRepository->setMagazines($subscriptionType, $magazines);
-            $this->processContentTypes($subscriptionType, $values);
+            $this->subscriptionTypeBuilder->processContentTypes($subscriptionType, (array) $values);
             $this->onUpdate->__invoke($subscriptionType);
         } else {
             $subscriptionType = $this->subscriptionTypeBuilder->createNew()
@@ -222,33 +199,19 @@ class SubscriptionTypesFormFactory
             $contentAccesses = $this->contentAccessRepository->all();
             $contentAccessValues = [];
             foreach ($contentAccesses as $contentAccess) {
-                $contentAccessValues[$contentAccess->name] = $values[$contentAccess->name];
+                if ($values[$contentAccess->name]) {
+                    $contentAccessValues[] = $contentAccess->name;
+                }
             }
-            $subscriptionType->setContentAccess($contentAccessValues);
+            $subscriptionType->setContentAccessOption(...$contentAccessValues);
 
             $subscriptionType = $subscriptionType->save();
 
             if (!$subscriptionType) {
                 $form['name']->addError(implode("\n", $this->subscriptionTypeBuilder->getErrors()));
             } else {
-                $this->subscriptionTypesRepository->setMagazines($subscriptionType, $magazines);
-                $this->processContentTypes($subscriptionType, $values);
+                $this->subscriptionTypeBuilder->processContentTypes($subscriptionType, (array) $values);
                 $this->onSave->__invoke($subscriptionType);
-            }
-        }
-    }
-
-    private function processContentTypes(IRow $subscriptionType, $values)
-    {
-        $access = $this->contentAccessRepository->all()->fetchPairs('name', 'name');
-
-        foreach ($access as $key) {
-            if ($values->{$key}) {
-                if (!$this->contentAccessRepository->hasAccess($subscriptionType, $key)) {
-                    $this->contentAccessRepository->addAccess($subscriptionType, $key);
-                }
-            } else {
-                $this->contentAccessRepository->removeAccess($subscriptionType, $key);
             }
         }
     }

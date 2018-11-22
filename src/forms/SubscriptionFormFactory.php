@@ -5,6 +5,7 @@ namespace Crm\SubscriptionsModule\Forms;
 use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\SubscriptionsModule\Events\NewSubscriptionEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionPreUpdateEvent;
+use Crm\SubscriptionsModule\Events\SubscriptionUpdatedEvent;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\UsersModule\Repository\AddressesRepository;
@@ -59,11 +60,11 @@ class SubscriptionFormFactory
      * @param IRow $user
      * @return Form
      */
-    public function create($subscriptionId, IRow $user = null)
+    public function create(int $subscriptionId = null, IRow $user = null)
     {
         $defaults = [];
         $subscription = false;
-        if (isset($subscriptionId)) {
+        if ($subscriptionId != null) {
             $subscription = $this->subscriptionsRepository->find($subscriptionId);
             $defaults = $subscription->toArray();
         }
@@ -175,6 +176,7 @@ class SubscriptionFormFactory
             }
 
             $this->subscriptionsRepository->update($subscription, $values);
+            $this->emitter->emit(new SubscriptionUpdatedEvent($subscription));
 
             $this->hermesEmitter->emit(new HermesMessage('update-subscription', [
                 'subscription_id' => $subscription->id,
