@@ -2,11 +2,12 @@
 
 namespace Crm\SubscriptionsModule;
 
+use Crm\ApiModule\Api\ApiRoutersContainerInterface;
 use Crm\ApiModule\Router\ApiIdentifier;
 use Crm\ApiModule\Router\ApiRoute;
 use Crm\ApplicationModule\Access\AccessManager;
-use Crm\ApiModule\Api\ApiRoutersContainerInterface;
 use Crm\ApplicationModule\Commands\CommandsContainerInterface;
+use Crm\ApplicationModule\Criteria\CriteriaStorage;
 use Crm\ApplicationModule\CrmModule;
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Menu\MenuContainerInterface;
@@ -14,7 +15,6 @@ use Crm\ApplicationModule\Menu\MenuItem;
 use Crm\ApplicationModule\SeederManager;
 use Crm\ApplicationModule\User\UserDataRegistrator;
 use Crm\ApplicationModule\Widget\WidgetManagerInterface;
-use Crm\ApplicationModule\Criteria\CriteriaStorage;
 use Crm\SubscriptionsModule\Seeders\ContentAccessSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionLengthMethodSeeder;
@@ -106,6 +106,11 @@ class SubscriptionsModule extends CrmModule
             700
         );
         $widgetManager->registerWidget(
+            'dashboard.stats.actuals.subscribers.source',
+            $this->getInstance(\Crm\SubscriptionsModule\Components\ActualSubscribersRegistrationSourceStatsWidget::class),
+            700
+        );
+        $widgetManager->registerWidget(
             'dashboard.singlestat.actuals.system',
             $this->getInstance(\Crm\SubscriptionsModule\Components\ActualSubscriptionsStatWidget::class),
             500
@@ -150,6 +155,11 @@ class SubscriptionsModule extends CrmModule
             $this->getInstance(\Crm\SubscriptionsModule\Components\ActualSubscriptionLabel::class),
             600
         );
+        $widgetManager->registerWidget(
+            'admin.payments.top',
+            $this->getInstance(\Crm\SubscriptionsModule\Components\PrintSubscribersWithoutPrintAddressWidget::class),
+            2000
+        );
     }
 
     public function registerEventHandlers(Emitter $emitter)
@@ -164,18 +174,25 @@ class SubscriptionsModule extends CrmModule
             $this->getInstance(\Crm\ApplicationModule\Events\RefreshUserDataTokenHandler::class),
             600
         );
+        $emitter->addListener(
+            \Crm\SubscriptionsModule\Events\NewSubscriptionEvent::class,
+            $this->getInstance(\Crm\SubscriptionsModule\Events\SubscriptionUpdatedHandler::class)
+        );
+        $emitter->addListener(
+            \Crm\SubscriptionsModule\Events\SubscriptionUpdatedEvent::class,
+            $this->getInstance(\Crm\SubscriptionsModule\Events\SubscriptionUpdatedHandler::class)
+        );
     }
 
     public function registerCommands(CommandsContainerInterface $commandsContainer)
     {
         $commandsContainer->registerCommand($this->getInstance(\Crm\SubscriptionsModule\Commands\ChangeSubscriptionsStateCommand::class));
-        $commandsContainer->registerCommand($this->getInstance(\Crm\SubscriptionsModule\Commands\CalculateAveragesCommand::class));
     }
 
     public function registerApiCalls(ApiRoutersContainerInterface $apiRoutersContainer)
     {
         $apiRoutersContainer->attachRouter(
-            new ApiRoute(new ApiIdentifier('1', 'users', 'subscriptions'), 'Crm\SubscriptionsModule\Api\v1\UsersSubscriptionsHandler', 'Crm\UsersModule\Auth\LoggedUserTokenAuthorization')
+            new ApiRoute(new ApiIdentifier('1', 'users', 'subscriptions'), 'Crm\SubscriptionsModule\Api\v1\UsersSubscriptionsHandler', 'Crm\UsersModule\Auth\UserTokenAuthorization')
         );
 
         $apiRoutersContainer->attachRouter(

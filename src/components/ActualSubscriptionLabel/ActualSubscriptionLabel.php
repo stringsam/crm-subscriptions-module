@@ -3,10 +3,7 @@
 namespace Crm\SubscriptionsModule\Components;
 
 use Crm\ApplicationModule\Widget\BaseWidget;
-use Crm\ApplicationModule\Widget\WidgetManager;
-use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Nette\Utils\DateTime;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class ActualSubscriptionLabel extends BaseWidget
 {

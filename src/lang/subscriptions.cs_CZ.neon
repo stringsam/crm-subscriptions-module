@@ -54,7 +54,6 @@ data:
 			sorting: Pořadí
 			description: Popis
 			default: Default
-			magazines: Magazíny
 			available_upgrades: Dostupné upgrady
 			sales_funnels: Dostupné v oknech
 			stats: Statistiky
@@ -62,6 +61,7 @@ data:
 			disable_notifications: Vypnuté notifikace
 			extension_method_id: Způsob prodloužení předplatného
 			recurrent_charge_before: "Realizace následující platby (počet hodin před vypršením)"
+			meta: Meta
 		required:
 			name: Název je povinný
 			length: "Délka (ve dnech) je povinná"
@@ -87,11 +87,13 @@ data:
 			hidden: Skryté
 frontend:
 	my:
-		history: Historie přeplatných
+		history: Historie předplatných
 		actual: Aktuální předplatné
 		upgrade: Navýšení předplatného
 		no_subscription: Nemáte žádné předplatné
 		buy_new_subscription: Můžete si ho zakoupit a získat tak přístup k obsahu
+	new:
+		title: Předplaťte si %site_name%
 	actual_subscription_widget:
 		active_subscription: 'Vaše předplatné v současnosti <span class="label label-success"><b>je aktivní</b></span>'
 		active_recurrent: Máte zvolený nejpohodlnější způsob platby za předplatné s automatickým obnovováním. Vaše předplatné se obnoví nejdříve
@@ -134,9 +136,9 @@ admin:
 		show:
 			back: Zpět na seznam
 			edit: Uprav typ předplatného
-			no_magazines_message: Tento typ předplatného není spojený s žádným magazínem
 			no_upgrades_message: Tento typ předplatného neumožňuje upgrade.
-			no_sales_funnels_message: Tento typ předplatného není přiřazený k žádnému platebnímu oknu.
+			add_upgrade: Přidat upgrade
+			remove_upgrade: Smazat
 		messages:
 			subscription_type_created: Typ předplatného byl vytvořen.
 			subscription_type_updated: Typ předplatného byl upraven.
@@ -186,6 +188,17 @@ admin:
 	filter_users:
 		subscription_type: Typ předplatného
 		actual_subscription: Jen aktuální
+
+	subscription_end_stats:
+		subscription_types: Typy předplatného
+		content_access_types: Typy přístupu k obsahu
+
+	month_subscriptions_small_bar_graph_widget:
+		title: Předplatné
+
+	print_subscribers_without_print_address_widget:
+		title: Užívatelé s aktivním printovým předplatným bez vyplněné adresy
+
 data_provider:
 	delete:
 		three_months_active: 'Uživatel měl během posledních tří měsíců aktivní předplatné a nemůže být smazán. '
