@@ -26,7 +26,10 @@ class FilterUsersSelectionDataProvider implements FilterUsersSelectionDataProvid
             throw new DataProviderException('params param missing');
         }
 
-        $params['selection']->select(':subscriptions.start_time, :subscriptions.end_time');
+        $params['selection']
+            ->select(':subscriptions.start_time, :subscriptions.end_time')
+            ->joinWhere(':subscriptions', 'end_time > NOW()');
+
         if (isset($params['params']['actual_subscription']) && $params['params']['actual_subscription'] == '1') {
             $params['selection']
                 ->where(':subscriptions.start_time < ?', new DateTime)
