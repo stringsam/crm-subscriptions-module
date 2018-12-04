@@ -101,6 +101,7 @@ frontend:
 		no_subscription: 'Vaše předplatné v současnosti <span class="label label-success"><b>není</b></span> aktivní'
 		refresh: Obnovit předplatné
 		active_without_extension: Vaše předplatné bude ukončeno <strong>%end_time%</strong> a nebude automaticky obnoveno.
+		active_with_next: Vaše předplatné s přístupem %access_actual% skončí <strong>%end_time%</strong> a pokračovat bude předplatné s přístupem %access_next%.
 		extend: Prodloužit předplatné
 admin:
 	subscriptions:

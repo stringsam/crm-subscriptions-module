@@ -10,6 +10,7 @@ use Crm\ApplicationModule\Commands\CommandsContainerInterface;
 use Crm\ApplicationModule\Criteria\CriteriaStorage;
 use Crm\ApplicationModule\CrmModule;
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
+use Crm\ApplicationModule\Event\EventsStorage;
 use Crm\ApplicationModule\Menu\MenuContainerInterface;
 use Crm\ApplicationModule\Menu\MenuItem;
 use Crm\ApplicationModule\SeederManager;
@@ -246,5 +247,14 @@ class SubscriptionsModule extends CrmModule
             'users.dataprovider.filter_user_actions_log_form',
             $this->getInstance(\Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsFormDataProvider::class)
         );
+    }
+
+    public function registerEvents(EventsStorage $eventsStorage)
+    {
+        $eventsStorage->register('new_subscription', Events\NewSubscriptionEvent::class, true);
+        $eventsStorage->register('subscription_pre_update', Events\SubscriptionPreUpdateEvent::class);
+        $eventsStorage->register('subscription_updated', Events\SubscriptionUpdatedEvent::class);
+        $eventsStorage->register('subscription_starts', Events\SubscriptionStartsEvent::class);
+        $eventsStorage->register('subscription_ends', Events\SubscriptionEndsEvent::class, true);
     }
 }
