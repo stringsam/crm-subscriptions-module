@@ -399,12 +399,17 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function userSubscriptionTypesCounts($userId)
+    public function userSubscriptionTypesCounts($userId, ?array $subscriptionTypeIds)
     {
-        return $this->getTable()
-            ->where(['user.id' => $userId])
-            ->group('subscription_type_id')
+        $query = $this->getTable()
             ->select('subscription_type_id, COUNT(*) AS count')
-            ->fetchPairs('subscription_type_id', 'count');
+            ->where(['user.id' => $userId])
+            ->group('subscription_type_id');
+
+        if ($subscriptionTypeIds !== null) {
+            $query->where(['subscription_type_id' => $subscriptionTypeIds]);
+        }
+
+        return $query->fetchPairs('subscription_type_id', 'count');
     }
 }
