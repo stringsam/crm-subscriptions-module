@@ -174,6 +174,15 @@ class SubscriptionsRepository extends Repository
         ])->order('subscription_type.mobile DESC, end_time DESC')->fetch();
     }
 
+    public function actualUserSubscriptions($userId)
+    {
+        return $this->getTable()->where([
+            'user_id' => $userId,
+            'start_time <= ?' => new DateTime,
+            'end_time > ?' => new DateTime,
+        ])->order('subscription_type.mobile DESC, end_time DESC')->fetchAll();
+    }
+
     public function hasSubscriptionEndAfter($userId, DateTime $endTime)
     {
         return $this->getTable()->where(['user_id' => $userId, 'end_time > ?' => $endTime])->count('*') > 0;
