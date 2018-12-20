@@ -67,7 +67,7 @@ class SubscriptionsModule extends CrmModule
         $menuItem = new MenuItem(
             $this->translator->translate('subscriptions.menu.endings'),
             ':Subscriptions:Dashboard:endings',
-            'fa fa-frown-o fa-fw',
+            'fa fa-frown fa-fw',
             500
         );
         $menuContainer->attachMenuItemToForeignModule('#dashboard', $mainMenu, $menuItem);
