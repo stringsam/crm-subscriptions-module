@@ -15,6 +15,8 @@ class ActualUserSubscription
 
     private $actualSubscription;
 
+    private $actualSubscriptions = null;
+
     private $nextSubscription;
 
     public function __construct(
@@ -37,12 +39,13 @@ class ActualUserSubscription
             return;
         }
 
-        $this->actualSubscription = $this->subscriptionsRepository->actualUserSubscription($this->user->getId());
-        if (!$this->actualSubscription) {
+        $this->actualSubscriptions = $this->subscriptionsRepository->actualUserSubscriptions($this->user->getId());
+        if (count($this->actualSubscriptions) == 0) {
             $this->nextSubscription = false;
             return;
         }
 
+        $this->actualSubscription = current($this->actualSubscriptions);
         $this->nextSubscription = $this->subscriptionsRepository->find($this->actualSubscription->next_subscription_id);
     }
 
@@ -68,5 +71,16 @@ class ActualUserSubscription
     {
         $this->init();
         return $this->nextSubscription;
+    }
+
+    public function getActualRecurrentSubscription()
+    {
+        $this->init();
+        foreach ($this->actualSubscriptions as $actualSubscription) {
+            if ($actualSubscription->is_recurrent) {
+                return $actualSubscription;
+            }
+        }
+        return null;
     }
 }

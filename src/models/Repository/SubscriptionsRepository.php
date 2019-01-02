@@ -174,6 +174,15 @@ class SubscriptionsRepository extends Repository
         ])->order('subscription_type.mobile DESC, end_time DESC')->fetch();
     }
 
+    public function actualUserSubscriptions($userId)
+    {
+        return $this->getTable()->where([
+            'user_id' => $userId,
+            'start_time <= ?' => new DateTime,
+            'end_time > ?' => new DateTime,
+        ])->order('subscription_type.mobile DESC, end_time DESC')->fetchAll();
+    }
+
     public function hasSubscriptionEndAfter($userId, DateTime $endTime)
     {
         return $this->getTable()->where(['user_id' => $userId, 'end_time > ?' => $endTime])->count('*') > 0;
@@ -397,5 +406,19 @@ class SubscriptionsRepository extends Repository
             'end_time <= ?' => $endTime,
             'next_subscription_id NOT' => null,
         ]);
+    }
+
+    public function userSubscriptionTypesCounts($userId, ?array $subscriptionTypeIds)
+    {
+        $query = $this->getTable()
+            ->select('subscription_type_id, COUNT(*) AS count')
+            ->where(['user.id' => $userId])
+            ->group('subscription_type_id');
+
+        if ($subscriptionTypeIds !== null) {
+            $query->where(['subscription_type_id' => $subscriptionTypeIds]);
+        }
+
+        return $query->fetchPairs('subscription_type_id', 'count');
     }
 }
