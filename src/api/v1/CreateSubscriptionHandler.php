@@ -48,6 +48,7 @@ class CreateSubscriptionHandler extends ApiHandler
             new InputParam(InputParam::TYPE_POST, 'email', InputParam::REQUIRED),
             new InputParam(InputParam::TYPE_POST, 'subscription_type_id', InputParam::REQUIRED),
             new InputParam(InputParam::TYPE_POST, 'start_time', InputParam::OPTIONAL),
+            new InputParam(InputParam::TYPE_POST, 'type', InputParam::OPTIONAL),
         ];
     }
 
@@ -72,11 +73,16 @@ class CreateSubscriptionHandler extends ApiHandler
             return $response;
         }
 
+        $type = SubscriptionsRepository::TYPE_REGULAR;
+        if (isset($params['type']) && in_array($params['type'], $this->subscriptionsRepository->availableTypes())) {
+            $type = $params['type'];
+        }
+
         $subscription = $this->subscriptionsRepository->add(
             $subscriptionType,
             false,
             $user,
-            'regular',
+            $type,
             DateTime::from(strtotime($params['start_time']))
         );
         $this->emitter->emit(new NewSubscriptionEvent($subscription));
