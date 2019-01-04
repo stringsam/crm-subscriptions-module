@@ -2,10 +2,11 @@
 
 namespace Crm\SubscriptionsModule\Components;
 
-use Nette\Database\Context;
 use Crm\ApplicationModule\Widget\BaseWidget;
-use Crm\UsersModule\Repository\UsersRepository;
 use Crm\ApplicationModule\Widget\WidgetManager;
+use Crm\UsersModule\Repository\AddressesRepository;
+use Crm\UsersModule\Repository\UsersRepository;
+use Nette\Database\Context;
 
 class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
 {
@@ -14,16 +15,19 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
     /** @var WidgetManager */
     protected $widgetManager;
 
-    /** @var UsersRepository */
     protected $usersRepository;
+
+    protected $addressesRepository;
 
     public function __construct(
         WidgetManager $widgetManager,
-        UsersRepository $usersRepository
+        UsersRepository $usersRepository,
+        AddressesRepository $addressesRepository
     ) {
         parent::__construct($widgetManager);
 
         $this->usersRepository = $usersRepository;
+        $this->addressesRepository = $addressesRepository;
     }
 
     public function header($id = '')
@@ -44,7 +48,7 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
             ->where(
                 ':subscriptions.subscription_type:subscription_type_content_access.content_access.name = ?',
                 'print'
-            )->where('users.id NOT IN (SELECT user_id FROM addresses WHERE `type` = ?)', 'print')
+            )->where('users.id NOT IN ?', $this->addressesRepository->all()->where('type = ?', 'print')->select('user_id'))
             ->fetchAll();
 
         if (!empty($listUsers)) {
