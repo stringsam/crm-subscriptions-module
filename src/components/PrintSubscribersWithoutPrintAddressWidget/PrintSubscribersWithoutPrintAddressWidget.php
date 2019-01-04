@@ -5,6 +5,7 @@ namespace Crm\SubscriptionsModule\Components;
 use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\UsersModule\Repository\AddressesRepository;
+use Crm\UsersModule\Repository\UserMetaRepository;
 use Crm\UsersModule\Repository\UsersRepository;
 use Nette\Database\Context;
 
@@ -17,17 +18,21 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
 
     protected $usersRepository;
 
+    protected $userMetaRepository;
+
     protected $addressesRepository;
 
     public function __construct(
         WidgetManager $widgetManager,
         UsersRepository $usersRepository,
-        AddressesRepository $addressesRepository
+        AddressesRepository $addressesRepository,
+        UserMetaRepository $userMetaRepository
     ) {
         parent::__construct($widgetManager);
 
         $this->usersRepository = $usersRepository;
         $this->addressesRepository = $addressesRepository;
+        $this->userMetaRepository = $userMetaRepository;
     }
 
     public function header($id = '')
@@ -48,8 +53,16 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
             ->where(
                 ':subscriptions.subscription_type:subscription_type_content_access.content_access.name = ?',
                 'print'
-            )->where('users.id NOT IN ?', $this->addressesRepository->all()->where('type = ?', 'print')->select('user_id'))
-            ->fetchAll();
+            );
+
+        $havePrintAddress = $this->addressesRepository->all()->where('type = ?', 'print')->select('user_id')->fetchAssoc('user_id=user_id');
+        if ($havePrintAddress) {
+            $listUsers->where('users.id NOT IN (?)', $havePrintAddress);
+        }
+        $haveDisabledNotification = $this->userMetaRepository->usersWithKey('notify_missing_print_address', 0)->select('user_id')->fetchAssoc('user_id=user_id');
+        if ($haveDisabledNotification) {
+            $listUsers->where('users.id NOT IN (?)', $haveDisabledNotification);
+        }
 
         if (!empty($listUsers)) {
             $this->template->listUsers = $listUsers;
