@@ -183,6 +183,10 @@ class SubscriptionsModule extends CrmModule
             \Crm\SubscriptionsModule\Events\SubscriptionUpdatedEvent::class,
             $this->getInstance(\Crm\SubscriptionsModule\Events\SubscriptionUpdatedHandler::class)
         );
+        $emitter->addListener(
+            \Crm\UsersModule\Events\AddressRemovedEvent::class,
+            $this->getInstance(\Crm\SubscriptionsModule\Events\AddressRemovedHandler::class)
+        );
     }
 
     public function registerCommands(CommandsContainerInterface $commandsContainer)
