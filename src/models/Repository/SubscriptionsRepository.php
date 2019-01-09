@@ -421,4 +421,9 @@ class SubscriptionsRepository extends Repository
 
         return $query->fetchPairs('subscription_type_id', 'count');
     }
+
+    public function allWithAddress($addressId)
+    {
+        return $this->all()->where(['address_id' => $addressId]);
+    }
 }
