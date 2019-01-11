@@ -201,7 +201,18 @@ class SubscriptionsRepository extends Repository
     public function update(IRow &$row, $data)
     {
         $values['modified_at'] = new DateTime();
-        return parent::update($row, $data);
+        $result = parent::update($row, $data);
+        if ($result) {
+            /** @var ActiveRow $row */
+            $this->getTable()
+                ->where([
+                    'user_id' => $row->user_id,
+                    'end_time' => $row->start_time
+                ])
+                ->where('next_subscription_id IS NULL')
+                ->update(['next_subscription_id' => $row->id]);
+        }
+        return $result;
     }
 
     /**
