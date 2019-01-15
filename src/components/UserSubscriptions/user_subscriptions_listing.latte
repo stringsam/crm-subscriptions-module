@@ -24,7 +24,7 @@
             {$subscription->subscription_type->name}
           </a>
           <span n:if="$subscription->start_time < new \DateTime() && $subscription->end_time > new \DateTime()" class="label label-success">Aktuálne</span>
-          <small n:if="$subscription->next_subscription_id"><i class="fa fa-level-up"></i> #{$subscription->next_subscription_id}</small>
+          <small n:if="$subscription->next_subscription_id"><i class="fa fa-level-up-alt"></i> #{$subscription->next_subscription_id}</small>
 
           {if $subscription->address_id}
             {var $address = $subscription->address}
