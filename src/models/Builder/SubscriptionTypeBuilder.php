@@ -51,6 +51,13 @@ class SubscriptionTypeBuilder extends Builder
         return true;
     }
 
+    public function createNew()
+    {
+        $this->subscriptionTypeItems = [];
+        $this->magazines = [];
+        return parent::createNew();
+    }
+
     protected function setDefaults()
     {
         parent::setDefaults();
@@ -248,7 +255,7 @@ class SubscriptionTypeBuilder extends Builder
                 $this->database->table($this->subscriptionTypeItemsTable)->insert([
                     'subscription_type_id' => $subscriptionType->id,
                     'name' => $item['name'],
-                    'amount' => $item['price'],
+                    'amount' => $item['amount'],
                     'vat' => $item['vat'],
                     'sorting' => $sorting,
                     'created_at' => new DateTime(),
