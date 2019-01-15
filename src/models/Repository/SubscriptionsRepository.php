@@ -156,6 +156,15 @@ class SubscriptionsRepository extends Repository
      * @param int $userId
      * @return \Nette\Database\Table\Selection
      */
+    public function userSubscription($userId)
+    {
+        return $this->getTable()->where(['user_id' => $userId])->limit(1);
+    }
+
+    /**
+     * @param int $userId
+     * @return \Nette\Database\Table\Selection
+     */
     public function userMobileSubscriptions($userId)
     {
         return $this->userSubscriptions($userId)->where(['subscription_type.mobile' => true]);
@@ -425,16 +434,5 @@ class SubscriptionsRepository extends Repository
     public function allWithAddress($addressId)
     {
         return $this->all()->where(['address_id' => $addressId]);
-    }
-
-    public function dashboardGetNewestSubscription($userId)
-    {
-        return $this->getTable()
-            ->where([
-                'user_id = ?' => $userId,
-                'end_time > ?' => new DateTime(),
-            ])
-            ->order('is_recurrent DESC, end_time DESC')
-            ->fetch();
     }
 }
