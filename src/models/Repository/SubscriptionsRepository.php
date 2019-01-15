@@ -426,4 +426,15 @@ class SubscriptionsRepository extends Repository
     {
         return $this->all()->where(['address_id' => $addressId]);
     }
+
+    public function dashboardGetNewestSubscription($userId)
+    {
+        return $this->getTable()
+            ->where([
+                'user_id = ?' => $userId,
+                'end_time > ?' => new DateTime(),
+            ])
+            ->order('is_recurrent DESC, end_time DESC')
+            ->fetch();
+    }
 }
