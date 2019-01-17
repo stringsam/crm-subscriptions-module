@@ -23,7 +23,6 @@ services:
 	- Crm\SubscriptionsModule\Components\ActualSubscribersRegistrationSourceStatsWidget
 	- Crm\SubscriptionsModule\Components\TotalSubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\ActualSubscribersStatWidget
-	- Crm\SubscriptionsModule\Components\ActualSubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\TodaySubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\MonthSubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\MonthToDateSubscriptionsStatWidget
@@ -56,6 +55,11 @@ services:
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsSelectionDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsFormDataProvider
 	- Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository
+
+	subscribersWithPaymentWidgetFactory:
+		class: Crm\SubscriptionsModule\Components\SubscribersWithPaymentWidgetFactory
+		setup:
+			- setSegment(%segments.active_subscribers_with_payment%)
 
 	extensionMethodFactory:
 		class: Crm\SubscriptionsModule\Extension\ExtensionMethodFactory

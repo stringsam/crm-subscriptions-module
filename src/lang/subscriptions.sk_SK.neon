@@ -235,6 +235,10 @@ admin:
 	print_subscribers_without_print_address_widget:
 		title: Používatelia s aktívnym printovým predplatným bez vyplnenej adresy
 
+	subscribers_with_payment_widget:
+		last_day: Last 24 hours
+		last_days: Last %count% days
+
 data_provider:
 	delete:
 		three_months_active: Používateľ mal v posledných troch mesiacoch aktívne predplatné a nemôže byť zmazaný
