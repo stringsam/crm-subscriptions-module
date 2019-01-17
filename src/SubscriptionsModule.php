@@ -112,11 +112,6 @@ class SubscriptionsModule extends CrmModule
             700
         );
         $widgetManager->registerWidget(
-            'dashboard.singlestat.actuals.system',
-            $this->getInstance(\Crm\SubscriptionsModule\Components\ActualSubscriptionsStatWidget::class),
-            500
-        );
-        $widgetManager->registerWidget(
             'dashboard.singlestat.today',
             $this->getInstance(\Crm\SubscriptionsModule\Components\TodaySubscriptionsStatWidget::class),
             500
@@ -160,6 +155,21 @@ class SubscriptionsModule extends CrmModule
             'admin.payments.top',
             $this->getInstance(\Crm\SubscriptionsModule\Components\PrintSubscribersWithoutPrintAddressWidget::class),
             2000
+        );
+        $widgetManager->registerWidget(
+            'dashboard.singlestat.actuals.system',
+            $this->getInstance(\Crm\SubscriptionsModule\Components\SubscribersWithPaymentWidgetFactory::class)->create()->setDateModifier('-1 day'),
+            500
+        );
+        $widgetManager->registerWidget(
+            'dashboard.singlestat.actuals.system',
+            $this->getInstance(\Crm\SubscriptionsModule\Components\SubscribersWithPaymentWidgetFactory::class)->create()->setDateModifier('-7 days'),
+            600
+        );
+        $widgetManager->registerWidget(
+            'dashboard.singlestat.actuals.system',
+            $this->getInstance(\Crm\SubscriptionsModule\Components\SubscribersWithPaymentWidgetFactory::class)->create()->setDateModifier('-30 days'),
+            600
         );
     }
 
