@@ -156,6 +156,15 @@ class SubscriptionsRepository extends Repository
      * @param int $userId
      * @return \Nette\Database\Table\Selection
      */
+    public function userSubscription($userId)
+    {
+        return $this->getTable()->where(['user_id' => $userId])->limit(1);
+    }
+
+    /**
+     * @param int $userId
+     * @return \Nette\Database\Table\Selection
+     */
     public function userMobileSubscriptions($userId)
     {
         return $this->userSubscriptions($userId)->where(['subscription_type.mobile' => true]);
