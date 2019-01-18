@@ -110,9 +110,6 @@ class SubscribersWithPaymentWidget extends BaseWidget
             );
         }
 
-        dump($this->segmentCode);
-        die();
-
         $this->template->date = $this->date;
         $this->template->now = $now ? $now->value : 0;
         $this->template->then = $then ? $then->value: 0;
