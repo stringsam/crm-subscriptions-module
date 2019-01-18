@@ -236,8 +236,8 @@ admin:
 		title: Používatelia s aktívnym printovým predplatným bez vyplnenej adresy
 
 	subscribers_with_payment_widget:
-		last_day: Last 24 hours
-		last_days: Last %count% days
+		last_day: Posledných 24 hodín
+		last_days: Posledných %count% dní
 
 data_provider:
 	delete:
