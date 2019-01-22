@@ -156,21 +156,6 @@ class SubscriptionsModule extends CrmModule
             $this->getInstance(\Crm\SubscriptionsModule\Components\PrintSubscribersWithoutPrintAddressWidget::class),
             2000
         );
-        $widgetManager->registerWidget(
-            'dashboard.singlestat.actuals.system',
-            $this->getInstance(\Crm\SubscriptionsModule\Components\SubscribersWithPaymentWidgetFactory::class)->create()->setDateModifier('-1 day'),
-            500
-        );
-        $widgetManager->registerWidget(
-            'dashboard.singlestat.actuals.system',
-            $this->getInstance(\Crm\SubscriptionsModule\Components\SubscribersWithPaymentWidgetFactory::class)->create()->setDateModifier('-7 days'),
-            600
-        );
-        $widgetManager->registerWidget(
-            'dashboard.singlestat.actuals.system',
-            $this->getInstance(\Crm\SubscriptionsModule\Components\SubscribersWithPaymentWidgetFactory::class)->create()->setDateModifier('-30 days'),
-            600
-        );
     }
 
     public function registerEventHandlers(Emitter $emitter)
