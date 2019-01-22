@@ -56,11 +56,6 @@ services:
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsFormDataProvider
 	- Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository
 
-	subscribersWithPaymentWidgetFactory:
-		class: Crm\SubscriptionsModule\Components\SubscribersWithPaymentWidgetFactory
-		setup:
-			- setSegment(%segments.active_subscribers_with_payment%)
-
 	extensionMethodFactory:
 		class: Crm\SubscriptionsModule\Extension\ExtensionMethodFactory
 		setup:
