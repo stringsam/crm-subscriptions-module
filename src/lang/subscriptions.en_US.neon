@@ -205,7 +205,8 @@ admin:
 		group:
 			users: User information
 		messages:
-			registered: "We are registering %count% users."
+			registrations: "We are signing up %count% new users."
+			newly_registered: "We are generating %count% subscriptions for newly-created users."
 			inactive: "We are generating %count% subscription for existing users without an active subscription."
 			active: "We are generating %count% subscriptions for existing users with an active subscription."
 			skipped: "We have skipped generation of subscription for %count% users, as they don't match the selected criteria for subscription."

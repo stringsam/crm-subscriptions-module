@@ -18,10 +18,11 @@ use Tomaj\Form\Renderer\BootstrapRenderer;
 
 class SubscriptionsGeneratorFormFactory
 {
+    const REGISTRATIONS = 'registrations';
     const NEWLY_REGISTERED = 'newly_registered';
-    const SKIPPED = 'skipped';
     const INACTIVE = 'inactive';
     const ACTIVE = 'active';
+    const SKIPPED = 'skipped';
 
     private $userManager;
 
@@ -141,6 +142,7 @@ class SubscriptionsGeneratorFormFactory
         }
 
         $stats = [
+            self::REGISTRATIONS => 0,
             self::NEWLY_REGISTERED => 0,
             self::INACTIVE => 0,
             self::ACTIVE => 0,
@@ -171,7 +173,11 @@ class SubscriptionsGeneratorFormFactory
                     continue;
                 }
 
-                $user = $this->userManager->addNewUser($email, true, 'subscriptiongenerator', null, false);
+                if ($values->generate) {
+                    $user = $this->userManager->addNewUser($email, true, 'subscriptiongenerator', null, false);
+                }
+
+                $stats[self::REGISTRATIONS] += 1;
 
                 if (!in_array(self::NEWLY_REGISTERED, $values->user_groups)) {
                     $stats[self::SKIPPED] += 1;
@@ -212,7 +218,6 @@ class SubscriptionsGeneratorFormFactory
             }
 
             $actualSubscription ? $stats[self::ACTIVE] += 1 : $stats[self::INACTIVE] += 1;
-            ;
 
             if ($values->generate) {
                 $this->subscriptionsGenerator->generate(
@@ -232,7 +237,11 @@ class SubscriptionsGeneratorFormFactory
         $type = $values->generate ? 'info' : 'warning';
         $messages += [
             [
-                'text' => $this->translator->translate('subscriptions.admin.subscription_generator.messages.registered', $stats[self::NEWLY_REGISTERED]),
+                'text' => $this->translator->translate('subscriptions.admin.subscription_generator.messages.registrations', $stats[self::REGISTRATIONS]),
+                'type' => $type
+            ],
+            [
+                'text' => $this->translator->translate('subscriptions.admin.subscription_generator.messages.newly_registered', $stats[self::NEWLY_REGISTERED]),
                 'type' => $type
             ],
             [
