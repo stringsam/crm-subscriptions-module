@@ -5,7 +5,6 @@ namespace Crm\SubscriptionsModule\Generator;
 use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\SubscriptionsModule\Events\NewSubscriptionEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionStartsEvent;
-use Crm\SubscriptionsModule\Repository\SubscriptionPaymentsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use DateTime;
 use League\Event\Emitter;
@@ -14,28 +13,22 @@ class SubscriptionsGenerator
 {
     private $subscriptionsRepository;
 
-    private $subscriptionPaymentsRepository;
-
     private $emitter;
 
     private $hermesEmitter;
 
     public function __construct(
         SubscriptionsRepository $subscriptionsRepository,
-        SubscriptionPaymentsRepository $subscriptionPaymentsRepository,
         Emitter $emitter,
         \Tomaj\Hermes\Emitter $hermesEmitter
     ) {
         $this->subscriptionsRepository = $subscriptionsRepository;
-        $this->subscriptionPaymentsRepository = $subscriptionPaymentsRepository;
         $this->emitter = $emitter;
         $this->hermesEmitter = $hermesEmitter;
     }
 
     public function generate(SubscriptionsParams $params, $count)
     {
-        $payment = $params->getPayment();
-
         for ($i = 0; $i < $count; $i++) {
             $subscription = $this->subscriptionsRepository->add(
                 $params->getSubscriptionType(),
@@ -45,10 +38,6 @@ class SubscriptionsGenerator
                 $params->getStartTime(),
                 $params->getEndTime()
             );
-
-            if ($payment) {
-                $this->subscriptionPaymentsRepository->add($subscription, $payment);
-            }
 
             // tento emiter by tu nemusel byt, idealne by bolo keby sa to robilo v add metode asi
             // treba zrefaktorovat aj v paymentprocessore

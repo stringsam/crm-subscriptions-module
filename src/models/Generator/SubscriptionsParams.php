@@ -9,8 +9,6 @@ class SubscriptionsParams
 {
     private $subscriptionType;
 
-    private $payment;
-
     private $user;
 
     private $startTime;
@@ -19,10 +17,9 @@ class SubscriptionsParams
 
     private $type;
 
-    public function __construct(IRow $subscriptionType, IRow $user, $type, DateTime $startTime, DateTime $endTime, IRow $payment = null)
+    public function __construct(IRow $subscriptionType, IRow $user, $type, DateTime $startTime, DateTime $endTime)
     {
         $this->subscriptionType = $subscriptionType;
-        $this->payment = $payment;
         $this->user = $user;
         $this->type = $type;
         $this->startTime = $startTime;
@@ -32,11 +29,6 @@ class SubscriptionsParams
     public function getSubscriptionType()
     {
         return $this->subscriptionType;
-    }
-
-    public function getPayment()
-    {
-        return $this->payment;
     }
 
     public function getStartTime()

@@ -16,11 +16,10 @@ class SubscriptionsGeneratorPresenter extends AdminPresenter
 
     public function createComponentSubscriptionsGeneratorForm()
     {
-        $this->subscriptionsGeneratorFormFactory->onSubmit = function ($message) {
-            $this->flashMessage($message, 'message');
-        };
-        $this->subscriptionsGeneratorFormFactory->onCreate = function ($message) {
-            $this->flashMessage($message);
+        $this->subscriptionsGeneratorFormFactory->onSubmit = function ($messages) {
+            foreach ($messages as $message) {
+                $this->flashMessage($message['text'], $message['type'] ?? 'info');
+            }
         };
 
         $form = $this->subscriptionsGeneratorFormFactory->create();

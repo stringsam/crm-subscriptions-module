@@ -149,28 +149,40 @@ admin:
 	subscription_generator:
 		form:
 			header: Generátor předplatného
-			subscriptions_count: Počet předplatných
 			generate: Vygeneruj předplatné
 			send: Odešli
+		field:
+			emails: E-maily
+			create_users: Vytvořit uživatele
+			user_groups: Komu vytvořit předplatné
+			newly_registered: Aktuálně zaregistrování
+			inactive: Zaregistrováni v minulosti bez aktivního předplatného
+			active: Zaregistrováni v minulosti s aktivním předplatným
+			subscription_type: Typ předplatného
 		description:
 			generate: "Pokud se nezaškrtne, zkontrolují se jen vstupy a vypíše se stav."
 			start_time: "Pokud není zadáno, předplatné bude platit od aktuálního času."
 			end_time: "Pokud není zadáno, konec předplatného bude vypočítám podle počtu dní vybraného předplatného."
-			type: "Pro generované předplatné, které má být předmětem daru, je třeba použít 'gift'."
+			emails: Jedna e-mailová adresa na každý řádek
+			create_users: "Pokud zadaný email neexistuje, bude konto vytvořeno"
+			user_groups: "Predplané bude vytvořeno pouze uživatelům splňujících zvolen stav"
 		errors:
-			unknown_variable_symbol: Nebyla nalezena platba s variabilním symbolem %variable_symbol%.
-			number: Musí být číslo
+			invalid_email: E-mail "%email%" není platný
 		required:
-			subscriptions_count: Je třeba vyplnit počet předplatných
+			emails: E-mail uživatele musí být vyplněn
+			subscription_type: Typ předplatného musí být vybrán
 		placeholder:
-			subscriptions_count: například 14
+			emails: například jozko@pucik.sk
+		prompt:
+			subscription_type: Vyberte typ předplatného
+		group:
+			users: Informace o uživatelích
 		messages:
-			created: 'Bylo vytvořeno %subscriptions_count% předplatných pro uživatele <a href="%link%" target="_blank">%email%</a>.'
-			creating: Budeme vytvářet %count% předplatných platných od %start_time% do %end_time%.
-			payment: Platba s variabilním symbolem patří uživateli %email% se sumou %amount% Kč.
-			no_payment: Nebyla zadána platba - předplatné nebude přiřazené k žádné platbě.
-			user: 'Nové předplatné bude přidáno uživateli %email% #%id%.'
-			new_user: Bude vytvořen nový uživatel s emailem %email%.
+			registered: "Registrujeme %count% uživatelů."
+			inactive: "Vytváříme %count% předplatných pro již registrované uživatele bez předplatného."
+			active: "Vytváříme %count% předplatných pro aktivní předplatitele."
+			skipped: "Nevytváříme %count% předplatných, protože uživatelé nesplňují zvolené podmínky"
+
 	actual_user_subscriptions:
 		header: Předplatné
 		no_subscription: Nemá aktuální předplatné

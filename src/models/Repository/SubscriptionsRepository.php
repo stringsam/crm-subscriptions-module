@@ -347,13 +347,6 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function userDonatedPayments($userId)
-    {
-        return $this->getTable()->where([
-            ':subscription_payments.payment.user_id' => $userId
-        ]);
-    }
-
     public function getPreviousSubscription($subscriptionId)
     {
         return $this->getTable()->where([
