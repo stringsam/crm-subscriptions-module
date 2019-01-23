@@ -132,6 +132,10 @@ class SubscriptionEndsStats extends UI\Control
         }
 
         $types = $this->processTypes($subscriptionsTypes, $types);
+        
+        usort($types, function ($a, $b) {
+            return $a['count'] < $b['count'];
+        });
 
         return [$types, $resultContents];
     }
