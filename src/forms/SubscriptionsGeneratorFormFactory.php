@@ -78,7 +78,7 @@ class SubscriptionsGeneratorFormFactory
         $form->addGroup('subscriptions.menu.subscriptions');
 
         $subscriptionTypePairs = SubscriptionType::getPairs($this->subscriptionTypesRepository->getAllActive());
-        $subscriptionType = $form->addSelect('subscription_type','subscriptions.admin.subscription_generator.field.subscription_type', $subscriptionTypePairs)
+        $subscriptionType = $form->addSelect('subscription_type', 'subscriptions.admin.subscription_generator.field.subscription_type', $subscriptionTypePairs)
             ->setPrompt("subscriptions.admin.subscription_generator.prompt.subscription_type")
             ->setRequired("subscriptions.admin.subscription_generator.required.subscription_type");
         $subscriptionType->getControlPrototype()->addAttributes(['class' => 'select2']);
@@ -186,7 +186,8 @@ class SubscriptionsGeneratorFormFactory
                             $user,
                             $values['type'],
                             $startTime,
-                            $endTime),
+                            $endTime
+                        ),
                         1
                     );
                 }
@@ -210,7 +211,8 @@ class SubscriptionsGeneratorFormFactory
                 continue;
             }
 
-            $actualSubscription ? $stats[self::ACTIVE] += 1 : $stats[self::INACTIVE] += 1;;
+            $actualSubscription ? $stats[self::ACTIVE] += 1 : $stats[self::INACTIVE] += 1;
+            ;
 
             if ($values->generate) {
                 $this->subscriptionsGenerator->generate(
@@ -219,7 +221,8 @@ class SubscriptionsGeneratorFormFactory
                         $user,
                         $values['type'],
                         $startTime,
-                        $endTime),
+                        $endTime
+                    ),
                     1
                 );
             }
