@@ -8,27 +8,11 @@ use Nette\DI\CompilerExtension;
 
 final class SubscriptionsModuleExtension extends CompilerExtension implements ITranslationProvider
 {
-    private $defaults = [
-        'segments' => [
-            'active_subscribers_with_payment' => 'active-subscription-with-payment',
-        ]
-    ];
-
     public function loadConfiguration()
     {
-        $builder = $this->getContainerBuilder();
-
-        // set default values if user didn't define them
-        $this->config = $this->validateConfig($this->defaults);
-
-        // set extension parameters
-        if (!isset($builder->parameters['segments']['active_subscribers_with_payment'])) {
-            $builder->parameters['segments']['active_subscribers_with_payment'] = $this->config['segments']['active_subscribers_with_payment'];
-        }
-
         // load services from config and register them to Nette\DI Container
         Compiler::loadDefinitions(
-            $builder,
+            $this->getContainerBuilder(),
             $this->loadFromFile(__DIR__.'/../config/config.neon')['services']
         );
     }
