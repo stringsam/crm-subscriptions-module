@@ -193,7 +193,7 @@ admin:
 			end_time: "Ak nie je zadané, koniec predplatného bude vypočítaný podľa počtu dní vybraného predplatného."
 			emails: Jedna e-mailová adresa na každý riadok
 			create_users: "Ak zadaný email neexistuje, bude konto vytvorené"
-			user_groups: "Predplané bude vytvorené iba používateľom spĺňajúcich zvolený stav"
+			user_groups: "Predplatné bude vytvorené iba používateľom spĺňajúcich zvolený stav"
 		errors:
 			invalid_email: Email "%email%" nie je platný
 		required:
@@ -206,7 +206,8 @@ admin:
 		group:
 			users: Informácie o používateľoch
 		messages:
-			registered: "Registrujeme %count% používateľov."
+			registrations: "Registrujeme %count% používateľov."
+			newly_registered: "Vytvárame %count% predplatných pre novo-registrovaných používateľov."
 			inactive: "Vytvárame %count% predplatných pre už registrovaných používateľov bez predplatného."
 			active: "Vytvárame %count% predplatných pre aktívnych predplatiteľov."
 			skipped: "Nevytvárame %count% predplatných, keďže používatelia nespĺňajú zvolené podmienky"
