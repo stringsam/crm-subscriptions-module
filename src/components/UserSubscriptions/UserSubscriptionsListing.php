@@ -66,7 +66,6 @@ class UserSubscriptionsListing extends UI\Control implements WidgetInterface
         $this->template->totalSubscriptions = $this->totalCount($id);
         $this->template->subscriptions = $subscriptions;
         $this->template->givenByEmail = $givenByEmail;
-        $this->template->donatedSubscriptions = $this->subscriptionsRepository->userDonatedPayments($id);
         $this->template->id = $id;
         $this->template->setFile(__DIR__ . '/' . $this->templateName);
         $this->template->render();

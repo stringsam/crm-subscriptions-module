@@ -180,25 +180,35 @@ admin:
 			subscriptions_count: Subscriptions count
 			generate: Generate subscriptions
 			send: Send
+		field:
+			emails: E-mails
+			create_users: Create users
+			user_groups: Who should receive a subscription
+			newly_registered: Newly registered
+			inactive: Registered in past without an active subscription
+			active: Registered in past with active subscription
+			subscription_type: Subscription type
 		description:
 			generate: "If you don't check this, application will only validate your input a give you feedback."
 			start_time: "If it is filled, subscriptions will be activated from this time. Othervise subscriptions starts now."
 			end_time: "If it is filled, subscriptions will end in provided time. Othervise it will be calculate based on subscription type."
-			type: "For generated subscriptions that are gift you need to select 'gift'."
+			emails: Single e-mail address per line
+			create_users: "If there's no account with given email, new account will be created"
+			user_groups: "Subscription will be created only to users matching selected states"
 		errors:
-			unknown_variable_symbol: Cannot find payment with variable symbol %variable_symbol%.
-			number: Need to be number
+			invalid_email: Email "%email%" is not valid
 		required:
-			subscriptions_count: You need to fill subscriptions count
+			emails: At least one email needs to be entered
+			subscription_type: Subscription type is required
 		placeholder:
-			subscriptions_count: for example 14
+			emails: e.g. jozko@pucik.sk
+		group:
+			users: User information
 		messages:
-			created: "Created %subscriptions_count% subscriptions for user <a href=\"%link%\" target=\"_blank\">%email%</a>. "
-			creating: "We will create %count% subscription available from %start_time% to %end_time%. "
-			payment: "Payment with variable symbol belongs to user %email% with amount %amount% €. "
-			no_payment: "Cannot find payment with provided variable symbol. Subscriptions will not be paired with payment. "
-			user: "Subscription will belongs to user %email% #%id%. "
-			new_user: "We will create new user with email %email%. "
+			registered: "We are registering %count% users."
+			inactive: "We are generating %count% subscription for existing users without an active subscription."
+			active: "We are generating %count% subscriptions for existing users with an active subscription."
+			skipped: "We have skipped generation of subscription for %count% users, as they don't match the selected criteria for subscription."
 
 	# componenty
 

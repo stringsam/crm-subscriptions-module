@@ -2,64 +2,57 @@
 
 namespace Crm\SubscriptionsModule\Forms;
 
-use Crm\ApplicationModule\DataProvider\DataProviderManager;
-use Crm\SubscriptionsModule\DataProvider\PaymentFromVariableSymbolDataProviderInterface;
 use Crm\SubscriptionsModule\Generator\SubscriptionsGenerator;
 use Crm\SubscriptionsModule\Generator\SubscriptionsParams;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
+use Crm\SubscriptionsModule\Subscription\SubscriptionType;
 use Crm\UsersModule\Auth\UserManager;
-use Crm\UsersModule\Repository\UsersRepository;
+use Crm\UsersModule\Email\EmailValidator;
 use DateInterval;
+use Kdyby\Translation\Phrase;
 use Kdyby\Translation\Translator;
-use Nette\Application\LinkGenerator;
 use Nette\Application\UI\Form;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
 class SubscriptionsGeneratorFormFactory
 {
-    /** @var DataProviderManager */
-    public $dataProviderManager;
+    const NEWLY_REGISTERED = 'newly_registered';
+    const SKIPPED = 'skipped';
+    const INACTIVE = 'inactive';
+    const ACTIVE = 'active';
 
-    /** @var UserManager  */
     private $userManager;
 
-    /** @var UsersRepository  */
-    private $usersRepository;
-
-    /** @var SubscriptionTypesRepository  */
     private $subscriptionTypesRepository;
 
-    /** @var SubscriptionsGenerator  */
     private $subscriptionsGenerator;
 
-    /** @var LinkGenerator  */
-    private $linkGenerator;
-
-    /** @var Translator  */
     private $translator;
+
+    private $subscriptionsRepository;
+
+    private $emailValidator;
 
     public $onSubmit;
 
     public $onCreate;
 
     public function __construct(
-        DataProviderManager $dataProviderManager,
         UserManager $userManager,
-        UsersRepository $usersRepository,
         SubscriptionsGenerator $subscriptionsGenerator,
         SubscriptionTypesRepository $subscriptionTypesRepository,
-        LinkGenerator $linkGenerator,
-        Translator $translator
+        Translator $translator,
+        SubscriptionsRepository $subscriptionsRepository,
+        EmailValidator $emailValidator
     ) {
-        $this->dataProviderManager = $dataProviderManager;
         $this->userManager = $userManager;
-        $this->usersRepository = $usersRepository;
         $this->subscriptionsGenerator = $subscriptionsGenerator;
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
-        $this->linkGenerator = $linkGenerator;
         $this->translator = $translator;
+        $this->subscriptionsRepository = $subscriptionsRepository;
+        $this->emailValidator = $emailValidator;
     }
 
     /**
@@ -68,7 +61,12 @@ class SubscriptionsGeneratorFormFactory
     public function create()
     {
         $defaults = [
-            'type' => SubscriptionsRepository::TYPE_GIFT,
+            'type' => SubscriptionsRepository::TYPE_FREE,
+            'create_users' => true,
+            'user_groups' => [
+                self::NEWLY_REGISTERED,
+                self::INACTIVE,
+            ],
         ];
 
         $form = new Form;
@@ -79,63 +77,42 @@ class SubscriptionsGeneratorFormFactory
 
         $form->addGroup('subscriptions.menu.subscriptions');
 
-        $form->addSelect('subscription_type', 'subscriptions.menu.subscription_types', $this->subscriptionTypesRepository->all()->fetchPairs('id', 'name'));
-
-        $form->addText('subscriptions_count', 'subscriptions.admin.subscription_generator.form.subscriptions_count')
-            ->setType('number')
-            ->setRequired('subscriptions.admin.subscription_generator.required.subscriptions_count')
-            ->setAttribute('placeholder', 'subscriptions.admin.subscription_generator.placeholder.subscriptions_count')
-            ->addRule(Form::INTEGER, 'subscriptions.admin.subscription_generator.errors.number');
+        $subscriptionTypePairs = SubscriptionType::getPairs($this->subscriptionTypesRepository->getAllActive());
+        $subscriptionType = $form->addSelect('subscription_type','subscriptions.admin.subscription_generator.field.subscription_type', $subscriptionTypePairs)
+            ->setPrompt("subscriptions.admin.subscription_generator.prompt.subscription_type")
+            ->setRequired("subscriptions.admin.subscription_generator.required.subscription_type");
+        $subscriptionType->getControlPrototype()->addAttributes(['class' => 'select2']);
 
         $form->addText('start_time', 'subscriptions.data.subscriptions.fields.start_time')
             ->setAttribute('placeholder', 'subscriptions.data.subscriptions.placeholder.start_time')
-            ->setOption('description', 'subscriptions.admin.subscription_generator.description.start_time');
+            ->setOption('description', 'subscriptions.admin.subscription_generator.description.start_time')
+            ->setAttribute('class', 'flatpickr');
 
         $form->addText('end_time', 'subscriptions.data.subscriptions.fields.end_time')
             ->setAttribute('placeholder', 'subscriptions.data.subscriptions.placeholder.end_time')
-            ->setOption('description', 'subscriptions.admin.subscription_generator.description.end_time');
+            ->setOption('description', 'subscriptions.admin.subscription_generator.description.end_time')
+            ->setAttribute('class', 'flatpickr');
 
-        $form->addSelect('type', 'subscriptions.data.subscriptions.fields.type', [
-            SubscriptionsRepository::TYPE_REGULAR  => SubscriptionsRepository::TYPE_REGULAR,
-            SubscriptionsRepository::TYPE_FREE     => SubscriptionsRepository::TYPE_FREE,
-            SubscriptionsRepository::TYPE_DONATION => SubscriptionsRepository::TYPE_DONATION,
-            SubscriptionsRepository::TYPE_GIFT     => SubscriptionsRepository::TYPE_GIFT,
-            SubscriptionsRepository::TYPE_SPECIAL  => SubscriptionsRepository::TYPE_SPECIAL,
-        ])->setOption('description', 'subscriptions.admin.subscription_generator.description.type');
+        $form->addSelect('type', 'subscriptions.data.subscriptions.fields.type', $this->subscriptionsRepository->availableTypes())
+            ->setOption('description', 'subscriptions.admin.subscription_generator.description.type');
 
-        $form->addGroup('Platba');
+        $form->addGroup('subscriptions.admin.subscription_generator.group.users');
 
-        $form->addText('variable_symbol', 'Variabilný symbol')
-            ->setAttribute('placeholder', 'napríklad 1351234215');
+        $form->addTextArea('emails', 'subscriptions.admin.subscription_generator.field.emails')
+            ->setAttribute('rows', 20)
+            ->setRequired('subscriptions.admin.subscription_generator.required.emails')
+            ->setAttribute('placeholder', 'subscriptions.admin.subscription_generator.placeholder.emails')
+            ->setOption('description', 'subscriptions.admin.subscription_generator.description.emails');
 
-        $form->addGroup('Informácie o používateľovi');
+        $form->addCheckbox('create_users', 'subscriptions.admin.subscription_generator.field.create_users')
+            ->setOption('description', 'subscriptions.admin.subscription_generator.description.create_users');
 
-        $form->addText('user_email', 'Email')
-            ->setRequired('Email používateľa musí byť vyplnený')
-            ->setType('email')
-            ->setAttribute('placeholder', 'napríklad jozko@pucik.sk')
-            ->setOption('description', 'Ak zadaný email neexistuje tak bude konto vytvorené');
-
-        $form->addText('first_name', 'Krstné meno:')
-            ->setAttribute('placeholder', 'krstné meno');
-        $form->addText('last_name', 'Priezvisko:')
-            ->setAttribute('placeholder', 'priezvisko');
-        $form->addText('institution_name', 'Názov inštitúcie:')
-            ->setAttribute('placeholder', 'napríklad Knižnica Martina Bella');
-        $form->addText('phone_number', 'Telefón')
-            ->setAttribute('placeholder', 'napríklad 0915 123 456');
-        $form->addText('print_first_name', 'Meno (pre doručenie):')
-            ->setAttribute('placeholder', 'krstné meno pre doručenie printu (ak je rôzne)')
-            ->setOption('description', 'Vyplniť iba ak je meno pre doručenie iné ako pôvodne');
-        $form->addText('print_last_name', 'Priezvisko (pre doručenie):')
-            ->setAttribute('placeholder', 'priezvisko pre doručenie printu (ak je rôzne)')
-            ->setOption('description', 'Vyplniť iba ak je priezvisko pre doručenie iné ako pôvodne');
-        $form->addText('address', 'Ulica:')
-            ->setAttribute('placeholder', 'napište ulicu');
-        $form->addText('zip', 'PSC:')
-            ->setAttribute('placeholder', 'napríklad 08102');
-        $form->addText('city', 'Mesto:')
-            ->setAttribute('placeholder', 'napríklad Trnava');
+        $form->addCheckboxList('user_groups', 'subscriptions.admin.subscription_generator.field.user_groups', [
+            'newly_registered' => 'subscriptions.admin.subscription_generator.field.newly_registered',
+            'inactive' => 'subscriptions.admin.subscription_generator.field.inactive',
+            'active' => 'subscriptions.admin.subscription_generator.field.active',
+        ])
+            ->setOption('description', 'subscriptions.admin.subscription_generator.description.user_groups');
 
         $form->addCheckbox('generate', 'subscriptions.admin.subscription_generator.form.generate')
             ->setOption('description', 'subscriptions.admin.subscription_generator.description.generate');
@@ -152,9 +129,10 @@ class SubscriptionsGeneratorFormFactory
         return $form;
     }
 
-    public function formSucceeded($form, $values)
+    public function formSucceeded(Form $form, $values)
     {
         $subscriptionType = $this->subscriptionTypesRepository->find($values['subscription_type']);
+
         $startTime = DateTime::from(strtotime($values['start_time']));
         $endTime = DateTime::from(strtotime($values['end_time']));
         if (!$values['end_time']) {
@@ -162,70 +140,111 @@ class SubscriptionsGeneratorFormFactory
             $endTime->add(new DateInterval("P{$subscriptionType->length}D"));
         }
 
-        $user = $this->userManager->loadUserByEmail($values['user_email']);
+        $stats = [
+            self::NEWLY_REGISTERED => 0,
+            self::INACTIVE => 0,
+            self::ACTIVE => 0,
+            self::SKIPPED => 0,
+        ];
 
-        $payment = null;
-        if ($values['variable_symbol']) {
-            /** @var PaymentFromVariableSymbolDataProviderInterface[] $providers */
-            $providers = $this->dataProviderManager->getProviders('subscriptions.dataprovider.payment_from_variable_symbol', PaymentFromVariableSymbolDataProviderInterface::class);
-            foreach ($providers as $sorting => $provider) {
-                $payment = $provider->provide(['variableSymbol' => $values['variable_symbol']]);
-                if ($payment) {
-                    break;
-                }
+        $emails = [];
+        foreach (explode("\n", $values->emails) as $email) {
+            $email = trim($email);
+            if (empty($email)) {
+                continue;
             }
-
-            if (is_null($payment)) {
-                $form['variable_symbol']->addError($this->translator->translate('subscriptions.admin.subscription_generator.errors.unknown_variable_symbol', ['variable_symbol' => $values['variable_symbol']]));
-                return;
+            if (!$this->emailValidator->isValid($email)) {
+                $form['emails']->addError(new Phrase('subscriptions.admin.subscription_generator.errors.invalid_email', null, ['email' => $email]));
+            }
+            if (!empty($email)) {
+                $emails[] = $email;
             }
         }
 
-        $count = intval($values['subscriptions_count']);
+        foreach ($emails as $email) {
+            $user = $this->userManager->loadUserByEmail($email);
 
-        if ($values['generate'] == 1) {
+            // newly registered
             if (!$user) {
-                $user = $this->userManager->addNewUser($values['user_email'], false, 'subscriptiongenerator');
-                if (!$user) {
-                    $form['user_email']->addError('Cannot process email');
-                    return;
+                if (!$values->create_users) {
+                    // user doesn't exist and we don't want create new users
+                    continue;
                 }
-                $data = [
-                    'first_name' => $values['first_name'],
-                    'last_name' => $values['last_name'],
-                    'phone_number' => $values['phone_number'],
-                    'print_first_name' => $values['print_first_name'],
-                    'print_last_name' => $values['print_last_name'],
-                    'address' => $values['address'],
-                    'zip' => $values['zip'],
-                    'city' => $values['city'],
-                ];
-                if ($values['institution_name']) {
-                    $data['institution_name'] = $values['institution_name'];
-                    $data['is_institution'] = true;
+
+                $user = $this->userManager->addNewUser($email, true, 'subscriptiongenerator', null, false);
+
+                if (!in_array(self::NEWLY_REGISTERED, $values->user_groups)) {
+                    $stats[self::SKIPPED] += 1;
+                    // we don't want to create subscription for newly registered, halting here
+                    continue;
                 }
-                $this->usersRepository->update($user, $data);
+
+                if ($values->generate) {
+                    $this->subscriptionsGenerator->generate(
+                        new SubscriptionsParams(
+                            $subscriptionType,
+                            $user,
+                            $values['type'],
+                            $startTime,
+                            $endTime),
+                        1
+                    );
+                }
+                $stats[self::NEWLY_REGISTERED] += 1;
+
+                // newly registered scenario handled completely
+                continue;
             }
 
-            $this->subscriptionsGenerator->generate(new SubscriptionsParams($subscriptionType, $user, $values['type'], $startTime, $endTime, $payment), $count);
+            // already registered
+            $actualSubscription = $this->subscriptionsRepository->actualUserSubscription($user->id);
 
-            $message = $this->translator->translate('subscriptions.admin.subscription_generator.messages.created', ['subscriptions_count' => $count, 'link' => $this->linkGenerator->link('Users:UsersAdmin:show', ['id' => $user->id]), 'email' => $user->email]);
-            $this->onCreate->__invoke($message);
-        } else {
-            $message = $this->translator->translate('subscriptions.admin.subscription_generator.messages.creating', ['count' => $count, 'start_time' => $startTime, 'end_time' => $endTime]);
-            if ($payment) {
-                $message .= $this->translator->translate('subscriptions.admin.subscription_generator.messages.payment', ['email' => $payment->user->email, 'amount' => $payment->amount]);
-            } else {
-                $message .= $this->translator->translate('subscriptions.admin.subscription_generator.messages.no_payment');
+            if ($actualSubscription && !in_array(self::ACTIVE, $values->user_groups)) {
+                // we don't want to create subscription for active subscribers, halting here
+                $stats[self::SKIPPED] += 1;
+                continue;
+            }
+            if (!$actualSubscription && !in_array(self::INACTIVE, $values->user_groups)) {
+                // we don't want to create subscription for inactive subscribers, halting here
+                $stats[self::SKIPPED] += 1;
+                continue;
             }
 
-            if ($user) {
-                $message .= $this->translator->translate('subscriptions.admin.subscription_generator.messages.user', ['email' => $user->email, 'id' => $user->id]);
-            } else {
-                $message .= $this->translator->translate('subscriptions.admin.subscription_generator.messages.new_user', ['email' => $values['user_email']]);
-            }
+            $actualSubscription ? $stats[self::ACTIVE] += 1 : $stats[self::INACTIVE] += 1;;
 
-            $this->onSubmit->__invoke($message);
+            if ($values->generate) {
+                $this->subscriptionsGenerator->generate(
+                    new SubscriptionsParams(
+                        $subscriptionType,
+                        $user,
+                        $values['type'],
+                        $startTime,
+                        $endTime),
+                    1
+                );
+            }
         }
+
+        $messages = [];
+        $type = $values->generate ? 'info' : 'warning';
+        $messages += [
+            [
+                'text' => $this->translator->translate('subscriptions.admin.subscription_generator.messages.registered', $stats[self::NEWLY_REGISTERED]),
+                'type' => $type
+            ],
+            [
+                'text' => $this->translator->translate('subscriptions.admin.subscription_generator.messages.inactive', $stats[self::INACTIVE]),
+                'type' => $type
+            ],
+            [
+                'text' => $this->translator->translate('subscriptions.admin.subscription_generator.messages.active', $stats[self::ACTIVE]),
+                'type' => $type,
+            ],
+            [
+                'text' => $this->translator->translate('subscriptions.admin.subscription_generator.messages.skipped', $stats[self::SKIPPED]),
+                'type' => 'warning',
+            ],
+        ];
+        ($this->onSubmit)($messages);
     }
 }
