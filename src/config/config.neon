@@ -22,7 +22,6 @@ services:
 	- Crm\SubscriptionsModule\Components\ActualSubscribersRegistrationSourceStatsWidget
 	- Crm\SubscriptionsModule\Components\TotalSubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\ActualSubscribersStatWidget
-	- Crm\SubscriptionsModule\Components\ActualSubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\TodaySubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\MonthSubscriptionsStatWidget
 	- Crm\SubscriptionsModule\Components\MonthToDateSubscriptionsStatWidget

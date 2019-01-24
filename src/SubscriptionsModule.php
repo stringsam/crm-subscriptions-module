@@ -112,11 +112,6 @@ class SubscriptionsModule extends CrmModule
             700
         );
         $widgetManager->registerWidget(
-            'dashboard.singlestat.actuals.system',
-            $this->getInstance(\Crm\SubscriptionsModule\Components\ActualSubscriptionsStatWidget::class),
-            500
-        );
-        $widgetManager->registerWidget(
             'dashboard.singlestat.today',
             $this->getInstance(\Crm\SubscriptionsModule\Components\TodaySubscriptionsStatWidget::class),
             500
