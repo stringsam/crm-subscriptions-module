@@ -15,6 +15,8 @@ use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
+use Tomaj\Hermes\Emitter;
+use Tomaj\Hermes\Message;
 
 class SubscriptionsGeneratorFormFactory
 {
@@ -36,6 +38,8 @@ class SubscriptionsGeneratorFormFactory
 
     private $emailValidator;
 
+    private $emitter;
+
     public $onSubmit;
 
     public $onCreate;
@@ -46,7 +50,8 @@ class SubscriptionsGeneratorFormFactory
         SubscriptionTypesRepository $subscriptionTypesRepository,
         Translator $translator,
         SubscriptionsRepository $subscriptionsRepository,
-        EmailValidator $emailValidator
+        EmailValidator $emailValidator,
+        Emitter $emitter
     ) {
         $this->userManager = $userManager;
         $this->subscriptionsGenerator = $subscriptionsGenerator;
@@ -54,6 +59,7 @@ class SubscriptionsGeneratorFormFactory
         $this->translator = $translator;
         $this->subscriptionsRepository = $subscriptionsRepository;
         $this->emailValidator = $emailValidator;
+        $this->emitter = $emitter;
     }
 
     /**
@@ -163,6 +169,11 @@ class SubscriptionsGeneratorFormFactory
             }
         }
 
+        $payload = [
+            'register' => [],
+            'subscribe' => [],
+        ];
+
         foreach ($emails as $email) {
             $user = $this->userManager->loadUserByEmail($email);
 
@@ -173,9 +184,12 @@ class SubscriptionsGeneratorFormFactory
                     continue;
                 }
 
-                if ($values->generate) {
-                    $user = $this->userManager->addNewUser($email, true, 'subscriptiongenerator', null, false);
-                }
+                $payload['register'][] = [
+                    'email' => $email,
+                    'send_email' => true,
+                    'source' => 'subscriptiongenerator',
+                    'check_email' => false,
+                ];
 
                 $stats[self::REGISTRATIONS] += 1;
 
@@ -185,18 +199,13 @@ class SubscriptionsGeneratorFormFactory
                     continue;
                 }
 
-                if ($values->generate) {
-                    $this->subscriptionsGenerator->generate(
-                        new SubscriptionsParams(
-                            $subscriptionType,
-                            $user,
-                            $values['type'],
-                            $startTime,
-                            $endTime
-                        ),
-                        1
-                    );
-                }
+                $payload['subscribe'][] = [
+                    'subscription_type_id' => $subscriptionType->id,
+                    'email' => $email,
+                    'type' => $values['type'],
+                    'start_time' => $startTime->format(DATE_RFC3339),
+                    'end_time' => $endTime->format(DATE_RFC3339),
+                ];
                 $stats[self::NEWLY_REGISTERED] += 1;
 
                 // newly registered scenario handled completely
@@ -219,18 +228,13 @@ class SubscriptionsGeneratorFormFactory
 
             $actualSubscription ? $stats[self::ACTIVE] += 1 : $stats[self::INACTIVE] += 1;
 
-            if ($values->generate) {
-                $this->subscriptionsGenerator->generate(
-                    new SubscriptionsParams(
-                        $subscriptionType,
-                        $user,
-                        $values['type'],
-                        $startTime,
-                        $endTime
-                    ),
-                    1
-                );
-            }
+            $payload['subscribe'][] = [
+                'subscription_type_id' => $subscriptionType->id,
+                'email' => $user->email,
+                'type' => $values['type'],
+                'start_time' => $startTime->format(DATE_RFC3339),
+                'end_time' => $endTime->format(DATE_RFC3339),
+            ];
         }
 
         $messages = [];
@@ -257,6 +261,11 @@ class SubscriptionsGeneratorFormFactory
                 'type' => 'warning',
             ],
         ];
+
+        if ($values->generate) {
+            $this->emitter->emit(new Message('generate-subscription', $payload));
+        }
+
         ($this->onSubmit)($messages);
     }
 }

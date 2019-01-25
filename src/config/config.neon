@@ -40,6 +40,7 @@ services:
 	- Crm\SubscriptionsModule\Events\AddressRemovedHandler
 	- Crm\SubscriptionsModule\Events\SubscriptionUpdatedHandler
 	- Crm\SubscriptionsModule\Events\NewSubscriptionHandler
+	- Crm\SubscriptionsModule\Hermes\GenerateSubscriptionHandler
 	- Crm\SubscriptionsModule\Api\v1\CreateSubscriptionHandler
 	- Crm\SubscriptionsModule\Repository\ContentAccessRepository
 	- Crm\SubscriptionsModule\User\SubscriptionsUserDataProvider
