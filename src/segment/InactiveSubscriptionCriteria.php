@@ -56,7 +56,7 @@ class InactiveSubscriptionCriteria implements CriteriaInterface
 
         if ($params->has('inactive_at')) {
             $where[] = " users.id NOT IN (SELECT user_id FROM subscriptions WHERE " .
-                implode(" AND ", $params->datetime('inactive_at')->escapedConditions('subscriptions.start_time', 'subscriptions.end_time')) .
+                implode(" AND ", $params->datetime('inactive_at')->inverse()->escapedConditions('subscriptions.start_time', 'subscriptions.end_time')) .
                 ")";
         }
 
