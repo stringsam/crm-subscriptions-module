@@ -9,14 +9,6 @@ use Crm\ApplicationModule\Graphs\GraphDataItem;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypeItemsFormFactory;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypesFormFactory;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypesUpgradesFormFactory;
-use Crm\SubscriptionsModule\Report\NoRecurrentChargeReport;
-use Crm\SubscriptionsModule\Report\PaidNextSubscriptionReport;
-use Crm\SubscriptionsModule\Report\RecurrentWithoutProfileReport;
-use Crm\SubscriptionsModule\Report\ReportGroup;
-use Crm\SubscriptionsModule\Report\ReportTable;
-use Crm\SubscriptionsModule\Report\StoppedOnFirstSubscriptionReport;
-use Crm\SubscriptionsModule\Report\TotalRecurrentSubscriptionsReport;
-use Crm\SubscriptionsModule\Report\TotalSubscriptionsReport;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
@@ -96,25 +88,6 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         $this->template->availableUpgrades = $this->subscriptionTypesUpgradesRepository->availableUpgrades($subscriptionType);
         $this->template->subscriptionTypeItems = $this->subscriptionTypeItemsRepository->subscriptionTypeItems($subscriptionType);
         $this->template->meta = $this->subscriptionTypesMetaRepository->subscriptionTypeMeta($subscriptionType);
-
-        $reportTable = new ReportTable(
-            ['subscription_type_id' => $id],
-            $this->context->getByType('Nette\Database\Context'),
-            new ReportGroup('users.source')
-        );
-        $reportTable
-            ->addReport(new TotalSubscriptionsReport(''))
-            ->addReport(new TotalRecurrentSubscriptionsReport(''))
-            ->addReport(new NoRecurrentChargeReport(''), ['Crm\SubscriptionsModule\Report\TotalRecurrentSubscriptionsReport'])
-            ->addReport(new StoppedOnFirstSubscriptionReport(''), ['Crm\SubscriptionsModule\Report\TotalRecurrentSubscriptionsReport'])
-            ->addReport(new PaidNextSubscriptionReport('', 1), ['Crm\SubscriptionsModule\Report\TotalRecurrentSubscriptionsReport'])
-            ->addReport(new PaidNextSubscriptionReport('', 2))
-            ->addReport(new PaidNextSubscriptionReport('', 3))
-            ->addReport(new RecurrentWithoutProfileReport(''), ['Crm\SubscriptionsModule\Report\TotalRecurrentSubscriptionsReport'])
-        ;
-        $this->template->reportTables = [
-            'Zdroj pouzivatelov' => $reportTable->getData(),
-        ];
     }
 
     protected function createComponentSubscriptionTypeItemsForm()
