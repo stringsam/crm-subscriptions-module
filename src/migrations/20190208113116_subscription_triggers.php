@@ -1,6 +1,7 @@
 <?php
 
-
+use Crm\ApplicationModule\Helpers;
+use Crm\ApplicationModule\Stats\StatsRepository;
 use Phinx\Migration\AbstractMigration;
 
 class SubscriptionTriggers extends AbstractMigration
@@ -26,29 +27,23 @@ SQL;
         $this->execute($q1);
         $this->execute($q2);
 
-        $event1Query = <<<SQL
+        $currentSubscribersCountQuery = <<<SQL
 SELECT COUNT(DISTINCT(`user`.`id`)) 
 FROM `subscriptions` 
 LEFT JOIN `users` `user` ON `subscriptions`.`user_id` = `user`.`id` 
-WHERE (`user`.`active` = 1) AND (`start_time` < NOW()) AND (`end_time` > NOW())
+WHERE `user`.`active` = 1 AND `start_time` < NOW() AND `end_time` > NOW()
 SQL;
-
-        $event1 = <<<SQL
-        CREATE EVENT current_subscribers_count
-ON SCHEDULE
-  EVERY 3 MINUTE
-DO
-  INSERT INTO stats (`key`, `value`)
-  VALUES ('current_subscribers_count', ($event1Query))
-  ON DUPLICATE KEY UPDATE value=VALUES(value);
-SQL;
-        $this->execute($event1);
+        $eventSql = Helpers::lockableScheduledEvent(
+            'current_subscribers_count_event',
+            3,
+            StatsRepository::insertOrUpdateQuery('current_subscribers_count', $currentSubscribersCountQuery));
+        $this->execute($eventSql);
     }
 
     public function down()
     {
         $this->execute('DROP TRIGGER IF EXISTS subscriptions_count_up');
         $this->execute('DROP TRIGGER IF EXISTS subscriptions_count_down');
-        $this->execute('DROP EVENT IF EXISTS current_subscribers_count');
+        $this->execute('DROP EVENT IF EXISTS current_subscribers_count_event');
     }
 }
