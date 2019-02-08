@@ -376,13 +376,19 @@ class SubscriptionsRepository extends Repository
             ->count('*');
     }
 
-    public function subscribers()
+    public function currentSubscribersCount()
     {
+        $stat = $this->statsRepository->loadByKey('current_subscribers_count');
+        if ($stat) {
+            return $stat->value;
+        }
+
         return $this->getTable()
-            ->select('DISTINCT user.*')
+            ->select('COUNT(DISTINCT(user.id)) AS total')
             ->where('user.active = ?', true)
             ->where('start_time < ?', $this->database::literal('NOW()'))
-            ->where('end_time > ?', $this->database::literal('NOW()'));
+            ->where('end_time > ?', $this->database::literal('NOW()'))
+            ->fetch()->total;
     }
 
     /**
