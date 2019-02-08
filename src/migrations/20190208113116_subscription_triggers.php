@@ -23,15 +23,13 @@ SET
 WHERE
   `stats`.`key` = "subscriptions_count";
 SQL;
-
         $this->execute($q1);
         $this->execute($q2);
-
     }
 
     public function down()
     {
-        $this->execute("DROP TRIGGER IF EXISTS subscriptions_count_up");
-        $this->execute("DROP TRIGGER IF EXISTS subscriptions_count_down");
+        $this->execute('DROP TRIGGER IF EXISTS subscriptions_count_up');
+        $this->execute('DROP TRIGGER IF EXISTS subscriptions_count_down');
     }
 }
