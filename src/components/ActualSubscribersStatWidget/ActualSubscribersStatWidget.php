@@ -2,6 +2,7 @@
 
 namespace Crm\SubscriptionsModule\Components;
 
+use Crm\ApplicationModule\Stats\StatsRepository;
 use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SegmentModule\Repository\SegmentsRepository;
@@ -38,10 +39,7 @@ class ActualSubscribersStatWidget extends BaseWidget
                 $this->segmentsRepository->findByCode('users_with_active_subscriptions')->id
             );
         }
-
-        $this->template->totalSubscribers = $this->subscriptionsRepository->subscribers()
-            ->select('COUNT(DISTINCT(user.id)) AS total')
-            ->fetch()->total;
+        $this->template->totalSubscribers = $this->subscriptionsRepository->currentSubscribersCount();
         $this->template->setFile(__DIR__ . DIRECTORY_SEPARATOR . $this->templateName);
         $this->template->render();
     }
