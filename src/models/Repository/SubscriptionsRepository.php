@@ -4,6 +4,7 @@ namespace Crm\SubscriptionsModule\Repository;
 
 use Crm\ApplicationModule\Repository;
 use Crm\ApplicationModule\Repository\AuditLogRepository;
+use Crm\ApplicationModule\Stats\StatsRepository;
 use Crm\SubscriptionsModule\Extension\ExtensionMethodFactory;
 use Crm\SubscriptionsModule\Length\LengthMethodFactory;
 use DateTime;
@@ -33,16 +34,29 @@ class SubscriptionsRepository extends Repository
 
     private $lengthMethodFactory;
 
+    private $statsRepository;
+
     public function __construct(
         Context $database,
         ExtensionMethodFactory $extensionMethodFactory,
         LengthMethodFactory $lengthMethodFactory,
-        AuditLogRepository $auditLogRepository
+        AuditLogRepository $auditLogRepository,
+        StatsRepository $statsRepository
     ) {
         parent::__construct($database);
         $this->auditLogRepository = $auditLogRepository;
         $this->extensionMethodFactory = $extensionMethodFactory;
         $this->lengthMethodFactory = $lengthMethodFactory;
+        $this->statsRepository = $statsRepository;
+    }
+
+    public function totalCount()
+    {
+        $stat = $this->statsRepository->loadByKey('subscriptions_count');
+        if ($stat) {
+            return $stat->value;
+        }
+        return parent::totalCount();
     }
 
     public function add(

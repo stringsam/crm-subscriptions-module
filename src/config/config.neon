@@ -50,6 +50,7 @@ services:
 	- Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionTypeNamesSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionLengthMethodSeeder
+	- Crm\SubscriptionsModule\Seeders\StatsSeeder
 	- Crm\SubscriptionsModule\Access\SubscriptionAccessProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUsersFormDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUsersSelectionDataProvider
