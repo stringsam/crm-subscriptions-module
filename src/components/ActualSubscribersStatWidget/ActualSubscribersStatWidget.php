@@ -39,7 +39,7 @@ class ActualSubscribersStatWidget extends BaseWidget
                 $this->segmentsRepository->findByCode('users_with_active_subscriptions')->id
             );
         }
-        $this->template->totalSubscribers = $this->subscriptionsRepository->currentSubscribersCount();
+        $this->template->totalSubscribers = $this->subscriptionsRepository->currentSubscribersCount(true);
         $this->template->setFile(__DIR__ . DIRECTORY_SEPARATOR . $this->templateName);
         $this->template->render();
     }

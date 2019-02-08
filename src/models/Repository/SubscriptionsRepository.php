@@ -376,11 +376,13 @@ class SubscriptionsRepository extends Repository
             ->count('*');
     }
 
-    public function currentSubscribersCount()
+    public function currentSubscribersCount($cachedAllowed = false)
     {
-        $stat = $this->statsRepository->loadByKey('current_subscribers_count');
-        if ($stat) {
-            return $stat->value;
+        if ($cachedAllowed) {
+            $stat = $this->statsRepository->loadByKey('current_subscribers_count');
+            if ($stat) {
+                return $stat->value;
+            }
         }
 
         return $this->getTable()
