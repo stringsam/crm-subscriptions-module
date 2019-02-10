@@ -67,20 +67,23 @@ class SubscriptionTypesFormFactory
 
         $form->addText('name', 'subscriptions.data.subscription_types.fields.name')
             ->setRequired('subscriptions.data.subscription_types.required.name')
-            ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.name');
+            ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.name')
+            ->setOption('description', 'subscriptions.data.subscription_types.description.name');
 
         $form->addText('code', 'subscriptions.data.subscription_types.fields.code')
             ->setRequired()
             ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.code');
+
+        $form->addText('user_label', 'subscriptions.data.subscription_types.fields.user_label')
+            ->setRequired('subscriptions.data.subscription_types.required.user_label')
+            ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.user_label')
+            ->setOption('description', 'subscriptions.data.subscription_types.description.user_label');
 
         $form->addSelect('extension_method_id', 'subscriptions.data.subscription_types.fields.extension_method_id', $this->subscriptionExtensionMethodsRepository->all()->fetchPairs('method', 'title'))
             ->setRequired();
 
         $form->addSelect('length_method_id', 'subscriptions.data.subscription_types.fields.length_method_id', $this->subscriptionLengthMethodsRepository->all()->fetchPairs('method', 'title'))
             ->setRequired();
-
-        $form->addText('user_label', 'subscriptions.data.subscription_types.fields.user_label')
-            ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.user_label');
 
         $form->addText('length', 'subscriptions.data.subscription_types.fields.length')
             ->setRequired('subscriptions.data.subscription_types.required.length')
