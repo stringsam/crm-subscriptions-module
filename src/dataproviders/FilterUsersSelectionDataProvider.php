@@ -29,7 +29,7 @@ class FilterUsersSelectionDataProvider implements FilterUsersSelectionDataProvid
         $params['selection']
             ->select(':subscriptions.start_time, :subscriptions.end_time');
 
-        if (!isset($params['params']['only_count'])) {
+        if (!($params['only_count'] ?? false)) {
             $params['selection']->joinWhere(':subscriptions', 'end_time > NOW()');
         }
 
