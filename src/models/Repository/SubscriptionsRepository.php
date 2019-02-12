@@ -52,11 +52,10 @@ class SubscriptionsRepository extends Repository
 
     public function totalCount()
     {
-        $stat = $this->statsRepository->loadByKey('subscriptions_count');
-        if ($stat) {
-            return $stat->value;
-        }
-        return parent::totalCount();
+        $callable = function() {
+            return parent::totalCount();
+        };
+        return $this->statsRepository->loadByKeyAndUpdateCache('subscriptions_count', $callable, \Nette\Utils\DateTime::from('-1 day'));
     }
 
     public function add(
@@ -378,19 +377,20 @@ class SubscriptionsRepository extends Repository
 
     public function currentSubscribersCount($cachedValueAllowed = false)
     {
+        $callable = function () {
+            return $this->getTable()
+                ->select('COUNT(DISTINCT(user.id)) AS total')
+                ->where('user.active = ?', true)
+                ->where('start_time < ?', $this->database::literal('NOW()'))
+                ->where('end_time > ?', $this->database::literal('NOW()'))
+                ->fetch()->total;
+        };
+
         if ($cachedValueAllowed) {
-            $stat = $this->statsRepository->loadByKey('current_subscribers_count');
-            if ($stat) {
-                return $stat->value;
-            }
+            return $this->statsRepository->loadByKeyAndUpdateCache('current_subscribers_count', $callable, \Nette\Utils\DateTime::from('-1 day'));
         }
 
-        return $this->getTable()
-            ->select('COUNT(DISTINCT(user.id)) AS total')
-            ->where('user.active = ?', true)
-            ->where('start_time < ?', $this->database::literal('NOW()'))
-            ->where('end_time > ?', $this->database::literal('NOW()'))
-            ->fetch()->total;
+        return $callable();
     }
 
     /**
