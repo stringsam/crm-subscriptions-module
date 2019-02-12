@@ -55,7 +55,7 @@ class SubscriptionsRepository extends Repository
         $callable = function() {
             return parent::totalCount();
         };
-        return $this->statsRepository->loadByKeyAndUpdateCache('subscriptions_count', $callable, \Nette\Utils\DateTime::from('-1 day'));
+        return $this->statsRepository->loadByKeyAndUpdateCache('subscriptions_count', $callable, \Nette\Utils\DateTime::from('-1 hour'));
     }
 
     public function add(
@@ -387,7 +387,7 @@ class SubscriptionsRepository extends Repository
         };
 
         if ($cachedValueAllowed) {
-            return $this->statsRepository->loadByKeyAndUpdateCache('current_subscribers_count', $callable, \Nette\Utils\DateTime::from('-1 day'));
+            return $this->statsRepository->loadByKeyAndUpdateCache('current_subscribers_count', $callable, \Nette\Utils\DateTime::from('-1 hour'));
         }
 
         return $callable();
