@@ -50,12 +50,20 @@ class SubscriptionsRepository extends Repository
         $this->statsRepository = $statsRepository;
     }
 
-    public function totalCount()
+    public function totalCount($allowCached = false, $forceCacheUpdate = false)
     {
         $callable = function () {
             return parent::totalCount();
         };
-        return $this->statsRepository->loadByKeyAndUpdateCache('subscriptions_count', $callable, \Nette\Utils\DateTime::from('-1 hour'));
+        if ($allowCached) {
+            return $this->statsRepository->loadByKeyAndUpdateCache(
+                'subscriptions_count',
+                $callable,
+                \Nette\Utils\DateTime::from('-10 minutes'),
+                $forceCacheUpdate
+            );
+        }
+        return $callable();
     }
 
     public function add(
@@ -375,7 +383,7 @@ class SubscriptionsRepository extends Repository
             ->count('*');
     }
 
-    public function currentSubscribersCount($cachedValueAllowed = false)
+    public function currentSubscribersCount($allowCached = false, $forceCacheUpdate = false)
     {
         $callable = function () {
             return $this->getTable()
@@ -386,8 +394,13 @@ class SubscriptionsRepository extends Repository
                 ->fetch()->total;
         };
 
-        if ($cachedValueAllowed) {
-            return $this->statsRepository->loadByKeyAndUpdateCache('current_subscribers_count', $callable, \Nette\Utils\DateTime::from('-1 hour'));
+        if ($allowCached) {
+            return $this->statsRepository->loadByKeyAndUpdateCache(
+                'current_subscribers_count',
+                $callable,
+                \Nette\Utils\DateTime::from('-1 hour'),
+                $forceCacheUpdate
+            );
         }
 
         return $callable();
