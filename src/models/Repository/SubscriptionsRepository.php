@@ -52,7 +52,7 @@ class SubscriptionsRepository extends Repository
 
     public function totalCount()
     {
-        $callable = function() {
+        $callable = function () {
             return parent::totalCount();
         };
         return $this->statsRepository->loadByKeyAndUpdateCache('subscriptions_count', $callable, \Nette\Utils\DateTime::from('-1 hour'));
