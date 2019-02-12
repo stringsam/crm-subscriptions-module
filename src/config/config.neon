@@ -34,6 +34,7 @@ services:
 	- Crm\SubscriptionsModule\Components\UserSubscriptionsListing
 	- Crm\SubscriptionsModule\Components\SubscriptionEndsStatsFactoryInterface
 	- Crm\SubscriptionsModule\Commands\ChangeSubscriptionsStateCommand
+	- Crm\SubscriptionsModule\Commands\RefreshStatsCommand
 	- Crm\SubscriptionsModule\Api\v1\UsersSubscriptionsHandler
 	- Crm\SubscriptionsModule\Subscription\ActualUserSubscription
 	- Crm\SubscriptionsModule\Events\NewAddressHandler
@@ -50,7 +51,6 @@ services:
 	- Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionTypeNamesSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionLengthMethodSeeder
-	- Crm\SubscriptionsModule\Seeders\StatsSeeder
 	- Crm\SubscriptionsModule\Access\SubscriptionAccessProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUsersFormDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUsersSelectionDataProvider
