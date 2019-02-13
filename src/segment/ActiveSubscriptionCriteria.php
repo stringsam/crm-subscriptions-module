@@ -129,6 +129,7 @@ class ActiveSubscriptionCriteria implements CriteriaInterface
             'subscriptions.end_time' => 'end_time',
             'subscriptions.type' => 'type',
             'subscription_types.id' => 'subscription_type_id',
+            'subscription_types.length' => 'subscription_type_length',
             'subscription_types.name' => 'subscription_type_name',
             'subscription_types.price' => 'subscription_type_price',
         ];

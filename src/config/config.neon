@@ -36,14 +36,15 @@ services:
 	- Crm\SubscriptionsModule\Commands\ChangeSubscriptionsStateCommand
 	- Crm\SubscriptionsModule\Api\v1\UsersSubscriptionsHandler
 	- Crm\SubscriptionsModule\Subscription\ActualUserSubscription
-	- Crm\SubscriptionsModule\Events\NewAddressHandler
 	- Crm\SubscriptionsModule\Events\AddressRemovedHandler
 	- Crm\SubscriptionsModule\Events\SubscriptionUpdatedHandler
 	- Crm\SubscriptionsModule\Events\NewSubscriptionHandler
+	- Crm\SubscriptionsModule\Hermes\GenerateSubscriptionHandler
 	- Crm\SubscriptionsModule\Api\v1\CreateSubscriptionHandler
 	- Crm\SubscriptionsModule\Repository\ContentAccessRepository
 	- Crm\SubscriptionsModule\User\SubscriptionsUserDataProvider
 	- Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria
+	- Crm\SubscriptionsModule\Segment\InactiveSubscriptionCriteria
 	- Crm\SubscriptionsModule\Seeders\ContentAccessSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionTypeNamesSeeder

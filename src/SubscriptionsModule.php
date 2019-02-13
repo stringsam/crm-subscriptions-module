@@ -23,6 +23,7 @@ use Crm\SubscriptionsModule\Seeders\SubscriptionTypeNamesSeeder;
 use League\Event\Emitter;
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
+use Tomaj\Hermes\Dispatcher;
 
 class SubscriptionsModule extends CrmModule
 {
@@ -161,11 +162,6 @@ class SubscriptionsModule extends CrmModule
     public function registerEventHandlers(Emitter $emitter)
     {
         $emitter->addListener(
-            \Crm\UsersModule\Events\NewAddressEvent::class,
-            $this->getInstance(\Crm\SubscriptionsModule\Events\NewAddressHandler::class),
-            600
-        );
-        $emitter->addListener(
             \Crm\SubscriptionsModule\Events\NewSubscriptionEvent::class,
             $this->getInstance(\Crm\ApplicationModule\Events\RefreshUserDataTokenHandler::class),
             600
@@ -181,6 +177,14 @@ class SubscriptionsModule extends CrmModule
         $emitter->addListener(
             \Crm\UsersModule\Events\AddressRemovedEvent::class,
             $this->getInstance(\Crm\SubscriptionsModule\Events\AddressRemovedHandler::class)
+        );
+    }
+
+    public function registerHermesHandlers(Dispatcher $dispatcher)
+    {
+        $dispatcher->registerHandler(
+            'generate-subscription',
+            $this->getInstance(\Crm\SubscriptionsModule\Hermes\GenerateSubscriptionHandler::class)
         );
     }
 
@@ -208,6 +212,7 @@ class SubscriptionsModule extends CrmModule
     public function registerSegmentCriteria(CriteriaStorage $criteriaStorage)
     {
         $criteriaStorage->register('users', 'active_subscription', $this->getInstance(\Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria::class));
+        $criteriaStorage->register('users', 'inactive_subscription', $this->getInstance(\Crm\SubscriptionsModule\Segment\InactiveSubscriptionCriteria::class));
     }
 
     public function registerRoutes(RouteList $router)
