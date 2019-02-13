@@ -2,9 +2,9 @@
 
 namespace Crm\SubscriptionsModule\Repository;
 
+use Crm\ApplicationModule\Cache\CacheRepository;
 use Crm\ApplicationModule\Repository;
 use Crm\ApplicationModule\Repository\AuditLogRepository;
-use Crm\ApplicationModule\Stats\StatsRepository;
 use Crm\SubscriptionsModule\Extension\ExtensionMethodFactory;
 use Crm\SubscriptionsModule\Length\LengthMethodFactory;
 use DateTime;
@@ -34,20 +34,20 @@ class SubscriptionsRepository extends Repository
 
     private $lengthMethodFactory;
 
-    private $statsRepository;
+    private $cacheRepository;
 
     public function __construct(
         Context $database,
         ExtensionMethodFactory $extensionMethodFactory,
         LengthMethodFactory $lengthMethodFactory,
         AuditLogRepository $auditLogRepository,
-        StatsRepository $statsRepository
+        CacheRepository $cacheRepository
     ) {
         parent::__construct($database);
         $this->auditLogRepository = $auditLogRepository;
         $this->extensionMethodFactory = $extensionMethodFactory;
         $this->lengthMethodFactory = $lengthMethodFactory;
-        $this->statsRepository = $statsRepository;
+        $this->cacheRepository = $cacheRepository;
     }
 
     public function totalCount($allowCached = false, $forceCacheUpdate = false)
@@ -56,7 +56,7 @@ class SubscriptionsRepository extends Repository
             return parent::totalCount();
         };
         if ($allowCached) {
-            return $this->statsRepository->loadByKeyAndUpdateCache(
+            return $this->cacheRepository->loadByKeyAndUpdate(
                 'subscriptions_count',
                 $callable,
                 \Nette\Utils\DateTime::from('-10 minutes'),
@@ -395,7 +395,7 @@ class SubscriptionsRepository extends Repository
         };
 
         if ($allowCached) {
-            return $this->statsRepository->loadByKeyAndUpdateCache(
+            return $this->cacheRepository->loadByKeyAndUpdate(
                 'current_subscribers_count',
                 $callable,
                 \Nette\Utils\DateTime::from('-1 hour'),
