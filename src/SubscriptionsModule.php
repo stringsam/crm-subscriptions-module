@@ -16,17 +16,30 @@ use Crm\ApplicationModule\Menu\MenuItem;
 use Crm\ApplicationModule\SeederManager;
 use Crm\ApplicationModule\User\UserDataRegistrator;
 use Crm\ApplicationModule\Widget\WidgetManagerInterface;
+use Crm\PaymentsModule\Repository\PaymentsRepository;
+use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Seeders\ContentAccessSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionLengthMethodSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionTypeNamesSeeder;
+use Kdyby\Translation\Translator;
 use League\Event\Emitter;
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
+use Nette\DI\Container;
+use Symfony\Component\Console\Output\OutputInterface;
 use Tomaj\Hermes\Dispatcher;
 
 class SubscriptionsModule extends CrmModule
 {
+    private $subscriptionsRepository;
+
+    public function __construct(Container $container, Translator $translator, SubscriptionsRepository $subscriptionsRepository)
+    {
+        parent::__construct($container, $translator);
+        $this->subscriptionsRepository = $subscriptionsRepository;
+    }
+
     public function registerAdminMenuItems(MenuContainerInterface $menuContainer)
     {
         $mainMenu = new MenuItem(
@@ -260,5 +273,15 @@ class SubscriptionsModule extends CrmModule
         $eventsStorage->register('subscription_updated', Events\SubscriptionUpdatedEvent::class);
         $eventsStorage->register('subscription_starts', Events\SubscriptionStartsEvent::class);
         $eventsStorage->register('subscription_ends', Events\SubscriptionEndsEvent::class, true);
+    }
+
+    public function cache(OutputInterface $output, array $tags = [])
+    {
+        if (in_array('precalc', $tags, true)) {
+            $output->writeln("<info>Refreshing subscriptions stats cache</info>");
+
+            $this->subscriptionsRepository->totalCount(true, true);
+            $this->subscriptionsRepository->currentSubscribersCount(true, true);
+        }
     }
 }
