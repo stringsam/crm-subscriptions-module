@@ -25,7 +25,7 @@ class TotalSubscriptionsStatWidget extends BaseWidget
 
     public function render()
     {
-        $this->template->totalSubscriptions = $this->subscriptionsRepository->totalCount();
+        $this->template->totalSubscriptions = $this->subscriptionsRepository->totalCount(true);
         $this->template->setFile(__DIR__ . DIRECTORY_SEPARATOR . $this->templateName);
         $this->template->render();
     }
