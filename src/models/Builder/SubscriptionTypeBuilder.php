@@ -51,6 +51,9 @@ class SubscriptionTypeBuilder extends Builder
         return true;
     }
 
+    /**
+     * @return SubscriptionTypeBuilder
+     */
     public function createNew()
     {
         $this->subscriptionTypeItems = [];
@@ -70,6 +73,22 @@ class SubscriptionTypeBuilder extends Builder
     public function setName($name)
     {
         return $this->set('name', $name);
+    }
+
+    public function setUserLabel($userLabel)
+    {
+        return $this->set('user_label', $userLabel);
+    }
+
+    /**
+     * Use this setter if you want to save same string as `name` and `user_label`.
+     *
+     * @param $nameAndUserLabel
+     * @return SubscriptionTypeBuilder
+     */
+    public function setNameAndUserLabel($nameAndUserLabel)
+    {
+        return $this->setName($nameAndUserLabel)->setUserLabel($nameAndUserLabel);
     }
 
     public function setCode($code)
@@ -146,11 +165,6 @@ class SubscriptionTypeBuilder extends Builder
     public function setNextSubscriptionTypeId($id)
     {
         return $this->set('next_subscription_type_id', $id);
-    }
-
-    public function setUserLabel($userLabel)
-    {
-        return $this->set('user_label', $userLabel);
     }
 
     public function setType($type)

@@ -66,20 +66,24 @@ data:
 			name: Název je povinný
 			length: "Délka (ve dnech) je povinná"
 			price: Cena je povinná
+			user_label: Veřejný popis je povinný
 		validation:
 			integer:
 				limit_per_user: Musí být číslo
 			minimum:
 				limit_per_user: Minimální hodnota 1
 		placeholder:
-			name: například Roční předplatné
+			name: "například Roční předplatné (42CZK, od 2019/02)"
 			code: například year123
-			user_label: například Měsíční předplatné
+			user_label: například Roční předplatné
 			next_subscription_type_id: ID
 			length: například 31
 			extending_length: například 35
 			fixed_end: například 3.5.2020
 			price: například 325
+		description:
+			name: Interní název viditelný v administraci
+			user_label: "Název předplatného, který vidí uživatel ve svém profilu"
 		values:
 			active: Aktivní
 			inactive: Neaktivní

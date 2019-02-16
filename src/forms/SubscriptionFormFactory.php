@@ -8,6 +8,7 @@ use Crm\SubscriptionsModule\Events\SubscriptionPreUpdateEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionUpdatedEvent;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
+use Crm\SubscriptionsModule\Subscription\SubscriptionType;
 use Crm\UsersModule\Repository\AddressesRepository;
 use Crm\UsersModule\Repository\UsersRepository;
 use Kdyby\Translation\Translator;
@@ -75,17 +76,22 @@ class SubscriptionFormFactory
         $form->setTranslator($this->translator);
         $form->addProtection();
 
-        $active = $this->subscriptionTypesRepository->all()->where(['active' => true])->fetchPairs('id', 'name');
-        $noActive = $this->subscriptionTypesRepository->all()->where(['active' => false])->fetchPairs('id', 'name');
+        $active = $subscriptionTypePairs = SubscriptionType::getPairs(
+            $this->subscriptionTypesRepository->all()->where(['active' => true])
+        );
+        $noActive = $subscriptionTypePairs = SubscriptionType::getPairs(
+            $this->subscriptionTypesRepository->all()->where(['active' => false])
+        );
 
-
-        $form->addSelect(
+        $subscriptionTypeId = $form->addSelect(
             'subscription_type_id',
             'subscriptions.data.subscriptions.fields.subscription_type',
             $active + [0 => '--'] + $noActive
-        )
-            ->setRequired()
-            ->addRule(function ($field, $user) {
+        )->setRequired();
+        $subscriptionTypeId->getControlPrototype()->addAttributes(['class' => 'select2']);
+
+        if (!$subscription) {
+            $subscriptionTypeId->addRule(function ($field, $user) {
                 $subscriptionType = $this->subscriptionTypesRepository->find($field->value);
                 if (!empty($subscriptionType->limit_per_user) &&
                     $this->subscriptionsRepository->getCount($subscriptionType->id, $user->id) >= $subscriptionType->limit_per_user) {
@@ -94,6 +100,7 @@ class SubscriptionFormFactory
 
                 return true;
             }, 'subscriptions.data.subscriptions.required.subscription_type_id', $user);
+        }
 
         $subscriptionTypeNames = $this->subscriptionsRepository->activeSubscriptionTypes()->fetchPairs('type', 'type');
         if ($subscription && !in_array($subscription->type, $subscriptionTypeNames)) {

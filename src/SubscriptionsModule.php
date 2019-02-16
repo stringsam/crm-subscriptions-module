@@ -16,16 +16,30 @@ use Crm\ApplicationModule\Menu\MenuItem;
 use Crm\ApplicationModule\SeederManager;
 use Crm\ApplicationModule\User\UserDataRegistrator;
 use Crm\ApplicationModule\Widget\WidgetManagerInterface;
+use Crm\PaymentsModule\Repository\PaymentsRepository;
+use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Seeders\ContentAccessSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionLengthMethodSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionTypeNamesSeeder;
+use Kdyby\Translation\Translator;
 use League\Event\Emitter;
 use Nette\Application\Routers\Route;
 use Nette\Application\Routers\RouteList;
+use Nette\DI\Container;
+use Symfony\Component\Console\Output\OutputInterface;
+use Tomaj\Hermes\Dispatcher;
 
 class SubscriptionsModule extends CrmModule
 {
+    private $subscriptionsRepository;
+
+    public function __construct(Container $container, Translator $translator, SubscriptionsRepository $subscriptionsRepository)
+    {
+        parent::__construct($container, $translator);
+        $this->subscriptionsRepository = $subscriptionsRepository;
+    }
+
     public function registerAdminMenuItems(MenuContainerInterface $menuContainer)
     {
         $mainMenu = new MenuItem(
@@ -112,11 +126,6 @@ class SubscriptionsModule extends CrmModule
             700
         );
         $widgetManager->registerWidget(
-            'dashboard.singlestat.actuals.system',
-            $this->getInstance(\Crm\SubscriptionsModule\Components\ActualSubscriptionsStatWidget::class),
-            500
-        );
-        $widgetManager->registerWidget(
             'dashboard.singlestat.today',
             $this->getInstance(\Crm\SubscriptionsModule\Components\TodaySubscriptionsStatWidget::class),
             500
@@ -166,11 +175,6 @@ class SubscriptionsModule extends CrmModule
     public function registerEventHandlers(Emitter $emitter)
     {
         $emitter->addListener(
-            \Crm\UsersModule\Events\NewAddressEvent::class,
-            $this->getInstance(\Crm\SubscriptionsModule\Events\NewAddressHandler::class),
-            600
-        );
-        $emitter->addListener(
             \Crm\SubscriptionsModule\Events\NewSubscriptionEvent::class,
             $this->getInstance(\Crm\ApplicationModule\Events\RefreshUserDataTokenHandler::class),
             600
@@ -186,6 +190,14 @@ class SubscriptionsModule extends CrmModule
         $emitter->addListener(
             \Crm\UsersModule\Events\AddressRemovedEvent::class,
             $this->getInstance(\Crm\SubscriptionsModule\Events\AddressRemovedHandler::class)
+        );
+    }
+
+    public function registerHermesHandlers(Dispatcher $dispatcher)
+    {
+        $dispatcher->registerHandler(
+            'generate-subscription',
+            $this->getInstance(\Crm\SubscriptionsModule\Hermes\GenerateSubscriptionHandler::class)
         );
     }
 
@@ -213,6 +225,7 @@ class SubscriptionsModule extends CrmModule
     public function registerSegmentCriteria(CriteriaStorage $criteriaStorage)
     {
         $criteriaStorage->register('users', 'active_subscription', $this->getInstance(\Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria::class));
+        $criteriaStorage->register('users', 'inactive_subscription', $this->getInstance(\Crm\SubscriptionsModule\Segment\InactiveSubscriptionCriteria::class));
     }
 
     public function registerRoutes(RouteList $router)
@@ -260,5 +273,15 @@ class SubscriptionsModule extends CrmModule
         $eventsStorage->register('subscription_updated', Events\SubscriptionUpdatedEvent::class);
         $eventsStorage->register('subscription_starts', Events\SubscriptionStartsEvent::class);
         $eventsStorage->register('subscription_ends', Events\SubscriptionEndsEvent::class, true);
+    }
+
+    public function cache(OutputInterface $output, array $tags = [])
+    {
+        if (in_array('precalc', $tags, true)) {
+            $output->writeln("<info>Refreshing subscriptions stats cache</info>");
+
+            $this->subscriptionsRepository->totalCount(true, true);
+            $this->subscriptionsRepository->currentSubscribersCount(true, true);
+        }
     }
 }

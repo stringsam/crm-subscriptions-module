@@ -2,6 +2,7 @@
 
 namespace Crm\SubscriptionsModule\Repository;
 
+use Crm\ApplicationModule\Cache\CacheRepository;
 use Crm\ApplicationModule\Repository;
 use Crm\ApplicationModule\Repository\AuditLogRepository;
 use Crm\SubscriptionsModule\Extension\ExtensionMethodFactory;
@@ -33,16 +34,36 @@ class SubscriptionsRepository extends Repository
 
     private $lengthMethodFactory;
 
+    private $cacheRepository;
+
     public function __construct(
         Context $database,
         ExtensionMethodFactory $extensionMethodFactory,
         LengthMethodFactory $lengthMethodFactory,
-        AuditLogRepository $auditLogRepository
+        AuditLogRepository $auditLogRepository,
+        CacheRepository $cacheRepository
     ) {
         parent::__construct($database);
         $this->auditLogRepository = $auditLogRepository;
         $this->extensionMethodFactory = $extensionMethodFactory;
         $this->lengthMethodFactory = $lengthMethodFactory;
+        $this->cacheRepository = $cacheRepository;
+    }
+
+    public function totalCount($allowCached = false, $forceCacheUpdate = false)
+    {
+        $callable = function () {
+            return parent::totalCount();
+        };
+        if ($allowCached) {
+            return $this->cacheRepository->loadByKeyAndUpdate(
+                'subscriptions_count',
+                $callable,
+                \Nette\Utils\DateTime::from('-10 minutes'),
+                $forceCacheUpdate
+            );
+        }
+        return $callable();
     }
 
     public function add(
@@ -362,13 +383,27 @@ class SubscriptionsRepository extends Repository
             ->count('*');
     }
 
-    public function subscribers()
+    public function currentSubscribersCount($allowCached = false, $forceCacheUpdate = false)
     {
-        return $this->getTable()
-            ->select('DISTINCT user.*')
-            ->where('user.active = ?', true)
-            ->where('start_time < ?', $this->database::literal('NOW()'))
-            ->where('end_time > ?', $this->database::literal('NOW()'));
+        $callable = function () {
+            return $this->getTable()
+                ->select('COUNT(DISTINCT(user.id)) AS total')
+                ->where('user.active = ?', true)
+                ->where('start_time < ?', $this->database::literal('NOW()'))
+                ->where('end_time > ?', $this->database::literal('NOW()'))
+                ->fetch()->total;
+        };
+
+        if ($allowCached) {
+            return $this->cacheRepository->loadByKeyAndUpdate(
+                'current_subscribers_count',
+                $callable,
+                \Nette\Utils\DateTime::from('-1 hour'),
+                $forceCacheUpdate
+            );
+        }
+
+        return $callable();
     }
 
     /**
