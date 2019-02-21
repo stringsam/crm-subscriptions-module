@@ -6,19 +6,19 @@ use DateTime;
 
 class Length
 {
-    private $date;
+    private $endTime;
 
     private $length;
 
-    public function __construct(DateTime $date, int $length)
+    public function __construct(DateTime $endTime, int $length)
     {
-        $this->date = $date;
+        $this->endTime = $endTime;
         $this->length = $length;
     }
 
-    public function getDate(): DateTime
+    public function getEndTime(): DateTime
     {
-        return $this->date;
+        return $this->endTime;
     }
 
     public function getLength(): int

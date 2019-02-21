@@ -22,20 +22,4 @@ class FixDaysLengthMethod implements LengthMethodInterface
 
         return new Length($end, $length);
     }
-
-    public function getStartTime(DateTime $endTime, IRow $subscriptionType, bool $isExtending = false): Length
-    {
-        $length = $subscriptionType->length;
-        if ($isExtending && $subscriptionType->extending_length) {
-            $length = $subscriptionType->extending_length;
-        }
-        $interval = (new \DateInterval("P{$length}D"));
-        $start = (clone $endTime)->sub($interval);
-
-        if ($subscriptionType->fixed_start) {
-            $start = $subscriptionType->fixed_start;
-        }
-
-        return new Length($start, $length);
-    }
 }
