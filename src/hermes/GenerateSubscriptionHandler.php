@@ -28,7 +28,7 @@ class GenerateSubscriptionHandler implements HandlerInterface
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
     }
 
-    public function handle(MessageInterface $message)
+    public function handle(MessageInterface $message): bool
     {
         $toRegister = $message->getPayload()['register'];
         $toSubscribe = $message->getPayload()['subscribe'];
@@ -36,7 +36,7 @@ class GenerateSubscriptionHandler implements HandlerInterface
         foreach ($toRegister as $record) {
             $user = $this->userManager->loadUserByEmail($record['email']);
             if (!$user) {
-                $user = $this->userManager->addNewUser($record['email'], $record['send_email'], $record['source'], null, $record['check_email']);
+                $this->userManager->addNewUser($record['email'], $record['send_email'], $record['source'], null, $record['check_email']);
             }
         }
 
@@ -55,5 +55,7 @@ class GenerateSubscriptionHandler implements HandlerInterface
                 1
             );
         }
+
+        return true;
     }
 }
