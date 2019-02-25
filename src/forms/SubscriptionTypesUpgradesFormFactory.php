@@ -4,6 +4,7 @@ namespace Crm\SubscriptionsModule\Forms;
 
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesUpgradesRepository;
+use Crm\SubscriptionsModule\Subscription\SubscriptionType;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
 use Tomaj\Form\Renderer\BootstrapRenderer;
@@ -52,8 +53,13 @@ class SubscriptionTypesUpgradesFormFactory
         }, $this->subscriptionTypesUpgradesRepository->availableUpgrades($fromSubscription)->fetchAll());
         $unavailableIds[] = $id;
 
-        $form->addSelect('to_subscription_type_id', 'subscriptions.data.subscription_types.fields.name', $this->subscriptionTypesRepository->all()->where(['id NOT IN (?)' => array_values($unavailableIds)])->fetchPairs('id', 'name'))
+        $subscriptionTypePairs = SubscriptionType::getPairs(
+            $this->subscriptionTypesRepository->getAllActive()->where(['id NOT IN (?)' => array_values($unavailableIds)])
+        );
+
+        $subscriptionType = $form->addSelect('to_subscription_type_id', 'subscriptions.data.subscription_types.fields.name', $subscriptionTypePairs)
             ->setRequired('subscriptions.data.subscription_types.required.name');
+        $subscriptionType->getControlPrototype()->addAttributes(['class' => 'select2']);
 
         $form->addSubmit('send', 'system.save')
             ->getControlPrototype()
