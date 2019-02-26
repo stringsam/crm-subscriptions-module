@@ -47,7 +47,8 @@ class SubscriptionEndsStats extends UI\Control
         $subscriptions1 = $this->subscriptionsRepository->subscriptionsEndBetween($this->startTime, $this->endTime, false);
 
         if (!$this->freeSubscriptions) {
-            $subscriptions->where(['subscription_type.price > ?' => 0]);
+            $subscriptions
+                ->where('subscription_type.price > ? OR subscriptions.type NOT IN ?', 0, ['free']);
         }
 
         if ($this->withoutRecurrent) {
