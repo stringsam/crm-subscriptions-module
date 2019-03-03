@@ -59,7 +59,7 @@ class SubscriptionsRepository extends Repository
             return $this->cacheRepository->loadByKeyAndUpdate(
                 'subscriptions_count',
                 $callable,
-                \Nette\Utils\DateTime::from('-10 minutes'),
+                \Nette\Utils\DateTime::from(CacheRepository::DEFAULT_REFRESH_TIME),
                 $forceCacheUpdate
             );
         }
