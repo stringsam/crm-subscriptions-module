@@ -174,6 +174,7 @@ class SubscriptionFormFactory
 
             $values['start_time'] = $startTime;
             $values['end_time'] = $endTime;
+            $values['internal_status'] = SubscriptionsRepository::INTERNAL_STATUS_UNKNOWN;
 
             $subscription = $this->subscriptionsRepository->find($subscriptionId);
 
