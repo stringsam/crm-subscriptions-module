@@ -31,7 +31,7 @@ class SubscriptionUpdatedHandler extends AbstractListener
     public function handle(EventInterface $event)
     {
         if (!($event instanceof IUserGetter) || !($event instanceof ISubscriptionGetter)) {
-            throw new \Exception('cannot handle event, invalid instance received: ' . gettype($event));
+            throw new \Exception('cannot handle event, invalid instance received: ' . get_class($event));
         }
 
         $subscription = $event->getSubscription();
