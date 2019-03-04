@@ -363,7 +363,8 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function setExpired($subscription) {
+    public function setExpired($subscription)
+    {
         $this->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_AFTER_END]);
         $this->emitter->emit(new SubscriptionEndsEvent($subscription));
     }
@@ -380,7 +381,8 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function setStarted($subscription) {
+    public function setStarted($subscription)
+    {
         $this->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_ACTIVE]);
         $this->emitter->emit(new SubscriptionStartsEvent($subscription));
     }
