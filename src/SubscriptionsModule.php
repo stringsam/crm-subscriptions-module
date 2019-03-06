@@ -278,7 +278,7 @@ class SubscriptionsModule extends CrmModule
     public function cache(OutputInterface $output, array $tags = [])
     {
         if (in_array('precalc', $tags, true)) {
-            $output->writeln('* Refreshing <info>subscriptions stats</info> cache');
+            $output->writeln('  * Refreshing <info>subscriptions stats</info> cache');
 
             $this->subscriptionsRepository->totalCount(true, true);
             $this->subscriptionsRepository->currentSubscribersCount(true, true);
