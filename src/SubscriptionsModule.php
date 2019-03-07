@@ -16,7 +16,6 @@ use Crm\ApplicationModule\Menu\MenuItem;
 use Crm\ApplicationModule\SeederManager;
 use Crm\ApplicationModule\User\UserDataRegistrator;
 use Crm\ApplicationModule\Widget\WidgetManagerInterface;
-use Crm\PaymentsModule\Repository\PaymentsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Seeders\ContentAccessSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder;
@@ -278,7 +277,7 @@ class SubscriptionsModule extends CrmModule
     public function cache(OutputInterface $output, array $tags = [])
     {
         if (in_array('precalc', $tags, true)) {
-            $output->writeln("<info>Refreshing subscriptions stats cache</info>");
+            $output->writeln('  * Refreshing <info>subscriptions stats</info> cache');
 
             $this->subscriptionsRepository->totalCount(true, true);
             $this->subscriptionsRepository->currentSubscribersCount(true, true);

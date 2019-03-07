@@ -49,8 +49,7 @@ class ChangeSubscriptionsStateCommand extends Command
         $expiredSubscriptions = $this->subscriptionsRepository->getExpiredSubscriptions();
         foreach ($expiredSubscriptions as $subscription) {
             $output->writeln('Expired subscription #' . $subscription->id . ' ' . json_encode($subscription->toArray()));
-            $this->subscriptionsRepository->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_AFTER_END]);
-            $this->emitter->emit(new SubscriptionEndsEvent($subscription));
+            $this->subscriptionsRepository->setExpired($subscription);
         }
 
         $output->writeln('');
@@ -58,8 +57,7 @@ class ChangeSubscriptionsStateCommand extends Command
         $startedSubscriptions = $this->subscriptionsRepository->getStartedSubscriptions();
         foreach ($startedSubscriptions as $subscription) {
             $output->writeln('Started subscription #' . $subscription->id . ' ' . json_encode($subscription->toArray()));
-            $this->subscriptionsRepository->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_ACTIVE]);
-            $this->emitter->emit(new SubscriptionStartsEvent($subscription));
+            $this->subscriptionsRepository->setStarted($subscription);
         }
     }
 }
