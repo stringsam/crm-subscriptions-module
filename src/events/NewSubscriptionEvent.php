@@ -2,11 +2,12 @@
 
 namespace Crm\SubscriptionsModule\Events;
 
+use Crm\UsersModule\User\ISubscriptionGetter;
 use Crm\UsersModule\User\IUserGetter;
 use League\Event\AbstractEvent;
 use Nette\Database\Table\IRow;
 
-class NewSubscriptionEvent extends AbstractEvent implements IUserGetter
+class NewSubscriptionEvent extends AbstractEvent implements IUserGetter, ISubscriptionGetter
 {
     /** @var IRow  */
     private $subscription;
@@ -19,7 +20,7 @@ class NewSubscriptionEvent extends AbstractEvent implements IUserGetter
         $this->sendEmail = $sendEmail;
     }
 
-    public function getSubscription()
+    public function getSubscription(): IRow
     {
         return $this->subscription;
     }
