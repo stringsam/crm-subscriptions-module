@@ -282,7 +282,7 @@ class SubscriptionTypeBuilder extends Builder
                 'subscription_type_id' => $subscriptionType->id,
                 'name' => $this->get('user_label') ? $this->get('user_label') : $this->get('name'),
                 'amount' => $this->get('price'),
-                'vat' => $this->applicationConfig->get('vat_normal_level') ? $this->applicationConfig->get('vat_normal_level') : 0,
+                'vat' => $this->applicationConfig->get('vat_default') ? $this->applicationConfig->get('vat_default') : 0,
                 'sorting' => 100,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime(),
