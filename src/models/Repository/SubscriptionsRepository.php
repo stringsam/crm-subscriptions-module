@@ -63,10 +63,10 @@ class SubscriptionsRepository extends Repository
             return parent::totalCount();
         };
         if ($allowCached) {
-            return $this->cacheRepository->loadByKeyAndUpdate(
+            return $this->cacheRepository->loadAndUpdate(
                 'subscriptions_count',
                 $callable,
-                \Nette\Utils\DateTime::from('-10 minutes'),
+                \Nette\Utils\DateTime::from(CacheRepository::REFRESH_TIME_5_MINUTES),
                 $forceCacheUpdate
             );
         }
@@ -414,7 +414,7 @@ class SubscriptionsRepository extends Repository
         };
 
         if ($allowCached) {
-            return $this->cacheRepository->loadByKeyAndUpdate(
+            return $this->cacheRepository->loadAndUpdate(
                 'current_subscribers_count',
                 $callable,
                 \Nette\Utils\DateTime::from('-1 hour'),
