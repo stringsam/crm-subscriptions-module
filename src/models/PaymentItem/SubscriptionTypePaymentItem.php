@@ -9,37 +9,57 @@ class SubscriptionTypePaymentItem implements PaymentItemInterface
 {
     const TYPE = 'subscription_type';
 
-    private $subscriptionTypeItem;
+    private $subscriptionTypeId;
 
     private $count;
 
-    private $name = null;
+    private $name;
 
-    private $vat = null;
+    private $vat;
 
-    private $price = null;
+    private $price;
 
     public function __construct(
-        IRow $subscriptionTypeItem,
-        int $count = 1,
-        $name = null,
-        float $price = null,
-        int $vat = null
+        int $subscriptionTypeId,
+        string $name,
+        float $price,
+        int $vat,
+        int $count = 1
     ) {
-        $this->subscriptionTypeItem = $subscriptionTypeItem;
-        $this->count = $count;
+        $this->subscriptionTypeId = $subscriptionTypeId;
         $this->name = $name;
         $this->price = $price;
         $this->vat = $vat;
+        $this->count = $count;
     }
 
-    public static function fromSubscriptionType(IRow $subscriptionType)
+    /**
+     * @param IRow $subscriptionType
+     * @return static[]
+     */
+    public static function fromSubscriptionType(IRow $subscriptionType, $count = 1): array
     {
         $rows = [];
         foreach ($subscriptionType->related('subscription_type_items')->order('sorting') as $item) {
-            $rows[] = new SubscriptionTypePaymentItem($item);
+            $rows[] = static::fromSubscriptionTypeItem($item, $count);
         }
         return $rows;
+    }
+
+    /**
+     * @param IRow $subscriptionTypeItem
+     * @param int $count
+     * @return static
+     */
+    public static function fromSubscriptionTypeItem(IRow $subscriptionTypeItem, $count = 1)
+    {
+        return new SubscriptionTypePaymentItem(
+            $subscriptionTypeItem->subscription_type_id,
+            $subscriptionTypeItem->name,
+            $subscriptionTypeItem->amount,
+            $subscriptionTypeItem->vat,
+            $count
+        );
     }
 
     public function type(): string
@@ -49,26 +69,17 @@ class SubscriptionTypePaymentItem implements PaymentItemInterface
 
     public function name(): string
     {
-        if ($this->name) {
-            return $this->name;
-        }
-        return $this->subscriptionTypeItem->name;
+        return $this->name;
     }
 
     public function price(): float
     {
-        if ($this->price !== null) {
-            return $this->price;
-        }
-        return $this->subscriptionTypeItem->amount;
+        return $this->price;
     }
 
     public function vat(): int
     {
-        if ($this->vat !== null) {
-            return $this->vat;
-        }
-        return $this->subscriptionTypeItem->vat;
+        return $this->vat;
     }
 
     public function count(): int
@@ -79,7 +90,7 @@ class SubscriptionTypePaymentItem implements PaymentItemInterface
     public function data(): array
     {
         return [
-            'subscription_type_id' => $this->subscriptionTypeItem->subscription_type_id,
+            'subscription_type_id' => $this->subscriptionTypeId,
         ];
     }
 
