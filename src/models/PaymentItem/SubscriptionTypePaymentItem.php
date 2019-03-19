@@ -35,9 +35,10 @@ class SubscriptionTypePaymentItem implements PaymentItemInterface
 
     /**
      * @param IRow $subscriptionType
+     * @param int $count
      * @return static[]
      */
-    public static function fromSubscriptionType(IRow $subscriptionType, $count = 1): array
+    public static function fromSubscriptionType(IRow $subscriptionType, int $count = 1): array
     {
         $rows = [];
         foreach ($subscriptionType->related('subscription_type_items')->order('sorting') as $item) {
@@ -51,7 +52,7 @@ class SubscriptionTypePaymentItem implements PaymentItemInterface
      * @param int $count
      * @return static
      */
-    public static function fromSubscriptionTypeItem(IRow $subscriptionTypeItem, $count = 1)
+    public static function fromSubscriptionTypeItem(IRow $subscriptionTypeItem, int $count = 1)
     {
         return new SubscriptionTypePaymentItem(
             $subscriptionTypeItem->subscription_type_id,
