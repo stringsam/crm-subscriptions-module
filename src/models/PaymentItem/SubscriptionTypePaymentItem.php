@@ -80,7 +80,7 @@ class SubscriptionTypePaymentItem implements PaymentItemInterface
 
     public function totalPrice(): float
     {
-        return $this->unitPrice() * $this->totalPrice();
+        return $this->unitPrice() * $this->count();
     }
 
     public function vat(): int
