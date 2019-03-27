@@ -5,9 +5,12 @@ namespace Crm\SubscriptionsModule\Repository;
 use Crm\ApplicationModule\Cache\CacheRepository;
 use Crm\ApplicationModule\Repository;
 use Crm\ApplicationModule\Repository\AuditLogRepository;
+use Crm\SubscriptionsModule\Events\SubscriptionEndsEvent;
+use Crm\SubscriptionsModule\Events\SubscriptionStartsEvent;
 use Crm\SubscriptionsModule\Extension\ExtensionMethodFactory;
 use Crm\SubscriptionsModule\Length\LengthMethodFactory;
 use DateTime;
+use League\Event\Emitter;
 use Nette\Database\Context;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\IRow;
@@ -36,18 +39,22 @@ class SubscriptionsRepository extends Repository
 
     private $cacheRepository;
 
+    private $emitter;
+
     public function __construct(
         Context $database,
         ExtensionMethodFactory $extensionMethodFactory,
         LengthMethodFactory $lengthMethodFactory,
         AuditLogRepository $auditLogRepository,
-        CacheRepository $cacheRepository
+        CacheRepository $cacheRepository,
+        Emitter $emitter
     ) {
         parent::__construct($database);
         $this->auditLogRepository = $auditLogRepository;
         $this->extensionMethodFactory = $extensionMethodFactory;
         $this->lengthMethodFactory = $lengthMethodFactory;
         $this->cacheRepository = $cacheRepository;
+        $this->emitter = $emitter;
     }
 
     public function totalCount($allowCached = false, $forceCacheUpdate = false)
@@ -56,10 +63,10 @@ class SubscriptionsRepository extends Repository
             return parent::totalCount();
         };
         if ($allowCached) {
-            return $this->cacheRepository->loadByKeyAndUpdate(
+            return $this->cacheRepository->loadAndUpdate(
                 'subscriptions_count',
                 $callable,
-                \Nette\Utils\DateTime::from('-10 minutes'),
+                \Nette\Utils\DateTime::from(CacheRepository::REFRESH_TIME_5_MINUTES),
                 $forceCacheUpdate
             );
         }
@@ -356,6 +363,12 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
+    public function setExpired($subscription)
+    {
+        $this->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_AFTER_END]);
+        $this->emitter->emit(new SubscriptionEndsEvent($subscription));
+    }
+
     public function getStartedSubscriptions()
     {
         return $this->getTable()->select('*')->where([
@@ -366,6 +379,12 @@ class SubscriptionsRepository extends Repository
                 self::INTERNAL_STATUS_UNKNOWN
             ]
         ]);
+    }
+
+    public function setStarted($subscription)
+    {
+        $this->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_ACTIVE]);
+        $this->emitter->emit(new SubscriptionStartsEvent($subscription));
     }
 
     public function getPreviousSubscription($subscriptionId)
@@ -395,7 +414,7 @@ class SubscriptionsRepository extends Repository
         };
 
         if ($allowCached) {
-            return $this->cacheRepository->loadByKeyAndUpdate(
+            return $this->cacheRepository->loadAndUpdate(
                 'current_subscribers_count',
                 $callable,
                 \Nette\Utils\DateTime::from('-1 hour'),
