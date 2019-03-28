@@ -69,29 +69,4 @@ class SubscriptionTypesRepository extends Repository
             self::TYPE_PRODUCT => self::TYPE_PRODUCT,
         ];
     }
-
-    public function getSalesFunnelSubscriptionTypes(IRow $funnel)
-    {
-        return $this->getTable()->where(['id' => array_keys($funnel->related('sales_funnels_subscription_types')->fetchPairs('subscription_type_id', 'subscription_type_id'))]);
-    }
-
-    public function getSalesFunnelDistribution(IRow $funnel)
-    {
-        $rows = $this->database->query('SELECT subscriptions.subscription_type_id,count(*) AS count
-          FROM subscriptions
-          INNER JOIN payments ON payments.subscription_id = subscriptions.id AND payments.sales_funnel_id=' . intval($funnel->id) . "
-          WHERE payments.status='paid'
-          GROUP BY subscriptions.subscription_type_id
-        ");
-        $rows = $this->database->query('SELECT payments.subscription_type_id,count(*) AS count
-          FROM payments
-          WHERE payments.status=\'paid\' AND payments.sales_funnel_id=' . intval($funnel->id) . "
-          GROUP BY payments.subscription_type_id
-        ");
-        $result = [];
-        foreach ($rows as $row) {
-            $result[$row->subscription_type_id] = $row->count;
-        }
-        return $result;
-    }
 }
