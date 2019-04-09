@@ -15,6 +15,8 @@ class SubscriptionTypeBuilder extends Builder
 
     protected $tableName = 'subscription_types';
 
+    protected $metaTableName = 'subscription_types_meta';
+
     private $magazinesSubscriptionTypesTable = 'subscription_type_magazines';
 
     private $subscriptionTypeItemsTable = 'subscription_type_items';
@@ -24,6 +26,8 @@ class SubscriptionTypeBuilder extends Builder
     private $subscriptionTypeItems = [];
 
     private $contentAccessRepository;
+
+    private $metaItems = [];
 
     public function __construct(
         Context $database,
@@ -218,6 +222,12 @@ class SubscriptionTypeBuilder extends Builder
         return $this;
     }
 
+    public function addMeta($key, $value)
+    {
+        $this->metaItems[$key] = $value;
+        return $this;
+    }
+
     public function setContentAccess($contentAccess)
     {
         foreach ($contentAccess as $key => $value) {
@@ -288,6 +298,18 @@ class SubscriptionTypeBuilder extends Builder
                 'updated_at' => new DateTime(),
             ]);
         }
+
+        if (count($this->metaItems)) {
+            foreach ($this->metaItems as $key => $value) {
+                $this->database->table($this->metaTableName)->insert([
+                    'subscription_type_id' => $subscriptionType->id,
+                    'key' => $key,
+                    'value' => $value,
+                    'sorting' => 100,
+                ]);
+            }
+        }
+
         return $subscriptionType;
     }
 }
