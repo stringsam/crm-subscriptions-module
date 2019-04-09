@@ -299,15 +299,13 @@ class SubscriptionTypeBuilder extends Builder
             ]);
         }
 
-        if (count($this->metaItems)) {
-            foreach ($this->metaItems as $key => $value) {
-                $this->database->table($this->metaTableName)->insert([
-                    'subscription_type_id' => $subscriptionType->id,
-                    'key' => $key,
-                    'value' => $value,
-                    'sorting' => 100,
-                ]);
-            }
+        foreach ($this->metaItems as $key => $value) {
+            $this->database->table($this->metaTableName)->insert([
+                'subscription_type_id' => $subscriptionType->id,
+                'key' => $key,
+                'value' => $value,
+                'sorting' => 100,
+            ]);
         }
 
         return $subscriptionType;
