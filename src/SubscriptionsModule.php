@@ -231,8 +231,21 @@ class SubscriptionsModule extends CrmModule
 
     public function registerSegmentCriteria(CriteriaStorage $criteriaStorage)
     {
-        $criteriaStorage->register('users', 'active_subscription', $this->getInstance(\Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria::class));
+        $criteriaStorage->register('users', 'active_subscription', $this->getInstance(\Crm\SubscriptionsModule\Segment\UserActiveSubscriptionCriteria::class));
+        $criteriaStorage->register('subscriptions', 'subscription_active_subscription', $this->getInstance(\Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria::class));
+
         $criteriaStorage->register('users', 'inactive_subscription', $this->getInstance(\Crm\SubscriptionsModule\Segment\InactiveSubscriptionCriteria::class));
+
+        $criteriaStorage->setDefaultFields('subscriptions', ['id']);
+        $criteriaStorage->setFields('subscriptions', [
+            'start_time',
+            'end_time',
+            'is_recurrent',
+            'type',
+            'length',
+            'created_at',
+            'note',
+        ]);
     }
 
     public function registerRoutes(RouteList $router)

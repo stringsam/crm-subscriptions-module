@@ -13,8 +13,10 @@ use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 
-class ActiveSubscriptionCriteria implements CriteriaInterface
+abstract class BaseActiveSubscriptionCriteria implements CriteriaInterface
 {
+    protected $tableField;
+
     private $contentAccessRepository;
 
     private $subscriptionTypesRepository;
@@ -79,7 +81,7 @@ class ActiveSubscriptionCriteria implements CriteriaInterface
             $where[] = " subscriptions.is_recurrent = {$params->boolean('is_recurrent')->number()} ";
         }
 
-        return "SELECT DISTINCT(subscriptions.user_id) AS id, " . Fields::formatSql($this->fields()) . "
+        return "SELECT DISTINCT({$this->tableField}) AS id, " . Fields::formatSql($this->fields()) . "
           FROM subscriptions
           INNER JOIN subscription_types ON subscription_types.id = subscriptions.subscription_type_id
           INNER JOIN subscription_type_content_access ON subscription_type_content_access.subscription_type_id = subscription_types.id
