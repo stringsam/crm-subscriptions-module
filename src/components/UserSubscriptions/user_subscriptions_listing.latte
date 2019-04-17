@@ -64,6 +64,8 @@
             <a href="#" class="btn btn-xs btn-default" data-toggle="modal" data-target="#address-{$subscription->id}-{$address->id}">Adresa #{$address->id}</a>
           {/if}
 
+          {control simpleWidget 'subscriptions.admin.user_subscriptions_listing.subscription', $subscription}
+
         </td>
         <td>{$subscription->subscription_type|typeContent|noescape}</td>
         <td>
@@ -71,13 +73,7 @@
         </td>
         <td>{$subscription->end_time|userDate}</td>
         <td>
-          {ifset $givenByEmail[$subscription->id]}
-            <span class="label label-default" data-toggle="tooltip" data-placement="top" title="Darované od {$givenByEmail[$subscription->id]}">
-                {$subscription->type}
-            </span>
-          {else}
-		    {$subscription->type|typeLabel}
-          {/ifset}
+          {$subscription->type|typeLabel}
         </td>
         <td class="text-muted">
           {$subscription->created_at|userDate}
