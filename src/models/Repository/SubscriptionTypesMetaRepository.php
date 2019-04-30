@@ -43,4 +43,9 @@ class SubscriptionTypesMetaRepository extends Repository
             return $this->add($subscriptionType, $key, $value);
         }
     }
+
+    public function getMeta(IRow $subscriptionType, string $key): string
+    {
+        return $this->getTable()->where(['subscription_type_id' => $subscriptionType->id, 'key' => $key])->fetchField('value');
+    }
 }
