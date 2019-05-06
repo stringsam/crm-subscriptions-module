@@ -7,6 +7,12 @@ use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Nette\Utils\DateTime;
 
+/**
+ * This widget fetches subscriptions created in this month
+ * and last month and renders simple line with both lines.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class MonthSubscriptionsStatWidget extends BaseWidget
 {
     private $templateName = 'month_subscriptions_stat_widget.latte';

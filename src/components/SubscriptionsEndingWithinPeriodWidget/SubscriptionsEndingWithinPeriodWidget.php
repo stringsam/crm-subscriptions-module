@@ -8,6 +8,12 @@ use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Nette\Localization\ITranslator;
 use Nette\Utils\DateTime;
 
+/**
+ * This widget fetches subscriptions ending within different
+ * time intervals and renders row with these values.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class SubscriptionsEndingWithinPeriodWidget extends BaseWidget implements IWidgetLegend
 {
     private $templateName = 'subscriptions_ending_within_period_widget.latte';

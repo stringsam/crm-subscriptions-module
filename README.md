@@ -182,3 +182,165 @@ Response:
     }
 }
 ```
+
+## Components
+
+**ActualSubscribersRegistrationSourceStatsWidget**
+
+Admin dashboard stats graph widget.
+
+![alt text](docs/_static/registration_source_active_subscription.png "ActualSubscribersRegistrationSourceStatsWidget")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/ActualSubscribersRegistrationSourceStatsWidget/ActualSubscribersRegistrationSourceStatsWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L123)
+
+**ActualSubscribersStatWidget**
+
+Admin dashboard stats widget.
+
+![alt text](docs/_static/active_subscribers.png "ActualSubscribersStatWidget")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/ActualSubscribersStatWidget/ActualSubscribersStatWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L118)
+
+**ActualSubscriptionLabel**
+
+Admin user listing component.
+
+![alt text](docs/_static/actual_subscription.png "ActualSubscriptionLabel")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/ActualSubscriptionLabel/ActualSubscriptionLabel.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L163)
+
+**ActualSubscriptionsStatWidget**
+
+Admin dashboard actual subscriptions count widget.
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/ActualSubscriptionsStatWidget/ActualSubscriptionsStatWidget.php#L1)
+
+**ActualUserSubscriptions**
+
+Admin user detail stats widget.
+
+![alt text](docs/_static/user_actual_subscriptions.png "ActualUserSubscriptions")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/ActualUserSubscriptions/ActualUserSubscriptions.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L108)
+
+**EndingSubscriptionsWidget**
+
+Admin ending subscriptions listing widget.
+
+![alt text](docs/_static/ending_subscriptions.png "EndingSubscriptionsWidget")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/EndingSubscriptionsWidget/EndingSubscriptionsWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L143)
+
+**MonthSubscriptionsSmallBarGraphWidget**
+
+Admin users header graph widget.
+
+![alt text](docs/_static/subscriptions_graph.png "MonthSubscriptionsSmallBarGraphWidget")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/MonthSubscriptionsSmallBarGraphWidget/MonthSubscriptionsSmallBarGraphWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L158)
+
+**MonthSubscriptionStatWidget**
+
+Admin dashboard single stat widget.
+
+![alt text](docs/_static/new_subscriptions.png "MonthSubscriptionStatWidget")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/MonthSubscriptionStatWidget/MonthSubscriptionsStatWidget.php#L1)
+
+**MonthToDateSubscriptionStatWidget**
+
+Admin dashboard single stat widget.
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/MonthToDateSubscriptionStatWidget/MonthToDateSubscriptionsStatWidget.php#L1)
+
+**PrintSubscribersWithoutPrintAddressWidget**
+
+Admin payments listing header widget.
+
+![alt text](docs/_static/subscribers_with_missing_address.png "PrintSubscribersWithoutPrintAddressWidget")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/PrintSubscribersWithoutPrintAddressWidget/SubscribersWithMissingAddressWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L168)
+
+**RenewedSubscriptionsEndingWithinPeriodWidget**
+
+Admin dashboard stats widget.
+
+![alt text](docs/_static/ending_subscriptions_1.png "RenewedSubscriptionsEndingWithinPeriodWidget")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/RenewedSubscriptionsEndingWithinPeriodWidget/RenewedSubscriptionsEndingWithinPeriodWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L153)
+
+**SubscriptionButton**
+
+Admin listing edit subscription button widget.
+
+![alt text](docs/_static/edit_subscription_btn.png "SubscriptionButton")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/SubscriptionButton/SubscriptionButton.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L103)
+
+**SubscriptionEndsStats**
+
+Admin ending subscriptions types and content access listing component.
+
+![alt text](docs/_static/ending_subscriptions_table.png "SubscriptionEndsStats")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/SubscriptionEndsStats/SubscriptionEndsStats.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/presenters/DashboardPresenter.php#L237)
+
+**SubscriptionsEndingWithinPeriodWidget**
+
+Admin dashboard ending subscriptions stats widget.
+
+![alt text](docs/_static/ending_within_period.png "SubscriptionsEndingWithinPeriodWidget")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/SubscriptionsEndingWithinPeriodWidget/SubscriptionsEndingWithinPeriodWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L148)
+
+**TodaySubscriptionsStatWidget**
+
+Admin dashboard single stat widget.
+
+![alt text](docs/_static/new_subscriptions_today.png "TodaySubscriptionsStatWidget")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/TodaySubscriptionsStatWidget/TodaySubscriptionsStatWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L128)
+
+**TotalSubscriptionsStatWidget**
+
+Admin dashboard single stat widget.
+
+![alt text](docs/_static/total_subscriptions.png "TotalSubscriptionsStatWidget")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/TotalSubscriptionsStatWidget/TotalSubscriptionsStatWidget.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L113)
+
+**UserSubscriptions**
+
+Admin user detail subscriptions listing widget.
+
+![alt text](docs/_static/user_subscriptions.png "UserSubscriptions")
+
+[Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/UserSubscriptions/UserSubscriptionsListing.php#L1)
+
+[How to use](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/SubscriptionsModule.php#L98)

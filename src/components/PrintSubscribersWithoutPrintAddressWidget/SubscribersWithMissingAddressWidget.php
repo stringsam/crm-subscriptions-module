@@ -8,6 +8,12 @@ use Crm\UsersModule\Repository\AddressesRepository;
 use Crm\UsersModule\Repository\UserMetaRepository;
 use Crm\UsersModule\Repository\UsersRepository;
 
+/**
+ * This widget fetches users with print subscription without print address
+ * and renders simple bootstrap panel.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class SubscribersWithMissingAddressWidget extends BaseWidget
 {
     private $templateName = 'subscribers_with_missing_address_widget.latte';

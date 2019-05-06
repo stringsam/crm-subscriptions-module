@@ -6,6 +6,12 @@ use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 
+/**
+ * This widget fetches users actual subscription and renders
+ * simple bootstrap panel showing start, end date and button to create new subscription.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class ActualUserSubscriptions extends BaseWidget
 {
     private $templateName = 'actual_user_subscriptions.latte';

@@ -6,6 +6,12 @@ use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 
+/**
+ * This widget fetches all subscriptions from db and renders
+ * simple single stat widget with this value.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class TotalSubscriptionsStatWidget extends BaseWidget
 {
     private $templateName = 'total_subscriptions_stat_widget.latte';

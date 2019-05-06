@@ -9,6 +9,12 @@ use Crm\ApplicationModule\Widget\WidgetManager;
 use Nette\Database\Context;
 use Nette\Localization\ITranslator;
 
+/**
+ * This widget fetches user source from subscriptions and renders
+ * google graph with interval controls.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class ActualSubscribersRegistrationSourceStatsWidget extends BaseWidget
 {
     private $templateName = 'actual_subscribers_registration_source_stats_widget.latte';

@@ -4,6 +4,11 @@ namespace Crm\SubscriptionsModule\Components;
 
 use Crm\ApplicationModule\Widget\BaseWidget;
 
+/**
+ * This widgets renders subscription edit link for specific payment.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class SubscriptionButton extends BaseWidget
 {
     private $templateName = 'subscription_button.latte';

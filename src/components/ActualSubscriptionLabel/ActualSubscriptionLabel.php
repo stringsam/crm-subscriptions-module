@@ -5,6 +5,12 @@ namespace Crm\SubscriptionsModule\Components;
 use Crm\ApplicationModule\Widget\BaseWidget;
 use Nette\Utils\DateTime;
 
+/**
+ * This widget checks if user has active running subscription
+ * and renders simple label 'Actual' in user listing.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class ActualSubscriptionLabel extends BaseWidget
 {
     private $templateName = 'actual_subscription_label.latte';

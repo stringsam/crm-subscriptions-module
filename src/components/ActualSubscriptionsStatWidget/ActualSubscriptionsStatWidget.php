@@ -6,6 +6,12 @@ use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 
+/**
+ * This simple widget fetches actual subscribers count and renders
+ * single count stat. Used in dashboard.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class ActualSubscriptionsStatWidget extends BaseWidget
 {
     private $templateName = 'actual_subscriptions_stat_widget.latte';

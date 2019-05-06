@@ -8,6 +8,12 @@ use Nette\Application\UI;
 use Nette\Localization\ITranslator;
 use Nette\Utils\DateTime;
 
+/**
+ * This component fetches ending subscriptions and renders 2 table.
+ * First with count for each subscription type and second with subscriptions content access.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class SubscriptionEndsStats extends UI\Control
 {
     private $templateName = 'subscription_end_stats.latte';

@@ -7,6 +7,12 @@ use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Nette\Utils\DateTime;
 
+/**
+ * This widget fetches subscriptions created today and renders
+ * simple single stat widget.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class TodaySubscriptionsStatWidget extends BaseWidget
 {
     private $templateName = 'today_subscriptions_stat_widget.latte';

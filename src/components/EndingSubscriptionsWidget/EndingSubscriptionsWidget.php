@@ -4,6 +4,12 @@ namespace Crm\SubscriptionsModule\Components;
 
 use Crm\ApplicationModule\Widget\BaseWidget;
 
+/**
+ * This widget fetches all widgets from `subscriptions.endinglist` namespace
+ * and renders panel with each widget as row.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class EndingSubscriptionsWidget extends BaseWidget
 {
     private $templateName = 'ending_subscriptions_widget.latte';

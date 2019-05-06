@@ -7,6 +7,12 @@ use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Nette\Localization\ITranslator;
 
+/**
+ * This component fetches specific users subscriptions and render
+ * data table. Used in user detail.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class UserSubscriptionsListing extends BaseWidget
 {
     private $templateName = 'user_subscriptions_listing.latte';

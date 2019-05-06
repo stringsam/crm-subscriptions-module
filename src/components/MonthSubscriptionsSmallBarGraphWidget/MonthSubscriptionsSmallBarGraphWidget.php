@@ -10,6 +10,12 @@ use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
 use Nette\Localization\ITranslator;
 
+/**
+ * This widget uses graph data to fetch subscriptions from last 31 days
+ * and renders simple small graph.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class MonthSubscriptionsSmallBarGraphWidget extends BaseWidget
 {
     private $templateName = 'month_subscriptions_small_bar_graph_widget.latte';

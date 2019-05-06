@@ -8,6 +8,12 @@ use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Nette\Localization\ITranslator;
 use Nette\Utils\DateTime;
 
+/**
+ * This widget fetches renewed subscriptions for intervals
+ * and renders line with these values.
+ *
+ * @package Crm\SubscriptionsModule\Components
+ */
 class RenewedSubscriptionsEndingWithinPeriodWidget extends BaseWidget implements IWidgetLegend
 {
     private $templateName = 'renewed_subscriptions_ending_within_period_widget.latte';
