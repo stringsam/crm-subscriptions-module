@@ -122,7 +122,7 @@ class SubscriptionFormFactory
             ->getControlPrototype()
             ->addAttributes(['class' => 'autosize']);
 
-        $form->addSelect('address_id', 'subscriptions.data.subscriptions.fields.address_id', $this->addressesRepository->addressesSelect($user, 'print'))
+        $form->addSelect('address_id', 'subscriptions.data.subscriptions.fields.address_id', $this->addressesRepository->addressesSelect($user, false))
             ->setPrompt('--');
 
         $form->addHidden('user_id', $user->id);
