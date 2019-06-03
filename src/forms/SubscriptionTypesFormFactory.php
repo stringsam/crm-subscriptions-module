@@ -55,6 +55,10 @@ class SubscriptionTypesFormFactory
         if (isset($subscriptionTypeId)) {
             $subscriptionType = $this->subscriptionTypesRepository->find($subscriptionTypeId);
             $defaults = $subscriptionType->toArray();
+
+            foreach ($subscriptionType->related("subscription_type_content_access") as $subscriptionTypeContentAccess) {
+                $defaults[$subscriptionTypeContentAccess->content_access->name] = true;
+            }
         }
 
         $form = new Form;
@@ -169,13 +173,23 @@ class SubscriptionTypesFormFactory
             $values['recurrent_charge_before'] = null;
         }
 
+        $contentAccesses = $this->contentAccessRepository->all();
+
         if (isset($values['subscription_type_id'])) {
             $subscriptionTypeId = $values['subscription_type_id'];
             unset($values['subscription_type_id']);
 
             $subscriptionType = $this->subscriptionTypesRepository->find($subscriptionTypeId);
-            $this->subscriptionTypesRepository->update($subscriptionType, $values);
             $this->subscriptionTypeBuilder->processContentTypes($subscriptionType, (array) $values);
+
+            // TODO: remove this once deprecated columns from subscription_type are removed (web, mobile...)
+            foreach ($contentAccesses as $contentAccess) {
+                if (isset($values[$contentAccess->name])) {
+                    unset($values[$contentAccess->name]);
+                }
+            }
+
+            $this->subscriptionTypesRepository->update($subscriptionType, $values);
             $this->onUpdate->__invoke($subscriptionType);
         } else {
             $subscriptionType = $this->subscriptionTypeBuilder->createNew()
