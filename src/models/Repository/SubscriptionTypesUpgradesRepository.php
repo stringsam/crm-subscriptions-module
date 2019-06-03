@@ -39,8 +39,8 @@ class SubscriptionTypesUpgradesRepository extends Repository
     public function availableUpgrades(IRow $fromSubscriptionType, $service = null, $type = null)
     {
         $where = ['from_subscription_type_id' => $fromSubscriptionType->id];
-        if (in_array($service, ['web', 'print', 'mobile', 'club', 'print_friday'])) {
-            $where['subscription_type.' . $service] = true;
+        if ($service) {
+            $where['subscription_type:subscription_type_content_access.content_access.name'] = $service;
         }
         if ($type) {
             $where['subscription_types_upgrades.type'] = $type;
