@@ -250,6 +250,10 @@ admin:
 	print_subscribers_without_print_address_widget:
 		title: Users with active print subscription without filled print address
 
+	actual_subscribers_stat_widget:
+		title: Active Subscribers
+		help: "Unique subscribers, paying and non-paying."
+
 data_provider:
 	delete:
 		three_months_active: User had an active subscription within last three months and cannot be deleted

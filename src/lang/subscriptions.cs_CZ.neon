@@ -217,6 +217,10 @@ admin:
 	print_subscribers_without_print_address_widget:
 		title: Užívatelé s aktivním printovým předplatným bez vyplněné adresy
 
+	actual_subscribers_stat_widget:
+		title: Aktivní předplatitelé
+		help: "Unikátní předplatitelé, platící i neplatící."
+
 data_provider:
 	delete:
 		three_months_active: 'Uživatel měl během posledních tří měsíců aktivní předplatné a nemůže být smazán. '

@@ -1,2 +1,7 @@
 <span class="badge">{$totalSubscribers}</span>
-<a n:tag-if="isset($totalSubscribersLink)" href="{$totalSubscribersLink}">Aktívni predplatelia</a> <i class="fa fa-question-circle" data-toggle="tooltip" data-original-title="Unikatny predplatelia, aj platiaci aj neplatiaci."></i>
+<a n:tag-if="isset($totalSubscribersLink)" href="{$totalSubscribersLink}">
+  {_subscriptions.admin.actual_subscribers_stat_widget.title}
+</a>
+<i class="fa fa-question-circle"
+   data-toggle="tooltip"
+   data-original-title="{_subscriptions.admin.actual_subscribers_stat_widget.help}"></i>
