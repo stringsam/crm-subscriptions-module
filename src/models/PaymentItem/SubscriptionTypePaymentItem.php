@@ -63,6 +63,25 @@ class SubscriptionTypePaymentItem implements PaymentItemInterface
         );
     }
 
+    /**
+     * @param IRow $paymentItem
+     * @return SubscriptionTypePaymentItem
+     * @throws \Exception Thrown if payment item isn't `subscription_type` payment item type.
+     */
+    public static function fromPaymentItem(IRow $paymentItem)
+    {
+        if ($paymentItem->type != self::TYPE) {
+            throw new \Exception("Can not load SubscriptionTypePaymentItem from payment item of different type. Got [{$paymentItem->type}]");
+        }
+        return new SubscriptionTypePaymentItem(
+            $paymentItem->subscription_type_id,
+            $paymentItem->name,
+            $paymentItem->amount,
+            $paymentItem->vat,
+            $paymentItem->count
+        );
+    }
+
     public function type(): string
     {
         return self::TYPE;
