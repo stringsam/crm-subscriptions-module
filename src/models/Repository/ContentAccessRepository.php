@@ -35,7 +35,10 @@ class ContentAccessRepository extends Repository
     public function hasAccess(IRow $subscriptionType, $name)
     {
         return $this->getDatabase()->table('subscription_type_content_access')
-            ->where(['subscription_type_id' => $subscriptionType->id, 'content_access_id' => $this->getId($name)])
+            ->where([
+                'subscription_type_id' => $subscriptionType->id,
+                'content_access.name' => $name
+            ])
             ->count('*') > 0;
     }
 
