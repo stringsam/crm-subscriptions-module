@@ -1,5 +1,5 @@
 {block #content}
-    <div class="page-header" n:if="$showHeader">
+    <div class="page-header page-header-funnel-{$funnel}" n:if="$showHeader">
         <h1 n:block=title>{_subscriptions.frontend.new.title, [site_name => "{$siteTitle}"]}</h1>
     </div>
 
