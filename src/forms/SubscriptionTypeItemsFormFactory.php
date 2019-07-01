@@ -28,10 +28,8 @@ class SubscriptionTypeItemsFormFactory
         $this->translator = $translator;
     }
 
-    public function create($subscriptionTypeId): Form
+    public function create(): Form
     {
-        $defaults = [];
-
         $form = new Form;
 
         $form->setRenderer(new BootstrapRenderer());
@@ -40,8 +38,6 @@ class SubscriptionTypeItemsFormFactory
         $form->getElementPrototype()->addAttributes(['class' => 'ajax']);
 
         $form->addGroup();
-
-        $form->addHidden('subscription_type_id', $subscriptionTypeId);
 
         $form->addText('name', 'subscriptions.data.subscription_type_items.fields.name')
             ->setAttribute('placeholder', 'subscriptions.data.subscription_type_items.placeholder.name')
@@ -56,12 +52,13 @@ class SubscriptionTypeItemsFormFactory
             ->setAttribute('placeholder', 'subscriptions.data.subscription_type_items.placeholder.vat')
             ->setRequired('subscriptions.data.subscription_type_items.required.vat');
 
+        $form->addHidden('subscription_type_id');
+        $form->addHidden('subscription_type_item_id');
+
         $form->addSubmit('send', 'system.save')
             ->getControlPrototype()
             ->setName('button')
             ->setHtml('<i class="fa fa-save"></i> ' . $this->translator->translate('system.save'));
-
-        $form->setDefaults($defaults);
 
         $form->onSuccess[] = [$this, 'formSucceeded'];
 
@@ -70,8 +67,26 @@ class SubscriptionTypeItemsFormFactory
 
     public function formSucceeded($form, $values)
     {
-        $subscriptionType = $this->subscriptionTypesRepository->find($values['subscription_type_id']);
-        $item = $this->subscriptionTypeItemsRepository->add($subscriptionType, $values['name'], $values['amount'], $values['vat']);
+        if ($values['subscription_type_item_id']) {
+            $item = $this->subscriptionTypeItemsRepository->find($values['subscription_type_item_id']);
+            $this->subscriptionTypeItemsRepository->update(
+                $item,
+                [
+                    'name' => $values['name'],
+                    'amount' => $values['amount'],
+                    'vat' => $values['vat'],
+                ]
+            );
+        } else {
+            $subscriptionType = $this->subscriptionTypesRepository->find($values['subscription_type_id']);
+            $item = $this->subscriptionTypeItemsRepository->add(
+                $subscriptionType,
+                $values['name'],
+                $values['amount'],
+                $values['vat']
+            );
+        }
+
         $this->onSave->__invoke($item);
     }
 }

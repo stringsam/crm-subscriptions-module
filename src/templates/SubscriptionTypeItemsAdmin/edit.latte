@@ -1,0 +1,46 @@
+
+{block #content}
+<div class="container" style="width: 100%;">
+	<div class="row">
+		<div class="col-md-12">
+			<a n:href="SubscriptionTypesAdmin:Show $type->id"><i class="fa fa-angle-left"></i> {_subscriptions.admin.subscription_types.edit.back}</a>
+
+			<div class="page-header">
+				<h1>
+					Úprava položky predplatného pre typ:
+				</h1>
+				<h2>
+					<small>[{$type->id}]</small>{$type->name}
+				</h2>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			{form subscriptionTypeItemsForm}
+				<div class="form-group required">
+					{label name /}
+					{input name, 'class' => 'form-control', 'autofocus' => '', 'value' => $item->name}
+				</div>
+
+				<div class="form-group required">
+					{label amount /}
+					{input amount, 'class' => 'form-control', 'autofocus' => '', 'value' => $item->amount}
+				</div>
+
+				<div class="form-group required">
+					{label vat /}
+					{input vat, 'class' => 'form-control', 'autofocus' => '', 'value' => $item->vat}
+				</div>
+
+				{input subscription_type_id, 'value' => $type->id}
+				{input subscription_type_item_id, 'value' => $item->id}
+
+				<div class="form-group">
+					{input send, 'class' => 'btn btn-primary'}
+				</div>
+			{/form}
+		</div>
+	</div>
+</div>

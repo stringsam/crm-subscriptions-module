@@ -90,20 +90,6 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         $this->template->meta = $this->subscriptionTypesMetaRepository->subscriptionTypeMeta($subscriptionType);
     }
 
-    protected function createComponentSubscriptionTypeItemsForm()
-    {
-        $form = $this->subscriptionTypeItemsFormFactory->create($this->params['id']);
-        $this->subscriptionTypeItemsFormFactory->onSave = function ($subscriptionTypeItem) {
-            $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_types.messages.subscription_type_item_created'));
-            if ($this->isAjax()) {
-                $this->redrawControl('subscriptionTypeItemsSnippet');
-            } else {
-                $this->redirect('SubscriptionTypesAdmin:Show', $subscriptionTypeItem->subscription_type_id);
-            }
-        };
-        return $form;
-    }
-
     public function handleRemoveSubscriptionTypeItem($itemId)
     {
         $item = $this->subscriptionTypeItemsRepository->find($itemId);

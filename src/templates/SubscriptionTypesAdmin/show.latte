@@ -133,6 +133,7 @@
           <span class="label label-default">{$item->vat} % {_'system.vat'}</span>
           <strong>{$item->amount|price}</strong>
           <a n:href="removeSubscriptionTypeItem! $item->id" class="pull-right btn btn-xs btn-danger ajax"><i class="fa fa-trash"></i></a>
+          <a n:href="SubscriptionTypeItemsAdmin:edit $item->id" class="pull-right btn btn-xs btn-warning open-type-item-modal" style="margin-right: 5px;"><i class="fa fa-edit"></i></a>
           <small class="text-muted pull-right" style="margin-right:20px;">{$item->created_at}</small>
         </li>
       </ul>
@@ -143,15 +144,12 @@
     {/if}
 
     <p class="text-center">
-      <a class="btn btn-default btn-xs" href="#subscriptionTypeItemsFormDiv" onclick="$('#subscriptionTypeItemsFormDiv').show(); return false;"><i class="fa fa-plus-circle"></i></a>
+      <a n:href="SubscriptionTypeItemsAdmin:new $type->id" class="btn btn-default btn-xs open-type-item-modal">
+        <i class="fa fa-plus-circle"></i>
+      </a>
     </p>
   </div>
-
-  <div id="subscriptionTypeItemsFormDiv" class="col-md-12" style="display:none">
-    {control subscriptionTypeItemsForm}
-  </div>
 </div>
-
 {/snippet}
 
 <div class="row">
