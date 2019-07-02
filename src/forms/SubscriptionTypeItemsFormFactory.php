@@ -52,8 +52,11 @@ class SubscriptionTypeItemsFormFactory
             ->setAttribute('placeholder', 'subscriptions.data.subscription_type_items.placeholder.vat')
             ->setRequired('subscriptions.data.subscription_type_items.required.vat');
 
-        $form->addHidden('subscription_type_id');
-        $form->addHidden('subscription_type_item_id');
+        $form->addHidden('subscription_type_id')
+            ->setHtmlId('subscription_type_id');
+
+        $form->addHidden('subscription_type_item_id')
+            ->setHtmlId('subscription_type_item_id');
 
         $form->addSubmit('send', 'system.save')
             ->getControlPrototype()

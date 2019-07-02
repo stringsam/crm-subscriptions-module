@@ -172,44 +172,28 @@
 <div class="modal fade" id="subscription-type-item-modal">
   <div class="modal-dialog modal-lg" style="width: 800px">
     <div class="modal-content">
+      <div class="modal-header">
+        <div class="close-button">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <h3>{_subscriptions.data.subscription_type_items.title}</h3>
+      </div>
       <div class="modal-body">
-        {form subscriptionTypeItemsForm}
-          <div class="form-group required">
-            {label name /}
-            {input name, 'class' => 'form-control', 'autofocus' => ''}
-          </div>
-
-          <div class="form-group required">
-            {label amount /}
-            {input amount, 'class' => 'form-control', 'autofocus' => ''}
-          </div>
-
-          <div class="form-group required">
-            {label vat /}
-            {input vat, 'class' => 'form-control', 'autofocus' => ''}
-          </div>
-
-        {input subscription_type_id}
-        {input subscription_type_item_id}
-
-          <div class="form-group">
-            {input send, 'class' => 'btn btn-primary'}
-          </div>
-        {/form}
+        {control subscriptionTypeItemsForm}
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 <script>
-  $('#subscription-type-item-modal').on('shown.bs.modal', function(e) {
+  $('#subscription-type-item-modal').on('show.bs.modal', function(e) {
     var $invoker = $(e.relatedTarget);
 
-    $(this).find('#frm-subscriptionTypeItemsForm-name').val($invoker.data('name'));
-    $(this).find('#frm-subscriptionTypeItemsForm-amount').val($invoker.data('amount'));
-    $(this).find('#frm-subscriptionTypeItemsForm-vat').val($invoker.data('vat'));
-    $(this).find('[name=subscription_type_id]').val($invoker.data('subscription_type_id'));
-    $(this).find('[name=subscription_type_item_id]').val($invoker.data('subscription_type_item_id'));
+    $(this).find('#' + {$control["subscriptionTypeItemsForm"]['name']->htmlId}).val($invoker.data('name'));
+    $(this).find('#' + {$control["subscriptionTypeItemsForm"]['amount']->htmlId}).val($invoker.data('amount'));
+    $(this).find('#' + {$control["subscriptionTypeItemsForm"]['vat']->htmlId}).val($invoker.data('vat'));
+    $(this).find('#' + {$control["subscriptionTypeItemsForm"]['subscription_type_id']->htmlId}).val($invoker.data('subscription_type_id'));
+    $(this).find('#' + {$control["subscriptionTypeItemsForm"]['subscription_type_item_id']->htmlId}).val($invoker.data('subscription_type_item_id'));
   });
 </script>
 

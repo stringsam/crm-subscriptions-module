@@ -94,6 +94,7 @@ data:
 			visible: Visible
 			hidden: Hidden
 	subscription_type_items:
+		title: Edit subscription type item
 		fields:
 			name: Name
 			amount: Amount

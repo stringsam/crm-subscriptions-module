@@ -89,6 +89,20 @@ data:
 			inactive: Neaktivní
 			visible: Viditelné
 			hidden: Skryté
+	subscription_type_items:
+		title: Upravit položku typu předplatného
+		fields:
+			name: Název
+			amount: Částka
+			vat: 'DPH (%)'
+		placeholder:
+			name: například 'Tištěné předplatné magazínu'
+			amount: například '123.45'
+			vat: například 20
+		required:
+			name: Název je povinný
+			amount: Suma je povinná
+			vat: DPH je povinná
 frontend:
 	my:
 		history: Historie předplatných
