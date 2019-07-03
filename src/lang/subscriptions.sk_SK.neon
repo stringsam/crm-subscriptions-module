@@ -94,7 +94,9 @@ data:
 			visible: Viditeľné
 			hidden: Skryté
 	subscription_type_items:
-		title: Upraviť položku typu predplatného
+		title:
+			add: Pridať položku typu predplatného
+			edit: Upraviť položku typu predplatného
 		fields:
 			name: Názov
 			amount: Suma

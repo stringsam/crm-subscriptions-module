@@ -90,7 +90,9 @@ data:
 			visible: Viditelné
 			hidden: Skryté
 	subscription_type_items:
-		title: Upravit položku typu předplatného
+		title:
+			add: Přidat položku typu předplatného
+			edit: Upravit položku typu předplatného
 		fields:
 			name: Název
 			amount: Částka

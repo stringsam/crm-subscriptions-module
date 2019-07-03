@@ -139,6 +139,7 @@
              data-name="{$item->name}"
              data-amount="{$item->amount}"
              data-vat="{$item->vat}"
+             data-action="edit"
              data-subscription_type_item_id="{$item->id}"
              data-subscription_type_id="{$item->subscription_type_id}"
              class="pull-right btn btn-xs btn-warning open-type-item-modal"
@@ -160,6 +161,7 @@
          data-toggle="modal"
          data-target="#subscription-type-item-modal"
          data-subscription_type_id="{$type->id}"
+         data-action="add"
          class="btn btn-default btn-xs open-type-item-modal">
         <i class="fa fa-plus-circle"></i>
       </a>
@@ -176,7 +178,8 @@
         <div class="close-button">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
-        <h3>{_subscriptions.data.subscription_type_items.title}</h3>
+        <h3 id="subscription-type-item-modal-edit-title">{_subscriptions.data.subscription_type_items.title.edit}</h3>
+        <h3 id="subscription-type-item-modal-add-title">{_subscriptions.data.subscription_type_items.title.add}</h3>
       </div>
       <div class="modal-body">
         {control subscriptionTypeItemsForm}
@@ -188,6 +191,14 @@
 <script>
   $('#subscription-type-item-modal').on('show.bs.modal', function(e) {
     var $invoker = $(e.relatedTarget);
+
+    if ($invoker.data('action') === 'add') {
+      $('#subscription-type-item-modal-edit-title').hide();
+      $('#subscription-type-item-modal-add-title').show();
+    } else if ($invoker.data('action') === 'edit') {
+      $('#subscription-type-item-modal-edit-title').show();
+      $('#subscription-type-item-modal-add-title').hide();
+    }
 
     $(this).find('#' + {$control["subscriptionTypeItemsForm"]['name']->htmlId}).val($invoker.data('name'));
     $(this).find('#' + {$control["subscriptionTypeItemsForm"]['amount']->htmlId}).val($invoker.data('amount'));
