@@ -375,9 +375,19 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function setExpired($subscription)
+    public function setExpired($subscription, $endTime = null, string $note = null)
     {
-        $this->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_AFTER_END]);
+        $data = [
+            'internal_status' => SubscriptionsRepository::INTERNAL_STATUS_AFTER_END,
+            'modified_at' => new DateTime(),
+        ];
+        if ($note) {
+            $data['note'] = $note;
+        }
+        if ($endTime) {
+            $data['end_time'] = $endTime;
+        }
+        $this->update($subscription, $data);
         $this->emitter->emit(new SubscriptionEndsEvent($subscription));
     }
 
