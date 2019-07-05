@@ -389,6 +389,9 @@ class SubscriptionsRepository extends Repository
         }
         $this->update($subscription, $data);
         $this->emitter->emit(new SubscriptionEndsEvent($subscription));
+        $this->hermesEmitter->emit(new HermesMessage('subscription-ends', [
+            'subscription_id' => $subscription->id,
+        ]));
     }
 
     public function getStartedSubscriptions()
