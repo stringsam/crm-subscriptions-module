@@ -85,10 +85,6 @@ class CreateSubscriptionHandler extends ApiHandler
             $type,
             DateTime::from(strtotime($params['start_time']))
         );
-        $this->emitter->emit(new NewSubscriptionEvent($subscription));
-        $this->hermesEmitter->emit(new HermesMessage('new-subscription', [
-            'subscription_id' => $subscription->id,
-        ]));
 
         $response = new JsonResponse([
             'status' => 'ok',

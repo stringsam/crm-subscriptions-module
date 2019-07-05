@@ -39,13 +39,6 @@ class SubscriptionsGenerator
                 $params->getEndTime()
             );
 
-            // tento emiter by tu nemusel byt, idealne by bolo keby sa to robilo v add metode asi
-            // treba zrefaktorovat aj v paymentprocessore
-            $this->emitter->emit(new NewSubscriptionEvent($subscription));
-            $this->hermesEmitter->emit(new HermesMessage('new-subscription', [
-                'subscription_id' => $subscription->id,
-            ]));
-
             if ($subscription->start_time <= new DateTime() and $subscription->end_time > new DateTime()) {
                 $this->subscriptionsRepository->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_ACTIVE]);
                 $this->emitter->emit(new SubscriptionStartsEvent($subscription));
