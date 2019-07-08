@@ -3,6 +3,7 @@
 namespace Crm\SubscriptionsModule\Api\v1;
 
 use Crm\ApiModule\Api\ApiHandler;
+use Crm\ApiModule\Api\IdempotentHandlerInterface;
 use Crm\ApiModule\Api\JsonResponse;
 use Crm\ApiModule\Authorization\ApiAuthorizationInterface;
 use Crm\ApiModule\Params\InputParam;
@@ -16,7 +17,7 @@ use League\Event\Emitter;
 use Nette\Http\Response;
 use Nette\Utils\DateTime;
 
-class CreateSubscriptionHandler extends ApiHandler
+class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerInterface
 {
     private $subscriptionsRepository;
 
@@ -89,6 +90,34 @@ class CreateSubscriptionHandler extends ApiHandler
         $this->hermesEmitter->emit(new HermesMessage('new-subscription', [
             'subscription_id' => $subscription->id,
         ]));
+
+        $response = new JsonResponse([
+            'status' => 'ok',
+            'message' => 'Subscription created',
+            'subscriptions' => [
+                'id' => $subscription->id,
+                'start_time' => $subscription->start_time->format('c'),
+                'end_time' => $subscription->end_time->format('c'),
+            ],
+        ]);
+        $response->setHttpCode(Response::S200_OK);
+        return $response;
+    }
+
+    public function idempotentHandle(ApiAuthorizationInterface $authorization)
+    {
+        $paramsProcessor = new ParamsProcessor($this->params());
+        $params = $paramsProcessor->getValues();
+
+        $user = $this->userManager->loadUserByEmail($params['email']);
+
+        $where = [
+            'user_id' => $user->id,
+            'start_time' => DateTime::from(strtotime($params['start_time'])),
+            'subscription_type_id' => $params['subscription_type_id'],
+            'type' => isset($params['type']) && $params['type'] ? $params['type'] : SubscriptionsRepository::TYPE_REGULAR,
+        ];
+        $subscription = $this->subscriptionsRepository->getTable()->where($where)->limit(1)->fetch();
 
         $response = new JsonResponse([
             'status' => 'ok',
