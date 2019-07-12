@@ -14,6 +14,7 @@ use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\UsersModule\Auth\UserManager;
 use League\Event\Emitter;
+use Nette\Database\Table\IRow;
 use Nette\Http\Response;
 use Nette\Utils\DateTime;
 
@@ -91,17 +92,7 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
             'subscription_id' => $subscription->id,
         ]));
 
-        $response = new JsonResponse([
-            'status' => 'ok',
-            'message' => 'Subscription created',
-            'subscriptions' => [
-                'id' => $subscription->id,
-                'start_time' => $subscription->start_time->format('c'),
-                'end_time' => $subscription->end_time->format('c'),
-            ],
-        ]);
-        $response->setHttpCode(Response::S200_OK);
-        return $response;
+        return $this->createResponse($subscription);
     }
 
     public function idempotentHandle(ApiAuthorizationInterface $authorization)
@@ -119,6 +110,11 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
         ];
         $subscription = $this->subscriptionsRepository->getTable()->where($where)->limit(1)->fetch();
 
+        return $this->createResponse($subscription);
+    }
+
+    private function createResponse(IRow $subscription)
+    {
         $response = new JsonResponse([
             'status' => 'ok',
             'message' => 'Subscription created',
