@@ -3,8 +3,10 @@
 namespace Crm\SubscriptionsModule\Repository;
 
 use Crm\ApplicationModule\Cache\CacheRepository;
+use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\ApplicationModule\Repository;
 use Crm\ApplicationModule\Repository\AuditLogRepository;
+use Crm\SubscriptionsModule\Events\NewSubscriptionEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionEndsEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionStartsEvent;
 use Crm\SubscriptionsModule\Extension\ExtensionMethodFactory;
@@ -41,13 +43,16 @@ class SubscriptionsRepository extends Repository
 
     private $emitter;
 
+    private $hermesEmitter;
+
     public function __construct(
         Context $database,
         ExtensionMethodFactory $extensionMethodFactory,
         LengthMethodFactory $lengthMethodFactory,
         AuditLogRepository $auditLogRepository,
         CacheRepository $cacheRepository,
-        Emitter $emitter
+        Emitter $emitter,
+        \Tomaj\Hermes\Emitter $hermesEmitter
     ) {
         parent::__construct($database);
         $this->auditLogRepository = $auditLogRepository;
@@ -55,6 +60,7 @@ class SubscriptionsRepository extends Repository
         $this->lengthMethodFactory = $lengthMethodFactory;
         $this->cacheRepository = $cacheRepository;
         $this->emitter = $emitter;
+        $this->hermesEmitter = $hermesEmitter;
     }
 
     public function totalCount($allowCached = false, $forceCacheUpdate = false)
@@ -81,7 +87,8 @@ class SubscriptionsRepository extends Repository
         DateTime $startTime = null,
         DateTime $endTime = null,
         $note = null,
-        IRow $address = null
+        IRow $address = null,
+        bool $sendEmail = true
     ) {
         $isExtending = false;
         if ($startTime == null) {
@@ -125,6 +132,11 @@ class SubscriptionsRepository extends Repository
                 'end_time' => $newSubscription->start_time
             ])->update(['next_subscription_id' => $newSubscription->id]);
         }
+
+        $this->emitter->emit(new NewSubscriptionEvent($newSubscription, $sendEmail));
+        $this->hermesEmitter->emit(new HermesMessage('new-subscription', [
+            'subscription_id' => $newSubscription->id,
+        ]));
 
         return $newSubscription;
     }
@@ -363,10 +375,23 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function setExpired($subscription)
+    public function setExpired($subscription, $endTime = null, string $note = null)
     {
-        $this->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_AFTER_END]);
+        $data = [
+            'internal_status' => SubscriptionsRepository::INTERNAL_STATUS_AFTER_END,
+            'modified_at' => new DateTime(),
+        ];
+        if ($note) {
+            $data['note'] = $note;
+        }
+        if ($endTime) {
+            $data['end_time'] = $endTime;
+        }
+        $this->update($subscription, $data);
         $this->emitter->emit(new SubscriptionEndsEvent($subscription));
+        $this->hermesEmitter->emit(new HermesMessage('subscription-ends', [
+            'subscription_id' => $subscription->id,
+        ]));
     }
 
     public function getStartedSubscriptions()

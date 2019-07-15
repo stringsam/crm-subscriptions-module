@@ -97,11 +97,6 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
             $this->subscriptionMetaRepository->setMeta($subscription, 'idempotent_key', $this->idempotentKey());
         }
 
-        $this->emitter->emit(new NewSubscriptionEvent($subscription));
-        $this->hermesEmitter->emit(new HermesMessage('new-subscription', [
-            'subscription_id' => $subscription->id,
-        ]));
-
         return $this->createResponse($subscription);
     }
 

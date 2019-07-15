@@ -206,10 +206,6 @@ class SubscriptionFormFactory
                 $values['note'],
                 $address
             );
-            $this->emitter->emit(new NewSubscriptionEvent($subscription));
-            $this->hermesEmitter->emit(new HermesMessage('new-subscription', [
-                'subscription_id' => $subscription->id,
-            ]));
             $this->onSave->__invoke($subscription);
         }
     }
