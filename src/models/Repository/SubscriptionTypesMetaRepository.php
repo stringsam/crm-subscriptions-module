@@ -4,6 +4,7 @@ namespace Crm\SubscriptionsModule\Repository;
 
 use Crm\ApplicationModule\Repository;
 use Nette\Database\Table\IRow;
+use Nette\Database\Table\Selection;
 use Nette\Utils\DateTime;
 
 class SubscriptionTypesMetaRepository extends Repository
@@ -22,6 +23,11 @@ class SubscriptionTypesMetaRepository extends Repository
         ]);
     }
 
+    public function getMeta(IRow $subscriptionType, string $key): Selection
+    {
+        return $this->getTable()->where(['subscription_type_id' => $subscriptionType->id, 'key' => $key]);
+    }
+
     public function subscriptionTypeMeta(IRow $subscriptionType): array
     {
         return $this->getTable()->where([
@@ -31,21 +37,21 @@ class SubscriptionTypesMetaRepository extends Repository
 
     public function exists(IRow $subscriptionType, string $key): bool
     {
-        return $this->getTable()->where(['subscription_type_id' => $subscriptionType->id, 'key' => $key])->count('*') > 0;
+        return $this->getMeta($subscriptionType, $key)->count('*') > 0;
     }
 
     public function setMeta(IRow $subscriptionType, string $key, $value): IRow
     {
-        if ($this->exists($subscriptionType, $key)) {
-            $this->getTable()->where(['subscription_type_id' => $subscriptionType->id, 'key' => $key])->update(['value' => $value]);
-            return $this->getTable()->where(['subscription_type_id' => $subscriptionType->id, 'key' => $key])->limit(1)->fetch();
+        if ($meta = $this->getMeta($subscriptionType, $key)->fetch()) {
+            $this->update($meta, ['value' => $value]);
+            return $meta;
         } else {
             return $this->add($subscriptionType, $key, $value);
         }
     }
 
-    public function getMeta(IRow $subscriptionType, string $key): string
+    public function getMetaValue(IRow $subscriptionType, string $key): string
     {
-        return $this->getTable()->where(['subscription_type_id' => $subscriptionType->id, 'key' => $key])->fetchField('value');
+        return $this->getMeta($subscriptionType, $key)->fetchField('value');
     }
 }
