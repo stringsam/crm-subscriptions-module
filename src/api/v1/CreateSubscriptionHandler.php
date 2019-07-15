@@ -10,6 +10,7 @@ use Crm\ApiModule\Params\InputParam;
 use Crm\ApiModule\Params\ParamsProcessor;
 use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\SubscriptionsModule\Events\NewSubscriptionEvent;
+use Crm\SubscriptionsModule\Repository\SubscriptionMetaRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\UsersModule\Auth\UserManager;
@@ -24,6 +25,8 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
 
     private $subscriptionTypesRepository;
 
+    private $subscriptionMetaRepository;
+
     private $userManager;
 
     private $emitter;
@@ -33,12 +36,14 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
     public function __construct(
         SubscriptionTypesRepository $subscriptionTypesRepository,
         SubscriptionsRepository $subscriptionsRepository,
+        SubscriptionMetaRepository $subscriptionMetaRepository,
         UserManager $userManager,
         Emitter $emitter,
         \Tomaj\Hermes\Emitter $hermesEmitter
     ) {
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->subscriptionsRepository = $subscriptionsRepository;
+        $this->subscriptionMetaRepository = $subscriptionMetaRepository;
         $this->userManager = $userManager;
         $this->emitter = $emitter;
         $this->hermesEmitter = $hermesEmitter;
@@ -87,6 +92,7 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
             $type,
             DateTime::from(strtotime($params['start_time']))
         );
+        $this->subscriptionMetaRepository->setMeta($subscription, 'idempotent_key', $this->idempotentKey());
         $this->emitter->emit(new NewSubscriptionEvent($subscription));
         $this->hermesEmitter->emit(new HermesMessage('new-subscription', [
             'subscription_id' => $subscription->id,
@@ -97,18 +103,7 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
 
     public function idempotentHandle(ApiAuthorizationInterface $authorization)
     {
-        $paramsProcessor = new ParamsProcessor($this->params());
-        $params = $paramsProcessor->getValues();
-
-        $user = $this->userManager->loadUserByEmail($params['email']);
-
-        $where = [
-            'user_id' => $user->id,
-            'start_time' => DateTime::from(strtotime($params['start_time'])),
-            'subscription_type_id' => $params['subscription_type_id'],
-            'type' => isset($params['type']) && $params['type'] ? $params['type'] : SubscriptionsRepository::TYPE_REGULAR,
-        ];
-        $subscription = $this->subscriptionsRepository->getTable()->where($where)->limit(1)->fetch();
+        $subscription = $this->subscriptionMetaRepository->findSubscriptionBy('idempotent_key', $this->idempotentKey());
 
         return $this->createResponse($subscription);
     }
