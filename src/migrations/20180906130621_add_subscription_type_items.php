@@ -27,7 +27,8 @@ class AddSubscriptionTypeItems extends AbstractMigration
     public function down()
     {
         $this->table('subscription_type_items')
-            ->drop();
+            ->drop()
+            ->update();
 
         $this->table('subscription_types')
             ->removeColumn('fixed_start')
