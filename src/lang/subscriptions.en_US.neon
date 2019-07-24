@@ -145,9 +145,12 @@ admin:
 			subscription_created: Subscription was created.
 			subscription_updated: Subscription was updated.
 
+		stats:
+			title: Subscription stats
+
 	subscriptions_ends:
 		default:
-			title: Subscriptions ends
+			title: Ending subscriptions
 			without_next: Without next
 			without_recurrent: Without recurrent
 			free_subscriptions: Free subscriptions

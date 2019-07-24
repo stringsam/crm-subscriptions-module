@@ -145,6 +145,9 @@ admin:
 			subscription_created: Predplatné bolo vytvorené.
 			subscription_updated: Predplatné bolo upravené.
 
+		stats:
+			title: Štatistiky predplatného
+
 	subscriptions_ends:
 		default:
 			title: Končiace predplatné

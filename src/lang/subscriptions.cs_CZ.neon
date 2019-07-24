@@ -136,6 +136,8 @@ admin:
 		messages:
 			subscription_created: Předplatné bylo vytvořeno
 			subscription_updated: Předplatné bylo upraveno
+		stats:
+			title: Statistiky předplatného
 	subscriptions_ends:
 		default:
 			title: Končící předplatné
