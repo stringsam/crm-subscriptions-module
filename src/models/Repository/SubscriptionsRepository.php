@@ -355,9 +355,13 @@ class SubscriptionsRepository extends Repository
 
     public function getNotRenewedSubscriptions($date)
     {
+        $notRenewedUsers = $this->getTable();
+
         $allSubscriptions = $this->actualSubscriptions($date)->select('user_id');
-        $notRenewedUsers = $this->getTable()
-            ->where('user_id NOT IN', $allSubscriptions)
+        if ($allSubscriptions->count() > 0) {
+            $notRenewedUsers->where('user_id NOT IN (?)', $allSubscriptions);
+        }
+        $notRenewedUsers
             ->where('end_time < ?', $date)
             ->where('subscription_type.print = ? ', 1)
             ->group('user_id');
