@@ -6,7 +6,6 @@ use Crm\ApplicationModule\Builder\Builder;
 use Crm\ApplicationModule\Config\ApplicationConfig;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Nette\Database\Context;
-use Nette\Database\Table\IRow;
 use Nette\Utils\DateTime;
 
 class SubscriptionTypeBuilder extends Builder
@@ -17,11 +16,7 @@ class SubscriptionTypeBuilder extends Builder
 
     protected $metaTableName = 'subscription_types_meta';
 
-    private $magazinesSubscriptionTypesTable = 'subscription_type_magazines';
-
     private $subscriptionTypeItemsTable = 'subscription_type_items';
-
-    private $magazines = [];
 
     private $subscriptionTypeItems = [];
 
@@ -61,7 +56,6 @@ class SubscriptionTypeBuilder extends Builder
     public function createNew()
     {
         $this->subscriptionTypeItems = [];
-        $this->magazines = [];
         return parent::createNew();
     }
 
@@ -206,12 +200,6 @@ class SubscriptionTypeBuilder extends Builder
         return $this->set('recurrent_charge_before', $recurrentChargeBefore);
     }
 
-    public function addMagazine(IRow $row)
-    {
-        $this->magazines[] = $row;
-        return $this;
-    }
-
     public function addSubscriptionTypeItem($name, $amount, $vat)
     {
         $this->subscriptionTypeItems[] = [
@@ -266,13 +254,6 @@ class SubscriptionTypeBuilder extends Builder
         $subscriptionType = parent::store($tableName);
         $this->processContentTypes($subscriptionType, $contentAccess);
 
-        foreach ($this->magazines as $magazine) {
-            $exists = $this->database->table($this->magazinesSubscriptionTypesTable)->where(['magazine_id' => $magazine->id, 'subscription_type_id' => $subscriptionType->id])->count('*') > 0;
-            if (!$exists) {
-                $this->database->table($this->magazinesSubscriptionTypesTable)
-                    ->insert(['magazine_id' => $magazine->id, 'subscription_type_id' => $subscriptionType->id]);
-            }
-        }
         if (count($this->subscriptionTypeItems)) {
             $sorting = 100;
             foreach ($this->subscriptionTypeItems as $item) {
