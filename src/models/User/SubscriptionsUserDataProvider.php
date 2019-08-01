@@ -38,6 +38,7 @@ class SubscriptionsUserDataProvider implements UserDataProviderInterface
             $result[] = [
                 'start_time' => $subscription->start_time->getTimestamp(),
                 'end_time' => $subscription->end_time->getTimestamp(),
+                'code' => $subscription->subscription_type->code,
                 'is_recurrent' => (bool) $subscription->is_recurrent,
                 'types' => $types,
             ];
