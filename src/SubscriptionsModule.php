@@ -17,6 +17,7 @@ use Crm\ApplicationModule\SeederManager;
 use Crm\ApplicationModule\User\UserDataRegistrator;
 use Crm\ApplicationModule\Widget\WidgetManagerInterface;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
+use Crm\SubscriptionsModule\Seeders\ConfigSeeder;
 use Crm\SubscriptionsModule\Seeders\ContentAccessSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionLengthMethodSeeder;
@@ -255,6 +256,7 @@ class SubscriptionsModule extends CrmModule
 
     public function registerSeeders(SeederManager $seederManager)
     {
+        $seederManager->addSeeder($this->getInstance(ConfigSeeder::class));
         $seederManager->addSeeder($this->getInstance(ContentAccessSeeder::class));
         $seederManager->addSeeder($this->getInstance(SubscriptionExtensionMethodsSeeder::class));
         $seederManager->addSeeder($this->getInstance(SubscriptionLengthMethodSeeder::class));

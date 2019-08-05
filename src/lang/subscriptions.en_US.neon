@@ -255,3 +255,9 @@ admin:
 data_provider:
 	delete:
 		three_months_active: User had an active subscription within last three months and cannot be deleted
+
+config:
+	category: Subscriptions
+	vat_default:
+		name: Default VAT rate
+		description: 'Default VAT rate for subscription type items (e.g. 20).'

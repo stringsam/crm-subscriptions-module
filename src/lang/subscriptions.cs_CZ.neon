@@ -234,3 +234,9 @@ admin:
 data_provider:
 	delete:
 		three_months_active: 'Uživatel měl během posledních tří měsíců aktivní předplatné a nemůže být smazán. '
+
+config:
+	category: Předplatné
+	vat_default:
+		name: Běžná DPH
+		description: 'Standardní sazba DPH pro položky platby. Hodnota v % (např. 21).'
