@@ -14,7 +14,6 @@ class SubscriptionTypesRepository extends Repository
 
     const TYPE_TIME_ARCHIVE = 'time_archive';
     const TYPE_TIME = 'time';
-    const TYPE_PRODUCT = 'product';
 
     public function __construct(Context $database, AuditLogRepository $auditLogRepository)
     {
@@ -66,7 +65,6 @@ class SubscriptionTypesRepository extends Repository
         return [
             self::TYPE_TIME_ARCHIVE => self::TYPE_TIME_ARCHIVE,
             self::TYPE_TIME => self::TYPE_TIME,
-            self::TYPE_PRODUCT => self::TYPE_PRODUCT,
         ];
     }
 }
