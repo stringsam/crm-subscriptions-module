@@ -121,19 +121,6 @@ CREATE TABLE IF NOT EXISTS `subscriptions` (
   CONSTRAINT `subscriptions_ibfk_7` FOREIGN KEY (`type`) REFERENCES `subscription_type_names` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
-CREATE TABLE IF NOT EXISTS `subscription_types_upgrades` (
-  `from_subscription_type_id` int(11) NOT NULL,
-  `to_subscription_type_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'default',
-  PRIMARY KEY (`from_subscription_type_id`,`to_subscription_type_id`),
-  KEY `to_subscription_type_id` (`to_subscription_type_id`),
-  CONSTRAINT `subscription_types_upgrades_ibfk_1` FOREIGN KEY (`from_subscription_type_id`) REFERENCES `subscription_types` (`id`),
-  CONSTRAINT `subscription_types_upgrades_ibfk_2` FOREIGN KEY (`to_subscription_type_id`) REFERENCES `subscription_types` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
 -- 2018-08-31 07:42:42
 SQL;
         $this->execute($sql);

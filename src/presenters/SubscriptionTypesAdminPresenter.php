@@ -8,21 +8,15 @@ use Crm\ApplicationModule\Graphs\Criteria;
 use Crm\ApplicationModule\Graphs\GraphDataItem;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypeItemsFormFactory;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypesFormFactory;
-use Crm\SubscriptionsModule\Forms\SubscriptionTypesUpgradesFormFactory;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
-use Crm\SubscriptionsModule\Repository\SubscriptionTypesUpgradesRepository;
 
 class SubscriptionTypesAdminPresenter extends AdminPresenter
 {
     private $subscriptionTypesRepository;
 
-    private $subscriptionTypesUpgradesRepository;
-
     private $subscriptionTypeFactory;
-
-    private $subscriptionTypesUpgradesFormFactory;
 
     private $subscriptionTypeItemsRepository;
 
@@ -32,18 +26,14 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
 
     public function __construct(
         SubscriptionTypesRepository $subscriptionTypesRepository,
-        SubscriptionTypesUpgradesRepository $subscriptionTypesUpgradesRepository,
         SubscriptionTypesFormFactory $subscriptionTypeFactory,
-        SubscriptionTypesUpgradesFormFactory $subscriptionTypesUpgradesFormFactory,
         SubscriptionTypeItemsRepository $subscriptionTypeItemsRepository,
         SubscriptionTypeItemsFormFactory $subscriptionTypeItemsFormFactory,
         SubscriptionTypesMetaRepository $subscriptionTypesMetaRepository
     ) {
         parent::__construct();
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
-        $this->subscriptionTypesUpgradesRepository = $subscriptionTypesUpgradesRepository;
         $this->subscriptionTypeFactory = $subscriptionTypeFactory;
-        $this->subscriptionTypesUpgradesFormFactory = $subscriptionTypesUpgradesFormFactory;
         $this->subscriptionTypeItemsRepository = $subscriptionTypeItemsRepository;
         $this->subscriptionTypeItemsFormFactory = $subscriptionTypeItemsFormFactory;
         $this->subscriptionTypesMetaRepository = $subscriptionTypesMetaRepository;
@@ -85,7 +75,6 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
             $this->redirect('default');
         }
         $this->template->type = $subscriptionType;
-        $this->template->availableUpgrades = $this->subscriptionTypesUpgradesRepository->availableUpgrades($subscriptionType);
         $this->template->subscriptionTypeItems = $this->subscriptionTypeItemsRepository->subscriptionTypeItems($subscriptionType);
         $this->template->meta = $this->subscriptionTypesMetaRepository->subscriptionTypeMeta($subscriptionType);
     }
@@ -111,30 +100,6 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         } else {
             $this->redirect('show', $subscriptionTypeId);
         }
-    }
-
-    protected function createComponentSubscriptionTypesUpgradesForm()
-    {
-        $id = null;
-        if (isset($this->params['id'])) {
-            $id = $this->params['id'];
-        }
-
-        $form = $this->subscriptionTypesUpgradesFormFactory->create($id);
-        $this->subscriptionTypesUpgradesFormFactory->onSave = function ($subscriptionType) {
-            $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_types.messages.subscription_types_upgrade_created'));
-            $this->redirect('SubscriptionTypesAdmin:Show', $subscriptionType->id);
-        };
-        return $form;
-    }
-
-    public function handleRemoveUpgrade($fromSubscriptionTypeId, $toSubscriptionTypeId)
-    {
-        $fromSubscriptionType = $this->subscriptionTypesRepository->find($fromSubscriptionTypeId);
-        $toSubscriptionType = $this->subscriptionTypesRepository->find($toSubscriptionTypeId);
-        $this->subscriptionTypesUpgradesRepository->remove($fromSubscriptionType, $toSubscriptionType);
-        $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_types.messages.subscription_types_upgrade_deleted'));
-        $this->redirect('show', $fromSubscriptionTypeId);
     }
 
     public function renderEdit($id)

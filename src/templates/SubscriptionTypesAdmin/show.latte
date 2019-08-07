@@ -208,43 +208,6 @@
   });
 </script>
 
-<div class="row">
-  <div class="col-md-12">
-    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.available_upgrades}</h2>
-    {if $availableUpgrades->count('*') > 0}
-      <ul class="list-group">
-        <li n:foreach="$availableUpgrades as $upgrade" class="list-group-item">
-          <a n:href="show $upgrade->to_subscription_type_id">{$upgrade->to_subscription_type->name}</a>
-          {$upgrade->to_subscription_type|typeContent|noescape}
-          <span class="text-muted">{$upgrade->to_subscription_type->price|price}</span>
-          <a n:href="removeUpgrade! $upgrade->from_subscription_type_id, $upgrade->to_subscription_type_id" class="btn btn-default btn-xs pull-right">
-              <i class="fa fa-trash"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.remove_upgrade}
-          </a>
-          <small class="text-muted pull-right" style="margin-right:20px;">{$upgrade->type}</small>
-        </li>
-      </ul>
-      <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">
-          <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.add_upgrade}
-      </a>
-    {else}
-      <p class="text-muted well text-center">
-        {_subscriptions.admin.subscription_types.show.no_upgrades_message}<br><br>
-        <a class="btn btn-default btn-xs" href="#subscriptionTypesUpgradeFormDiv" onclick="$('#subscriptionTypesUpgradeFormDiv').show(); return false;">
-            <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;{_subscriptions.admin.subscription_types.show.add_upgrade}
-        </a>
-      </p>
-    {/if}
-  </div>
-  <div id="subscriptionTypesUpgradeFormDiv" class="col-md-12" style="display:none">
-    <style type="text/css">
-      .select2.select2-container.select2-container--default {
-        width: 100% !important;
-      }
-    </style>
-    {control subscriptionTypesUpgradesForm}
-  </div>
-</div>
-
 <h2 class="page-header">{_subscriptions.data.subscription_types.fields.stats}</h2>
 
 {control simpleWidget 'admin.subscription_types.show.bottom_stats', $type->id}

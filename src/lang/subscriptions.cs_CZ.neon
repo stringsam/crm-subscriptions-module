@@ -54,7 +54,6 @@ data:
 			sorting: Pořadí
 			description: Popis
 			default: Default
-			available_upgrades: Dostupné upgrady
 			sales_funnels: Dostupné v oknech
 			stats: Statistiky
 			ask_address: Vyžádej adresu
@@ -109,7 +108,6 @@ frontend:
 	my:
 		history: Historie předplatných
 		actual: Aktuální předplatné
-		upgrade: Navýšení předplatného
 		no_subscription: Nemáte žádné předplatné
 		buy_new_subscription: Můžete si ho zakoupit a získat tak přístup k obsahu
 	new:
@@ -159,15 +157,10 @@ admin:
 		show:
 			back: Zpět na seznam
 			edit: Uprav typ předplatného
-			no_upgrades_message: Tento typ předplatného neumožňuje upgrade.
-			add_upgrade: Přidat upgrade
-			remove_upgrade: Smazat
 		messages:
 			subscription_type_created: Typ předplatného byl vytvořen.
 			subscription_type_updated: Typ předplatného byl upraven.
 			subscription_type_not_found: Typ předplatného se nepodařilo nalézt.
-			subscription_types_upgrade_created: Upgrade předplatného byl vytvořen.
-			subscription_types_upgrade_deleted: Upgrade předplatného byl vymazán.
 	subscription_generator:
 		form:
 			header: Generátor předplatného

@@ -4,6 +4,7 @@ namespace Crm\SubscriptionsModule\Repository;
 
 use Crm\ApplicationModule\Repository;
 use Nette\Database\Table\IRow;
+use Nette\Database\Table\Selection;
 use Nette\Utils\DateTime;
 
 class ContentAccessRepository extends Repository
@@ -40,6 +41,15 @@ class ContentAccessRepository extends Repository
                 'content_access.name' => $name
             ])
             ->count('*') > 0;
+    }
+
+    public function allForSubscriptionType(IRow $subscriptionType): Selection
+    {
+        return $this->getTable()
+            ->where([
+                ':subscription_type_content_access.subscription_type_id' => $subscriptionType->id,
+            ])
+            ->order('sorting');
     }
 
     public function addAccess(IRow $subscriptionType, $name)

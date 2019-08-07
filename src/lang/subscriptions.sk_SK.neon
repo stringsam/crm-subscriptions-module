@@ -56,7 +56,6 @@ data:
 			sorting: Poradie
 			description: Popis
 			default: Default
-			available_upgrades: Dostupné upgrady
 			stats: Štatistiky
 			ask_address: Vypýtaj adresu
 			disable_notifications: Vypnuté notifikácie
@@ -114,7 +113,6 @@ frontend:
 	my:
 		history: História predplatných
 		actual: Aktuálne predplatné
-		upgrade: Navýšenie predplatného
 		no_subscription: "Nemáte žiadne predplatné"
 		buy_new_subscription: Môžete si ho zakúpiť a získať tak prístup ku obsahu.
 	new:
@@ -170,15 +168,10 @@ admin:
 		show:
 			back: Späť na zoznam
 			edit: Uprav typ predplatného
-			no_upgrades_message: Tento typ predplatného neumožňuje upgrade.
-			add_upgrade: Pridať upgrade
-			remove_upgrade: Zmazať
 		messages:
 			subscription_type_created: Typ predplatného bol vytvorený.
 			subscription_type_updated: Typ predplatného bol upravený.
 			subscription_type_not_found: Typ predplatného sa nepodarilo nájsť.
-			subscription_types_upgrade_created: Upgrade predplatného bol vytvorený.
-			subscription_types_upgrade_deleted: Upgrade predplatného bol zmazaný.
 			subscription_type_item_created: Položka predplatného bola vytvorená
 			subscription_type_item_deleted: Položka predplatného bola vymazaná
 			subscription_types_wrong_amount: 'Nesedí suma za položky so sumou predplatného. Rozdiel <strong>%price%</strong>'

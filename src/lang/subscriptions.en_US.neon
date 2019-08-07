@@ -56,7 +56,6 @@ data:
 			sorting: Sorting
 			description: Description
 			default: Default
-			available_upgrades: Available upgrades
 			stats: Stats
 			ask_address: Ask address
 			disable_notifications: Disabled notifications
@@ -114,7 +113,6 @@ frontend:
 	my:
 		history: Subscriptions history
 		actual: Actual subscription
-		upgrade: Upgrade subscription
 		no_subscription: "You don't have any subscription."
 		buy_new_subscription: You can buy new subscription.
 	new:
@@ -170,15 +168,10 @@ admin:
 		show:
 			back: back to listing
 			edit: Edit subscription type
-			no_upgrades_message: This subscription type doesn't contains any upgrade subscriptions.
-			add_upgrade: Add upgrade
-			remove_upgrade: Remove
 		messages:
 			subscription_type_created: Subscription type was created.
 			subscription_type_updated: Subscription type was updated.
 			subscription_type_not_found: Subscription type not found.
-			subscription_types_upgrade_created: Subscription upgrade was created.
-			subscription_types_upgrade_deleted: Subscription upgrade was deleted.
 			subscription_type_item_created: Subscription item was created.
 			subscription_type_item_deleted: Subscription item was deleted.
 			subscription_types_wrong_amount: 'Wrong subscription items amounts sum. Difference <strong>%price%</strong>'
