@@ -87,7 +87,6 @@ Response:
         {
             "start_at": "2019-01-15T00:00:00+01:00", // String; RFC3339 encoded start time
             "end_at": "2020-01-15T00:00:00+01:00", // String; RFC3339 encoded end time
-            "type": "time_archive", // String; type of subscription, available values in ["time", "time_archive"]
             "code": "web_year", // String; subscription code (slug)
             "access": [ // Array: list of all types of content subscription includes
                 "web" // String; name of the content type
@@ -96,7 +95,6 @@ Response:
         {
             "start_at": "2019-03-05T00:00:00+01:00",
             "end_at": "2019-03-19T00:00:00+01:00",
-            "type": "time_archive",
             "code": "mobile-welcome-action",
             "access": [
                 "web",

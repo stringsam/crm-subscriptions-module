@@ -165,11 +165,6 @@ class SubscriptionTypeBuilder extends Builder
         return $this->set('next_subscription_type_id', $id);
     }
 
-    public function setType($type)
-    {
-        return $this->set('type', $type);
-    }
-
     public function setLimitPerUser($limitPerUser)
     {
         return $this->set('limit_per_user', $limitPerUser);

@@ -12,9 +12,6 @@ class SubscriptionTypesRepository extends Repository
 {
     protected $tableName = 'subscription_types';
 
-    const TYPE_TIME_ARCHIVE = 'time_archive';
-    const TYPE_TIME = 'time';
-
     public function __construct(Context $database, AuditLogRepository $auditLogRepository)
     {
         parent::__construct($database);
@@ -58,13 +55,5 @@ class SubscriptionTypesRepository extends Repository
     public function findByCode($code)
     {
         return $this->getTable()->where('code', $code)->fetch();
-    }
-
-    public function availableTypes()
-    {
-        return [
-            self::TYPE_TIME_ARCHIVE => self::TYPE_TIME_ARCHIVE,
-            self::TYPE_TIME => self::TYPE_TIME,
-        ];
     }
 }

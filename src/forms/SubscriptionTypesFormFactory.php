@@ -102,9 +102,6 @@ class SubscriptionTypesFormFactory
         $form->addText('fixed_end', 'subscriptions.data.subscription_types.fields.fixed_end')
             ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.fixed_end');
 
-        $form->addSelect('type', 'subscriptions.data.subscription_types.fields.type', $this->subscriptionTypesRepository->availableTypes())
-            ->setRequired('subscriptions.data.subscription_types.required.type');
-
         $form->addText('recurrent_charge_before', 'subscriptions.data.subscription_types.fields.recurrent_charge_before')
             ->setType('number');
 
@@ -201,7 +198,6 @@ class SubscriptionTypesFormFactory
                 ->setExtendingLength($values['extending_length'])
                 ->setFixedStart($values['fixed_start'])
                 ->setFixedEnd($values['fixed_end'])
-                ->setType($values['type'])
                 ->setLimitPerUser($values['limit_per_user'])
                 ->setUserLabel($values['user_label'])
                 ->setSorting($values['sorting'])

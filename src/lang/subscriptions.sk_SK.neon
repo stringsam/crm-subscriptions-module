@@ -43,7 +43,6 @@ data:
 			fixed_start: "Fixný začiatok predplatného"
 			fixed_end: "Fixný koniec predplatného"
 			user_label: Verejný popis
-			type: Typ
 			limit_per_user: "Max. počet predplatných na používateľa"
 			content: Obsah
 			active: Aktívne

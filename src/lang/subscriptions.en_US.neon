@@ -43,7 +43,6 @@ data:
 			fixed_start: "Fixed subscription start time"
 			fixed_end: "Fixed subscription end time"
 			user_label: User label
-			type: Type
 			limit_per_user: Max. number of subscriptions per user
 			content: Content
 			active: Active

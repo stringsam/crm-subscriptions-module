@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS `subscription_length_methods` (
 
 CREATE TABLE IF NOT EXISTS `subscription_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'time_archive',
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `extension_method_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'extend_actual',

@@ -78,7 +78,6 @@ class UsersSubscriptionsHandler extends ApiHandler
         return [
             'start_at' => $subscription->start_time->format('c'),
             'end_at' => $subscription->end_time->format('c'),
-            'type' => $subscriptionType->type,
             'code' => $subscriptionType->code,
             'access' => $access,
         ];
