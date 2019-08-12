@@ -3,7 +3,6 @@
 namespace Crm\SubscriptionsModule\Forms;
 
 use Crm\SubscriptionsModule\Generator\SubscriptionsGenerator;
-use Crm\SubscriptionsModule\Generator\SubscriptionsParams;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\SubscriptionsModule\Subscription\SubscriptionType;

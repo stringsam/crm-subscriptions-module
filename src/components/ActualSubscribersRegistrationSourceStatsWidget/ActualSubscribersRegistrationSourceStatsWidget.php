@@ -6,10 +6,8 @@ use Crm\ApplicationModule\Components\Graphs\GoogleBarGraphControlFactoryInterfac
 use Crm\ApplicationModule\Graphs\GraphData;
 use Crm\ApplicationModule\Widget\BaseWidget;
 use Crm\ApplicationModule\Widget\WidgetManager;
-use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Nette\Database\Context;
 use Nette\Localization\ITranslator;
-use Nette\Utils\DateTime;
 
 class ActualSubscribersRegistrationSourceStatsWidget extends BaseWidget
 {

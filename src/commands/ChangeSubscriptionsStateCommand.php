@@ -2,8 +2,6 @@
 
 namespace Crm\SubscriptionsModule\Commands;
 
-use Crm\SubscriptionsModule\Events\SubscriptionEndsEvent;
-use Crm\SubscriptionsModule\Events\SubscriptionStartsEvent;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use League\Event\Emitter;
 use Symfony\Component\Console\Command\Command;

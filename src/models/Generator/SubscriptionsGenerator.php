@@ -2,8 +2,6 @@
 
 namespace Crm\SubscriptionsModule\Generator;
 
-use Crm\ApplicationModule\Hermes\HermesMessage;
-use Crm\SubscriptionsModule\Events\NewSubscriptionEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionStartsEvent;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use DateTime;

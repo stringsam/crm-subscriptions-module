@@ -3,7 +3,6 @@
 namespace Crm\SubscriptionsModule\Forms;
 
 use Crm\ApplicationModule\Hermes\HermesMessage;
-use Crm\SubscriptionsModule\Events\NewSubscriptionEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionPreUpdateEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionUpdatedEvent;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
