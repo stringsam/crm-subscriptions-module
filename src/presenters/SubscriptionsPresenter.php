@@ -42,7 +42,7 @@ class SubscriptionsPresenter extends FrontendPresenter
         }
         $this->template->funnel = $funnel;
 
-        $showHeader = true;
+        $showHeader = false;
         $this->template->showHeader = $showHeader;
     }
 }
