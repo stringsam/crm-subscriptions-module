@@ -368,10 +368,13 @@ class SubscriptionsRepository extends Repository
         return $notRenewedUsers;
     }
 
-    public function getExpiredSubscriptions()
+    public function getExpiredSubscriptions(DateTime $dateTime = null)
     {
+        if (!$dateTime) {
+            $dateTime = new DateTime();
+        }
         return $this->getTable()->select('*')->where([
-            'end_time < ?' => new DateTime(),
+            'end_time <= ?' => $dateTime,
             'internal_status' => [
                 self::INTERNAL_STATUS_ACTIVE,
                 self::INTERNAL_STATUS_UNKNOWN
@@ -398,11 +401,14 @@ class SubscriptionsRepository extends Repository
         ]));
     }
 
-    public function getStartedSubscriptions()
+    public function getStartedSubscriptions(DateTime $dateTime = null)
     {
+        if (!$dateTime) {
+            $dateTime = new DateTime();
+        }
         return $this->getTable()->select('*')->where([
-            'start_time <= ?' => new DateTime(),
-            'end_time > ?' => new DateTime(),
+            'start_time <= ?' => $dateTime,
+            'end_time > ?' => $dateTime,
             'internal_status' => [
                 self::INTERNAL_STATUS_BEFORE_START,
                 self::INTERNAL_STATUS_UNKNOWN

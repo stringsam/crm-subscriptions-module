@@ -44,7 +44,9 @@ class ChangeSubscriptionsStateCommand extends Command
         $output->writeln('<info>***** CHANGE SUBSCRIPTIONS STATUS *****</info>');
         $output->writeln('');
 
-        $expiredSubscriptions = $this->subscriptionsRepository->getExpiredSubscriptions();
+        $now = new \DateTime();
+
+        $expiredSubscriptions = $this->subscriptionsRepository->getExpiredSubscriptions($now);
         foreach ($expiredSubscriptions as $subscription) {
             $output->writeln('Expired subscription #' . $subscription->id . ' ' . json_encode($subscription->toArray()));
             $this->subscriptionsRepository->setExpired($subscription);
@@ -52,7 +54,7 @@ class ChangeSubscriptionsStateCommand extends Command
 
         $output->writeln('');
 
-        $startedSubscriptions = $this->subscriptionsRepository->getStartedSubscriptions();
+        $startedSubscriptions = $this->subscriptionsRepository->getStartedSubscriptions($now);
         foreach ($startedSubscriptions as $subscription) {
             $output->writeln('Started subscription #' . $subscription->id . ' ' . json_encode($subscription->toArray()));
             $this->subscriptionsRepository->setStarted($subscription);
