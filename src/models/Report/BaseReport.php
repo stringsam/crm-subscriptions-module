@@ -4,7 +4,6 @@ namespace Crm\SubscriptionsModule\Report;
 
 use Kdyby\Translation\Translator;
 use Nette\Database\Context;
-use Nette\Localization\ITranslator;
 
 abstract class BaseReport implements ReportInterface
 {
