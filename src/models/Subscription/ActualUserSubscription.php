@@ -39,7 +39,7 @@ class ActualUserSubscription
             return;
         }
 
-        $this->actualSubscriptions = $this->subscriptionsRepository->actualUserSubscriptions($this->user->getId());
+        $this->actualSubscriptions = $this->subscriptionsRepository->actualUserSubscriptions($this->user->getId())->fetchAll();
         if (count($this->actualSubscriptions) == 0) {
             $this->nextSubscription = false;
             return;
