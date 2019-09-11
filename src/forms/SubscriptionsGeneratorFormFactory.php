@@ -2,6 +2,7 @@
 
 namespace Crm\SubscriptionsModule\Forms;
 
+use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\SubscriptionsModule\Generator\SubscriptionsGenerator;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
@@ -15,7 +16,6 @@ use Nette\Application\UI\Form;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 use Tomaj\Hermes\Emitter;
-use Tomaj\Hermes\Message;
 
 class SubscriptionsGeneratorFormFactory
 {
@@ -262,7 +262,7 @@ class SubscriptionsGeneratorFormFactory
         ];
 
         if ($values->generate) {
-            $this->emitter->emit(new Message('generate-subscription', $payload));
+            $this->emitter->emit(new HermesMessage('generate-subscription', $payload));
         }
 
         ($this->onSubmit)($messages);
