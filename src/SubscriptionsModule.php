@@ -166,7 +166,7 @@ class SubscriptionsModule extends CrmModule
         );
         $widgetManager->registerWidget(
             'admin.payments.top',
-            $this->getInstance(\Crm\SubscriptionsModule\Components\PrintSubscribersWithoutPrintAddressWidget::class),
+            $this->getInstance(\Crm\SubscriptionsModule\Components\SubscribersWithMissingAddressWidget::class),
             2000
         );
     }

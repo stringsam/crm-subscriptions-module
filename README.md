@@ -21,6 +21,38 @@ extensions:
 	- Crm\SubscriptionsModule\DI\SubscriptionsModuleExtension
 ```
 
+## Widgets
+
+Widgets are small reusable components that can be used on different places within CRM. Module can provide widget placeholders for other modules to populate or widget implementations.
+
+### Available widgets
+
+#### `SubscribersWithMissingAddressWidget`
+
+![Subscribers with missing address widget](src/docs/subscribers_with_missing_address_widget.png)
+
+Widget displays list of all subscribers with specified content access that don't have specified address type entered in the system. It is placed at the `admin.payments.top` placeholder, above the payments listing.
+
+By default the widget displays all `print` subscribers without `print` address type entered. You can change the configuration in your `config.local.neon` and check different content access names against different address types:
+
+```neon
+subscribersWithMissingAddressWidget:
+    setup:
+        - setContentAccessNames(print, print_friday)
+        - setAddressTypes(print, print_other)
+```
+
+### Available placeholders
+
+These are widget placeholders provided by Payments Module. You can register your own widgets to be displayed at following places:
+
+* `admin.payments.top`
+* `payments.banktransfer.right`
+* `payments.admin.payment_source_listing`
+* `payments.admin.payment_item_listing`
+* `payments.frontend.payments_my.top`
+* `payments.arpu.bottom`
+
 ## API documentation
 
 All examples use `http://crm.press` as a base domain. Please change the host to the one you use

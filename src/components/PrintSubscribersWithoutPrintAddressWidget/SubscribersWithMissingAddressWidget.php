@@ -7,11 +7,10 @@ use Crm\ApplicationModule\Widget\WidgetManager;
 use Crm\UsersModule\Repository\AddressesRepository;
 use Crm\UsersModule\Repository\UserMetaRepository;
 use Crm\UsersModule\Repository\UsersRepository;
-use Nette\Database\Context;
 
-class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
+class SubscribersWithMissingAddressWidget extends BaseWidget
 {
-    private $templateName = 'print_subscribers_without_print_address_widget.latte';
+    private $templateName = 'subscribers_with_missing_address_widget.latte';
 
     /** @var WidgetManager */
     protected $widgetManager;
@@ -21,6 +20,10 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
     protected $userMetaRepository;
 
     protected $addressesRepository;
+
+    protected $contentAccessNames = ['print'];
+
+    protected $addressTypes = ['print'];
 
     public function __construct(
         WidgetManager $widgetManager,
@@ -37,27 +40,36 @@ class PrintSubscribersWithoutPrintAddressWidget extends BaseWidget
 
     public function header($id = '')
     {
-        return 'Nevyplnena adresa';
+        return 'Missing address';
     }
 
     public function identifier()
     {
-        return 'printsubscriberswithoutprintaddresswidget';
+        return 'subscribersWithMissingAddressWidget';
+    }
+
+    public function setContentAccessNames(string ...$contentAccessNames)
+    {
+        $this->contentAccessNames = $contentAccessNames;
+    }
+
+    public function setAddressTypes(string ...$addressTypes)
+    {
+        $this->addressTypes = $addressTypes;
     }
 
     public function render()
     {
         $listUsers = $this->usersRepository->getTable()
-            ->where(':subscriptions.start_time < ?', Context::literal('NOW()'))
-            ->where(':subscriptions.end_time > ?', Context::literal('NOW()'))
-            ->where(
-                ':subscriptions.subscription_type:subscription_type_content_access.content_access.name = ?',
-                'print'
-            );
+            ->where(':subscriptions.start_time <= ?', new \DateTime())
+            ->where(':subscriptions.end_time > ?', new \DateTime())
+            ->where([
+                ':subscriptions.subscription_type:subscription_type_content_access.content_access.name' => $this->contentAccessNames,
+            ]);
 
-        $havePrintAddress = $this->addressesRepository->all()->where('type = ?', 'print')->select('user_id')->fetchAssoc('user_id=user_id');
-        if ($havePrintAddress) {
-            $listUsers->where('users.id NOT IN (?)', $havePrintAddress);
+        $haveAddress = $this->addressesRepository->all()->where(['type' => $this->addressTypes])->select('user_id')->fetchAssoc('user_id=user_id');
+        if ($haveAddress) {
+            $listUsers->where('users.id NOT IN (?)', $haveAddress);
         }
         $haveDisabledNotification = $this->userMetaRepository->usersWithKey('notify_missing_print_address', 0)->select('user_id')->fetchAssoc('user_id=user_id');
         if ($haveDisabledNotification) {

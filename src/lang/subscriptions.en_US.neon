@@ -245,8 +245,8 @@ admin:
 	month_subscriptions_small_bar_graph_widget:
 		title: Subscriptions
 
-	print_subscribers_without_print_address_widget:
-		title: Users with active print subscription without filled print address
+	subscribers_with_missing_address_widget:
+		title: Subscribers with missing address
 
 	actual_subscribers_stat_widget:
 		title: Active Subscribers

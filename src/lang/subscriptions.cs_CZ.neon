@@ -224,8 +224,8 @@ admin:
 	month_subscriptions_small_bar_graph_widget:
 		title: Předplatné
 
-	print_subscribers_without_print_address_widget:
-		title: Užívatelé s aktivním printovým předplatným bez vyplněné adresy
+	subscribers_with_missing_address_widget:
+		title: Užívatelé bez vyplněné adresy
 
 	actual_subscribers_stat_widget:
 		title: Aktivní předplatitelé
