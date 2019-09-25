@@ -6,12 +6,14 @@ class MigrateSubscriptionTypeProductToNoSubscription extends AbstractMigration
 {
     public function up()
     {
-        $sql = <<<SQL
+        if ($this->table('subscription_types')->hasColumn('type')) {
+            $sql = <<<SQL
 UPDATE `subscription_types`
 SET `no_subscription` = 1
 WHERE `type` = "product";
 SQL;
-        $this->execute($sql);
+            $this->execute($sql);
+        }
     }
 
     public function down()
