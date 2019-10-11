@@ -56,4 +56,15 @@ class SubscriptionTypesRepository extends Repository
     {
         return $this->getTable()->where('code', $code)->fetch();
     }
+
+    public function findDefaultForContentAccess(string ...$contentAccess)
+    {
+        return $this->getTable()
+            ->where([
+                'default' => true,
+                ':subscription_type_content_access.content_access.name' => $contentAccess,
+            ])
+            ->order('price')
+            ->fetch();
+    }
 }
