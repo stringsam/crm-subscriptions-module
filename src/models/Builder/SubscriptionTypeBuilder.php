@@ -281,6 +281,8 @@ class SubscriptionTypeBuilder extends Builder
                 'key' => $key,
                 'value' => $value,
                 'sorting' => 100,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime(),
             ]);
         }
 
