@@ -5,6 +5,7 @@ namespace Crm\SubscriptionsModule\Builder;
 use Crm\ApplicationModule\Builder\Builder;
 use Crm\ApplicationModule\Config\ApplicationConfig;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
+use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Nette\Database\Context;
 use Nette\Utils\DateTime;
 
@@ -22,16 +23,20 @@ class SubscriptionTypeBuilder extends Builder
 
     private $contentAccessRepository;
 
+    private $subscriptionTypesRepository;
+
     private $metaItems = [];
 
     public function __construct(
         Context $database,
         ApplicationConfig $applicationConfig,
-        ContentAccessRepository $contentAccessRepository
+        ContentAccessRepository $contentAccessRepository,
+        SubscriptionTypesRepository $subscriptionTypesRepository
     ) {
         parent::__construct($database);
         $this->applicationConfig = $applicationConfig;
         $this->contentAccessRepository = $contentAccessRepository;
+        $this->subscriptionTypesRepository = $subscriptionTypesRepository;
     }
 
     public function isValid()
@@ -163,6 +168,15 @@ class SubscriptionTypeBuilder extends Builder
     public function setNextSubscriptionTypeId($id)
     {
         return $this->set('next_subscription_type_id', $id);
+    }
+
+    public function setNextSubscriptionTypeIdFromCode(string $code)
+    {
+        $subscriptionType = $this->subscriptionTypesRepository->findByCode($code);
+        if (!$subscriptionType) {
+            throw new \Exception("Provided subscription type with ID [{$code}] doesn't exist.");
+        }
+        return $this->setNextSubscriptionTypeId($subscriptionType->id);
     }
 
     public function setLimitPerUser($limitPerUser)
