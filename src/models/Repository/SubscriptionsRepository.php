@@ -286,7 +286,7 @@ class SubscriptionsRepository extends Repository
             'subscription_type:subscription_type_content_access.content_access.name' => $contentAccess,
             'start_time <= ?' => $date,
             'end_time > ?' => $date,
-        ])->group('user_id');
+        ]);
     }
 
     public function createdOrModifiedSubscriptions(DateTime $fromTime, DateTime $toTime)
