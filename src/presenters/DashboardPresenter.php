@@ -261,7 +261,7 @@ INNER JOIN subscription_type_content_access ON subscription_types.id = subscript
   AND subscription_type_content_access.content_access_id = {$contentAccess->id}
 SQL
                 )
-                ->setValueField('count(subscriptions.id)')
+                ->setValueField('count(distinct subscriptions.user_id)')
                 ->setStart($this->dateFrom)
                 ->setEnd($this->dateTo));
             $graphDataItem->setName($contentAccess->name);
