@@ -189,7 +189,7 @@ class SubscriptionsRepository extends Repository
      */
     public function userSubscriptions($userId)
     {
-        return $this->getTable()->where(['user_id' => $userId])->order('end_time DESC');
+        return $this->getTable()->where(['user_id' => $userId])->order('end_time DESC, start_time DESC');
     }
 
     /**
