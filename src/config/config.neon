@@ -16,7 +16,7 @@ services:
 	- Crm\SubscriptionsModule\Forms\SubscriptionsGeneratorFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionTypeItemsFormFactory
 	- Crm\SubscriptionsModule\Generator\SubscriptionsGenerator
-	- Crm\SubscriptionsModule\Components\SubscriptionButtonFactory
+	- Crm\SubscriptionsModule\Components\SubscriptionButton
 	- Crm\SubscriptionsModule\Components\ActualUserSubscriptions
 	- Crm\SubscriptionsModule\Components\ActualSubscribersRegistrationSourceStatsWidget
 	- Crm\SubscriptionsModule\Components\TotalSubscriptionsStatWidget

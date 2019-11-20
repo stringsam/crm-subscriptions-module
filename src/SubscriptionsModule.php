@@ -100,9 +100,9 @@ class SubscriptionsModule extends CrmModule
             $this->getInstance(\Crm\SubscriptionsModule\Components\UserSubscriptionsListing::class),
             100
         );
-        $widgetManager->registerWidgetFactory(
+        $widgetManager->registerWidget(
             'admin.payments.listing.action',
-            $this->getInstance(\Crm\SubscriptionsModule\Components\SubscriptionButtonFactory::class),
+            $this->getInstance(\Crm\SubscriptionsModule\Components\SubscriptionButton::class),
             6000
         );
         $widgetManager->registerWidget(
