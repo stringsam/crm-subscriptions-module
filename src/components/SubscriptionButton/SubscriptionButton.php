@@ -20,6 +20,10 @@ class SubscriptionButton extends BaseWidget
 
     public function render($payment)
     {
+        if (!$payment->subscription_id) {
+            return;
+        }
+
         $this->template->payment = $payment;
         $this->template->setFile(__DIR__ . '/' . $this->templateName);
         $this->template->render();

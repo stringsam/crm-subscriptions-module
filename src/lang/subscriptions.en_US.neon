@@ -228,7 +228,7 @@ admin:
 		gift_header: Gift subscriptions
 
 	subscription_button:
-		title: Subscription
+		title: Edit subscription
 
 	actual_subscription_label:
 		subscription: Subscription
