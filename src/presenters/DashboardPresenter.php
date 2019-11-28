@@ -38,7 +38,7 @@ class DashboardPresenter extends AdminPresenter
             $this->dateFrom = $this->dateFrom ?? DateTime::from('now')->format('Y-m-d');
             $this->dateTo = $this->dateTo ?? DateTime::from('+6 months')->format('Y-m-d');
         } else {
-            $this->dateFrom = $this->dateFrom ?? DateTime::from('-2 months')->format('Y-m-d');
+            $this->dateFrom = $this->dateFrom ?? DateTime::from('-1 months')->format('Y-m-d');
             $this->dateTo = $this->dateTo ?? DateTime::from('today')->format('Y-m-d');
         }
 
