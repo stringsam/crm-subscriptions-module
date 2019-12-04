@@ -65,7 +65,9 @@ class SubscriptionsEndsPresenter extends AdminPresenter
         $subscriptions1 = $this->subscriptionsRepository->subscriptionsEndBetween($this->startTime, $this->endTime, false);
 
         if (!$this->freeSubscriptions) {
-            $subscriptions->where(['subscription_type.price > ?' => 0]);
+            $subscriptions
+                ->where('subscription_type.price > ?', 0)
+                ->where('subscriptions.type NOT IN ?', ['free']);
         }
         if ($this->withoutRecurrent) {
             $subscriptions->where('subscriptions.id NOT', $subscriptions1->where([

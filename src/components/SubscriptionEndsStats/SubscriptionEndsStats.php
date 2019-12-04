@@ -54,7 +54,8 @@ class SubscriptionEndsStats extends UI\Control
 
         if (!$this->freeSubscriptions) {
             $subscriptions
-                ->where('subscription_type.price > ? OR subscriptions.type NOT IN ?', 0, ['free']);
+                ->where('subscription_type.price > ?', 0)
+                ->where('subscriptions.type NOT IN ?', ['free']);
         }
 
         if ($this->withoutRecurrent) {
