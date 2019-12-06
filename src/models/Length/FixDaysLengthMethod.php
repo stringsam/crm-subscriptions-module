@@ -7,7 +7,7 @@ use Nette\Database\Table\IRow;
 
 class FixDaysLengthMethod implements LengthMethodInterface
 {
-    public function getEndTime(DateTime $startTime, IRow $user, IRow $subscriptionType, bool $isExtending = false): Length
+    public function getEndTime(DateTime $startTime, IRow $subscriptionType, bool $isExtending = false): Length
     {
         $length = $subscriptionType->length;
         if ($isExtending && $subscriptionType->extending_length) {

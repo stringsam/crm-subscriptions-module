@@ -7,7 +7,7 @@ use Nette\Database\Table\IRow;
 
 class CalendarDaysLengthMethod implements LengthMethodInterface
 {
-    public function getEndTime(DateTime $startTime, IRow $user, IRow $subscriptionType, bool $isExtending): Length
+    public function getEndTime(DateTime $startTime, IRow $subscriptionType, bool $isExtending): Length
     {
         $length = intval(date('t', $startTime->getTimestamp()));
         $interval = new \DateInterval("P{$length}D");
