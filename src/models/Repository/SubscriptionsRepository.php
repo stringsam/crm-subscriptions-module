@@ -232,6 +232,12 @@ class SubscriptionsRepository extends Repository
         ])->order('subscription_type.mobile DESC, end_time DESC');
     }
 
+    public function actualUserSubscriptionsByContentAccess(DateTime $date, $userId, string ...$contentAccess)
+    {
+        return $this->actualSubscriptionsByContentAccess($date, ...$contentAccess)
+            ->where(['user_id' => $userId]);
+    }
+
     public function hasSubscriptionEndAfter($userId, DateTime $endTime)
     {
         return $this->getTable()->where(['user_id' => $userId, 'end_time > ?' => $endTime])->count('*') > 0;
