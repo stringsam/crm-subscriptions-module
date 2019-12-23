@@ -67,7 +67,7 @@ class SubscriptionsEndsPresenter extends AdminPresenter
         if (!$this->freeSubscriptions) {
             $subscriptions
                 ->where('subscription_type.price > ?', 0)
-                ->where('subscriptions.type NOT IN ?', ['free']);
+                ->where('subscriptions.type NOT IN (?)', ['free']);
         }
         if ($this->withoutRecurrent) {
             $subscriptions->where('subscriptions.id NOT', $subscriptions1->where([
