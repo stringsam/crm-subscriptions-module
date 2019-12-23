@@ -135,7 +135,9 @@ class SubscriptionsRepository extends Repository
             ])->update(['next_subscription_id' => $newSubscription->id]);
         }
 
-        $callbackBeforeNewSubscriptionEvent($newSubscription);
+        if ($callbackBeforeNewSubscriptionEvent !== null) {
+            $callbackBeforeNewSubscriptionEvent($newSubscription);
+        }
 
         $this->emitter->emit(new NewSubscriptionEvent($newSubscription, $sendEmail));
         $this->hermesEmitter->emit(new HermesMessage('new-subscription', [
