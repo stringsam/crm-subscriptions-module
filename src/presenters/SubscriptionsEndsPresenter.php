@@ -98,8 +98,10 @@ class SubscriptionsEndsPresenter extends AdminPresenter
         $form->setTranslator($this->translator);
         $form->setRenderer(new BootstrapInlineRenderer());
         $form->addText('start_time', 'subscriptions.data.subscriptions.fields.start_time')
-            ->setAttribute('autofocus');
-        $form->addText('end_time', 'subscriptions.data.subscriptions.fields.end_time');
+            ->setAttribute('autofocus')
+            ->setAttribute('class', 'flatpickr');
+        $form->addText('end_time', 'subscriptions.data.subscriptions.fields.end_time')
+            ->setAttribute('class', 'flatpickr');
         $form->addCheckbox('without_next', 'subscriptions.admin.subscriptions_ends.default.without_next');
         $form->addCheckbox('without_recurrent', 'subscriptions.admin.subscriptions_ends.default.without_recurrent');
         $form->addCheckbox('free_subscriptions', 'subscriptions.admin.subscriptions_ends.default.free_subscriptions');
