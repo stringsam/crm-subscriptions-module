@@ -8,6 +8,7 @@ use Crm\ApiModule\Router\ApiRoute;
 use Crm\ApplicationModule\Access\AccessManager;
 use Crm\ApplicationModule\Commands\CommandsContainerInterface;
 use Crm\ApplicationModule\Criteria\CriteriaStorage;
+use Crm\ApplicationModule\Criteria\ScenariosCriteriaStorage;
 use Crm\ApplicationModule\CrmModule;
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\ApplicationModule\Event\EventsStorage;
@@ -17,6 +18,8 @@ use Crm\ApplicationModule\SeederManager;
 use Crm\ApplicationModule\User\UserDataRegistrator;
 use Crm\ApplicationModule\Widget\WidgetManagerInterface;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
+use Crm\SubscriptionsModule\Scenarios\SubscriptionTypeCriteria;
+use Crm\SubscriptionsModule\Scenarios\TypeCriteria;
 use Crm\SubscriptionsModule\Seeders\ConfigSeeder;
 use Crm\SubscriptionsModule\Seeders\ContentAccessSeeder;
 use Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder;
@@ -228,6 +231,12 @@ class SubscriptionsModule extends CrmModule
     public function registerUserData(UserDataRegistrator $dataRegistrator)
     {
         $dataRegistrator->addUserDataProvider($this->getInstance(\Crm\SubscriptionsModule\User\SubscriptionsUserDataProvider::class));
+    }
+
+    public function registerScenariosCriteria(ScenariosCriteriaStorage $scenariosCriteriaStorage)
+    {
+        $scenariosCriteriaStorage->register('subscription', 'type', $this->getInstance(TypeCriteria::class));
+        $scenariosCriteriaStorage->register('subscription', 'subscription_type', $this->getInstance(SubscriptionTypeCriteria::class));
     }
 
     public function registerSegmentCriteria(CriteriaStorage $criteriaStorage)

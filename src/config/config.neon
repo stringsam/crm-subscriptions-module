@@ -45,6 +45,8 @@ services:
 	- Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria
 	- Crm\SubscriptionsModule\Segment\UserActiveSubscriptionCriteria
 	- Crm\SubscriptionsModule\Segment\InactiveSubscriptionCriteria
+	- Crm\SubscriptionsModule\Scenarios\TypeCriteria
+	- Crm\SubscriptionsModule\Scenarios\SubscriptionTypeCriteria
 	- Crm\SubscriptionsModule\Seeders\ConfigSeeder
 	- Crm\SubscriptionsModule\Seeders\ContentAccessSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder
