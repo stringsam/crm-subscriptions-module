@@ -36,7 +36,6 @@ class ChangeSubscriptionsStateCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -59,5 +58,7 @@ class ChangeSubscriptionsStateCommand extends Command
             $output->writeln('Started subscription #' . $subscription->id . ' ' . json_encode($subscription->toArray()));
             $this->subscriptionsRepository->setStarted($subscription);
         }
+
+        return 0;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Crm\SubscriptionsModule\Repository;
 
+use Closure;
 use Crm\ApplicationModule\Cache\CacheRepository;
 use Crm\ApplicationModule\Hermes\HermesMessage;
 use Crm\ApplicationModule\Repository;
@@ -88,7 +89,8 @@ class SubscriptionsRepository extends Repository
         DateTime $endTime = null,
         $note = null,
         IRow $address = null,
-        bool $sendEmail = true
+        bool $sendEmail = true,
+        Closure $callbackBeforeNewSubscriptionEvent = null
     ) {
         $isExtending = false;
         if ($startTime == null) {
@@ -131,6 +133,10 @@ class SubscriptionsRepository extends Repository
                 'user_id' => $user->id,
                 'end_time' => $newSubscription->start_time
             ])->update(['next_subscription_id' => $newSubscription->id]);
+        }
+
+        if ($callbackBeforeNewSubscriptionEvent !== null) {
+            $callbackBeforeNewSubscriptionEvent($newSubscription);
         }
 
         $this->emitter->emit(new NewSubscriptionEvent($newSubscription, $sendEmail));
