@@ -26,9 +26,9 @@ class TypeCriteria implements ScenariosCriteriaInterface
         ];
     }
 
-    public function addCondition(Selection $selection, $values)
+    public function addCondition(Selection $selection, $key, $values)
     {
-        $selection->where('subscriptions.type IN (?)', $values);
+        $selection->where('subscriptions.type IN (?)', $values->selection);
     }
 
     public function label(): string

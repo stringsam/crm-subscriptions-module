@@ -26,9 +26,9 @@ class SubscriptionTypeCriteria implements ScenariosCriteriaInterface
         ];
     }
 
-    public function addCondition(Selection $selection, $values)
+    public function addCondition(Selection $selection, $key, $values)
     {
-        $selection->where('subscription_type.code IN (?)', $values);
+        $selection->where('subscription_type.code IN (?)', $values->selection);
     }
 
     public function label(): string
