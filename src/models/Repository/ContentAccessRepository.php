@@ -11,7 +11,7 @@ class ContentAccessRepository extends Repository
 {
     protected $tableName = 'content_access';
 
-    public function all()
+    public function all(): Selection
     {
         return $this->getTable()->order('sorting');
     }

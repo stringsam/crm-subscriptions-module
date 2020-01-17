@@ -11,6 +11,7 @@ services:
 	- Crm\SubscriptionsModule\Repository\SubscriptionTypeNamesRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository
 	- Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository
+	- Crm\SubscriptionsModule\Repository\SubscriptionTypeContentAccess
 	- Crm\SubscriptionsModule\Forms\SubscriptionTypesFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionsGeneratorFormFactory
@@ -46,6 +47,9 @@ services:
 	- Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria
 	- Crm\SubscriptionsModule\Segment\UserActiveSubscriptionCriteria
 	- Crm\SubscriptionsModule\Segment\InactiveSubscriptionCriteria
+	- Crm\SubscriptionsModule\Scenarios\TypeCriteria
+	- Crm\SubscriptionsModule\Scenarios\SubscriptionTypeCriteria
+	- Crm\SubscriptionsModule\Scenarios\ContentAccessCriteria
 	- Crm\SubscriptionsModule\Seeders\ConfigSeeder
 	- Crm\SubscriptionsModule\Seeders\ContentAccessSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder

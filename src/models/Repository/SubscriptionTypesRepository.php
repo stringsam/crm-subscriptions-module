@@ -18,12 +18,12 @@ class SubscriptionTypesRepository extends Repository
         $this->auditLogRepository = $auditLogRepository;
     }
 
-    public function getAllActive()
+    public function getAllActive(): Selection
     {
         return $this->getTable()->where(['active' => true])->order('sorting');
     }
 
-    public function getAllVisible()
+    public function getAllVisible(): Selection
     {
         return $this->getTable()->where(['active' => true, 'visible' => true])->order('sorting');
     }
@@ -31,7 +31,7 @@ class SubscriptionTypesRepository extends Repository
     /**
      * @return Selection
      */
-    public function all()
+    public function all(): Selection
     {
         return $this->getTable()->order('sorting');
     }
@@ -44,7 +44,7 @@ class SubscriptionTypesRepository extends Repository
 
     public function getPrintSubscriptionTypes()
     {
-        return $this->getTable()->where(['print' => 1])->fetch();
+        return $this->getTable()->where(['print' => 1])->fetchAll();
     }
 
     public function exists($code)
