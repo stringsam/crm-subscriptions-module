@@ -142,6 +142,7 @@ class SubscriptionsRepository extends Repository
         $this->emitter->emit(new NewSubscriptionEvent($newSubscription, $sendEmail));
         $this->hermesEmitter->emit(new HermesMessage('new-subscription', [
             'subscription_id' => $newSubscription->id,
+            'send_email' => $sendEmail
         ]));
 
         return $newSubscription;
