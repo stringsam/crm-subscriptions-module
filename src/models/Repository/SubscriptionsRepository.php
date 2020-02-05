@@ -194,7 +194,7 @@ class SubscriptionsRepository extends Repository
      * @param int $userId
      * @return \Nette\Database\Table\Selection
      */
-    public function userSubscriptions($userId)
+    public function userSubscriptions($userId): Selection
     {
         return $this->getTable()->where(['user_id' => $userId])->order('end_time DESC, start_time DESC');
     }
