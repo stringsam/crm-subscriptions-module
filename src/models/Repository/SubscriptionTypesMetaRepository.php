@@ -23,6 +23,11 @@ class SubscriptionTypesMetaRepository extends Repository
         ]);
     }
 
+    public function getMetasWithKey(string $key): Selection
+    {
+        return $this->getTable()->where(['key' => $key]);
+    }
+
     public function getMeta(IRow $subscriptionType, string $key): Selection
     {
         return $this->getTable()->where(['subscription_type_id' => $subscriptionType->id, 'key' => $key]);

@@ -25,8 +25,9 @@ class SubscriptionsGenerator
         $this->hermesEmitter = $hermesEmitter;
     }
 
-    public function generate(SubscriptionsParams $params, $count)
+    public function generate(SubscriptionsParams $params, $count): array
     {
+        $subscriptions = [];
         for ($i = 0; $i < $count; $i++) {
             $subscription = $this->subscriptionsRepository->add(
                 $params->getSubscriptionType(),
@@ -43,6 +44,8 @@ class SubscriptionsGenerator
             } else {
                 $this->subscriptionsRepository->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_BEFORE_START]);
             }
+            $subscriptions[] = $subscription;
         }
+        return $subscriptions;
     }
 }
