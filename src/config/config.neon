@@ -50,6 +50,7 @@ services:
 	- Crm\SubscriptionsModule\Scenarios\TypeCriteria
 	- Crm\SubscriptionsModule\Scenarios\SubscriptionTypeCriteria
 	- Crm\SubscriptionsModule\Scenarios\ContentAccessCriteria
+	- Crm\SubscriptionsModule\Scenarios\IsRecurrentCriteria
 	- Crm\SubscriptionsModule\Seeders\ConfigSeeder
 	- Crm\SubscriptionsModule\Seeders\ContentAccessSeeder
 	- Crm\SubscriptionsModule\Seeders\SubscriptionExtensionMethodsSeeder
