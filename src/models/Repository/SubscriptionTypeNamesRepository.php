@@ -20,4 +20,11 @@ class SubscriptionTypeNamesRepository extends Repository
     {
         return $this->getTable()->where(['type' => $type])->count('*');
     }
+
+    public function allActive()
+    {
+        return $this->getTable()
+            ->where(['is_active' => true])
+            ->order('sorting');
+    }
 }
