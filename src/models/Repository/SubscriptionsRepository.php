@@ -196,7 +196,9 @@ class SubscriptionsRepository extends Repository
      */
     public function userSubscriptions($userId): Selection
     {
-        return $this->getTable()->where(['user_id' => $userId])->order('end_time DESC, start_time DESC');
+        return $this->getTable()
+            ->where(['subscriptions.user_id' => $userId])
+            ->order('subscriptions.end_time DESC, subscriptions.start_time DESC');
     }
 
     /**
@@ -233,9 +235,9 @@ class SubscriptionsRepository extends Repository
     public function actualUserSubscriptions($userId): Selection
     {
         return $this->getTable()->where([
-            'user_id' => $userId,
-            'start_time <= ?' => new DateTime,
-            'end_time > ?' => new DateTime,
+            'subscriptions.user_id' => $userId,
+            'subscriptions.start_time <= ?' => new DateTime,
+            'subscriptions.end_time > ?' => new DateTime,
         ])->order('subscription_type.mobile DESC, end_time DESC');
     }
 
