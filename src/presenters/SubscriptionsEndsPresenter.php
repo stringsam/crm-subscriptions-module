@@ -4,11 +4,12 @@ namespace Crm\SubscriptionsModule\Presenters;
 
 use Crm\AdminModule\Presenters\AdminPresenter;
 use Crm\SubscriptionsModule\Components\SubscriptionEndsStatsFactoryInterface;
+use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Nette\Application\UI\Form;
 use Nette\Utils\DateTime;
-use Tomaj\Form\Renderer\BootstrapInlineRenderer;
+use Tomaj\Form\Renderer\BootstrapRenderer;
 
 class SubscriptionsEndsPresenter extends AdminPresenter
 {
@@ -17,6 +18,9 @@ class SubscriptionsEndsPresenter extends AdminPresenter
 
     /** @var SubscriptionTypesRepository @inject */
     public $subscriptionTypesRepository;
+
+    /** @var ContentAccessRepository @inject */
+    public $contentAccessRepository;
 
     /** @persisted */
     public $startTime;
@@ -32,6 +36,9 @@ class SubscriptionsEndsPresenter extends AdminPresenter
 
     /** @persisted */
     public $freeSubscriptions;
+
+    /** @persisted */
+    public $contentAccessTypes;
 
     public function startup()
     {
@@ -57,6 +64,9 @@ class SubscriptionsEndsPresenter extends AdminPresenter
         if (isset($this->params['freeSubscriptions']) && $this->params['freeSubscriptions']) {
             $this->freeSubscriptions = true;
         }
+        if (isset($this->params['contentAccessTypes'])) {
+            $this->contentAccessTypes = $this->params['contentAccessTypes'];
+        }
     }
 
     public function renderDefault()
@@ -75,6 +85,10 @@ class SubscriptionsEndsPresenter extends AdminPresenter
                 ':payments:recurrent_payments.retries > ?' => 0,
                 ':payments:recurrent_payments.state = ?' => 'active'
             ])->fetchPairs(null, 'id'));
+        }
+
+        if ($this->contentAccessTypes) {
+            $subscriptions->where('subscription_type:subscription_type_content_access.content_access.id IN (?)', $this->contentAccessTypes);
         }
 
         $data = $subscriptions->fetchAll();
@@ -96,7 +110,7 @@ class SubscriptionsEndsPresenter extends AdminPresenter
     {
         $form = new Form();
         $form->setTranslator($this->translator);
-        $form->setRenderer(new BootstrapInlineRenderer());
+        $form->setRenderer(new BootstrapRenderer());
         $form->addText('start_time', 'subscriptions.data.subscriptions.fields.start_time')
             ->setAttribute('autofocus')
             ->setAttribute('class', 'flatpickr');
@@ -105,21 +119,27 @@ class SubscriptionsEndsPresenter extends AdminPresenter
         $form->addCheckbox('without_next', 'subscriptions.admin.subscriptions_ends.default.without_next');
         $form->addCheckbox('without_recurrent', 'subscriptions.admin.subscriptions_ends.default.without_recurrent');
         $form->addCheckbox('free_subscriptions', 'subscriptions.admin.subscriptions_ends.default.free_subscriptions');
+
+        $form->addMultiSelect('content_access_types','subscriptions.admin.subscription_end_stats.content_access_types', $this->contentAccessRepository->all()->fetchPairs('id', 'name'))
+            ->getControlPrototype()->addAttributes(['class' => 'select2']);
+
         $form->addSubmit('send', 'system.filter')
             ->getControlPrototype()
             ->setName('button')
             ->setHtml('<i class="fa fa-filter"></i> ' . $this->translator->translate('system.filter'));
+
         $presenter = $this;
         $form->addSubmit('cancel', 'system.cancel_filter')->onClick[] = function () use ($presenter) {
             $presenter->redirect('default', ['text' => '']);
         };
         $form->onSuccess[] = [$this, 'adminFilterSubmited'];
         $form->setDefaults([
-            'start_time' => isset($_GET['startTime']) ? $_GET['startTime'] : date('d.m.Y', strtotime('-1 week')),
-            'end_time' => isset($_GET['endTime']) ? $_GET['endTime'] : date('d.m.Y'),
-            'without_next' => isset($_GET['withoutNext']) ? $_GET['withoutNext'] : '',
-            'without_recurrent' => isset($_GET['withoutRecurrent']) ? $_GET['withoutRecurrent'] : '',
-            'free_subscriptions' => isset($_GET['freeSubscriptions']) ? $_GET['freeSubscriptions'] : '',
+            'start_time' => $_GET['startTime'] ?? date('d.m.Y', strtotime('-1 week')),
+            'end_time' => $_GET['endTime'] ?? date('d.m.Y'),
+            'without_next' => $_GET['withoutNext'] ?? '',
+            'without_recurrent' => $_GET['withoutRecurrent'] ?? '',
+            'free_subscriptions' => $_GET['freeSubscriptions'] ?? '',
+            'content_access_types' => $_GET['contentAccessTypes'] ?? [],
         ]);
         return $form;
     }
@@ -132,6 +152,7 @@ class SubscriptionsEndsPresenter extends AdminPresenter
             'withoutNext' => $values['without_next'],
             'withoutRecurrent' => $values['without_recurrent'],
             'freeSubscriptions' => $values['free_subscriptions'],
+            'contentAccessTypes' => $values['content_access_types'],
         ]);
     }
 }
