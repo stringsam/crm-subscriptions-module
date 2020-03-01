@@ -120,7 +120,7 @@ class SubscriptionsEndsPresenter extends AdminPresenter
         $form->addCheckbox('without_recurrent', 'subscriptions.admin.subscriptions_ends.default.without_recurrent');
         $form->addCheckbox('free_subscriptions', 'subscriptions.admin.subscriptions_ends.default.free_subscriptions');
 
-        $form->addMultiSelect('content_access_types','subscriptions.admin.subscription_end_stats.content_access_types', $this->contentAccessRepository->all()->fetchPairs('id', 'name'))
+        $form->addMultiSelect('content_access_types', 'subscriptions.admin.subscription_end_stats.content_access_types', $this->contentAccessRepository->all()->fetchPairs('id', 'name'))
             ->getControlPrototype()->addAttributes(['class' => 'select2']);
 
         $form->addSubmit('send', 'system.filter')
