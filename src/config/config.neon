@@ -3,15 +3,18 @@ services:
 		setup:
 			- addModule(Crm\SubscriptionsModule\SubscriptionsModule())
 
+	subscriptionTypesRepository: Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository
+	subscriptionsRepository: Crm\SubscriptionsModule\Repository\SubscriptionsRepository
+	subscriptionMetaRepository: Crm\SubscriptionsModule\Repository\SubscriptionMetaRepository
+	subscriptionExtensionMethodsRepository: Crm\SubscriptionsModule\Repository\SubscriptionExtensionMethodsRepository
+	subscriptionTypeNamesRepository: Crm\SubscriptionsModule\Repository\SubscriptionTypeNamesRepository
+	subscriptionLengthMethodsRepository: Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository
+	subscriptionTypeItemsRepository: Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository
+	subscriptionTypeContentAccess: Crm\SubscriptionsModule\Repository\SubscriptionTypeContentAccess
+	subscriptionTypesMetaRepository: Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository
+	contentAccessRepository: Crm\SubscriptionsModule\Repository\ContentAccessRepository
+
 	- Crm\SubscriptionsModule\Builder\SubscriptionTypeBuilder
-	- Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository
-	- Crm\SubscriptionsModule\Repository\SubscriptionsRepository
-	- Crm\SubscriptionsModule\Repository\SubscriptionMetaRepository
-	- Crm\SubscriptionsModule\Repository\SubscriptionExtensionMethodsRepository
-	- Crm\SubscriptionsModule\Repository\SubscriptionTypeNamesRepository
-	- Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository
-	- Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository
-	- Crm\SubscriptionsModule\Repository\SubscriptionTypeContentAccess
 	- Crm\SubscriptionsModule\Forms\SubscriptionTypesFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionsGeneratorFormFactory
@@ -42,7 +45,6 @@ services:
 	- Crm\SubscriptionsModule\Events\SubscriptionUpdatedHandler
 	- Crm\SubscriptionsModule\Hermes\GenerateSubscriptionHandler
 	- Crm\SubscriptionsModule\Api\v1\CreateSubscriptionHandler
-	- Crm\SubscriptionsModule\Repository\ContentAccessRepository
 	- Crm\SubscriptionsModule\User\SubscriptionsUserDataProvider
 	- Crm\SubscriptionsModule\Segment\ActiveSubscriptionCriteria
 	- Crm\SubscriptionsModule\Segment\UserActiveSubscriptionCriteria
@@ -61,7 +63,6 @@ services:
 	- Crm\SubscriptionsModule\DataProvider\FilterUsersSelectionDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsSelectionDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsFormDataProvider
-	- Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository
 
 	extensionMethodFactory:
 		class: Crm\SubscriptionsModule\Extension\ExtensionMethodFactory
