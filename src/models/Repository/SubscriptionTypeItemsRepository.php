@@ -10,7 +10,7 @@ class SubscriptionTypeItemsRepository extends Repository
 {
     protected $tableName = 'subscription_type_items';
 
-    public function add(IRow $subscriptionType, string $name, float $amount, int $vat, int $sorting = null)
+    final public function add(IRow $subscriptionType, string $name, float $amount, int $vat, int $sorting = null)
     {
         return $this->getTable()->insert([
             'subscription_type_id' => $subscriptionType->id,
@@ -23,12 +23,12 @@ class SubscriptionTypeItemsRepository extends Repository
         ]);
     }
 
-    public function exists(IRow $subscriptionType, string $name)
+    final public function exists(IRow $subscriptionType, string $name)
     {
         return $this->getTable()->where(['subscription_type_id' => $subscriptionType->id, 'name' => $name])->count('*');
     }
 
-    public function subscriptionTypeItems(IRow $subscriptionType)
+    final public function subscriptionTypeItems(IRow $subscriptionType)
     {
         return $this->getTable()->where(['subscription_type_id' => $subscriptionType->id])->order('sorting ASC');
     }

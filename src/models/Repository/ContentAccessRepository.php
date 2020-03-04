@@ -11,12 +11,12 @@ class ContentAccessRepository extends Repository
 {
     protected $tableName = 'content_access';
 
-    public function all(): Selection
+    final public function all(): Selection
     {
         return $this->getTable()->order('sorting');
     }
 
-    public function add($name, $description, $class = '', $sorting = 100)
+    final public function add($name, $description, $class = '', $sorting = 100)
     {
         return $this->getTable()->insert([
             'name' => $name,
@@ -28,12 +28,12 @@ class ContentAccessRepository extends Repository
         ]);
     }
 
-    public function exists($name)
+    final public function exists($name)
     {
         return $this->getTable()->where(['name' => $name])->count('*') > 0;
     }
 
-    public function hasAccess(IRow $subscriptionType, $name)
+    final public function hasAccess(IRow $subscriptionType, $name)
     {
         return $this->getDatabase()->table('subscription_type_content_access')
             ->where([
@@ -43,7 +43,7 @@ class ContentAccessRepository extends Repository
             ->count('*') > 0;
     }
 
-    public function allForSubscriptionType(IRow $subscriptionType): Selection
+    final public function allForSubscriptionType(IRow $subscriptionType): Selection
     {
         return $this->getTable()
             ->where([
@@ -52,7 +52,7 @@ class ContentAccessRepository extends Repository
             ->order('sorting');
     }
 
-    public function addAccess(IRow $subscriptionType, $name)
+    final public function addAccess(IRow $subscriptionType, $name)
     {
         $this->getDatabase()->table('subscription_type_content_access')->insert([
             'subscription_type_id' => $subscriptionType->id,
@@ -61,7 +61,7 @@ class ContentAccessRepository extends Repository
         ]);
     }
 
-    public function removeAccess(IRow $subscriptionType, $name)
+    final public function removeAccess(IRow $subscriptionType, $name)
     {
         $this->getDatabase()->table('subscription_type_content_access')->where([
             'subscription_type_id' => $subscriptionType->id,
@@ -69,7 +69,7 @@ class ContentAccessRepository extends Repository
         ])->delete();
     }
 
-    public function getId($name)
+    final public function getId($name)
     {
         return $this->getTable()->select('id')->where(['name' => $name])->limit(1)->fetch()->id;
     }
@@ -80,7 +80,7 @@ class ContentAccessRepository extends Repository
      * @param DateTime $endTime
      * @return \Nette\Database\Table\Selection
      */
-    public function usersWithAccessActiveBetween($contentAccess, DateTime $startTime, DateTime $endTime)
+    final public function usersWithAccessActiveBetween($contentAccess, DateTime $startTime, DateTime $endTime)
     {
         return $this->database->table('users')
             ->where(':subscriptions.subscription_type:subscription_type_content_access.id = ?', $contentAccess->id)

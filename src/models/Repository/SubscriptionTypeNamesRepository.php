@@ -8,7 +8,7 @@ class SubscriptionTypeNamesRepository extends Repository
 {
     protected $tableName = 'subscription_type_names';
 
-    public function add($type, $sorting)
+    final public function add($type, $sorting)
     {
         return $this->getTable()->insert([
             'type' => $type,
@@ -16,12 +16,12 @@ class SubscriptionTypeNamesRepository extends Repository
         ]);
     }
 
-    public function exists($type)
+    final public function exists($type)
     {
         return $this->getTable()->where(['type' => $type])->count('*');
     }
 
-    public function allActive()
+    final public function allActive()
     {
         return $this->getTable()
             ->where(['is_active' => true])

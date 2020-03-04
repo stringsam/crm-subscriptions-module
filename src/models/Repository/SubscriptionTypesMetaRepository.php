@@ -11,7 +11,7 @@ class SubscriptionTypesMetaRepository extends Repository
 {
     protected $tableName = 'subscription_types_meta';
 
-    public function add(IRow $subscriptionType, string $key, $value, int $sorting = 100)
+    final public function add(IRow $subscriptionType, string $key, $value, int $sorting = 100)
     {
         return $this->getTable()->insert([
             'subscription_type_id' => $subscriptionType->id,
@@ -23,29 +23,29 @@ class SubscriptionTypesMetaRepository extends Repository
         ]);
     }
 
-    public function getByKey(string $key): Selection
+    final public function getByKey(string $key): Selection
     {
         return $this->getTable()->where(['key' => $key]);
     }
 
-    public function getMeta(IRow $subscriptionType, string $key): Selection
+    final public function getMeta(IRow $subscriptionType, string $key): Selection
     {
         return $this->getTable()->where(['subscription_type_id' => $subscriptionType->id, 'key' => $key]);
     }
 
-    public function subscriptionTypeMeta(IRow $subscriptionType): array
+    final public function subscriptionTypeMeta(IRow $subscriptionType): array
     {
         return $this->getTable()->where([
             'subscription_type_id' => $subscriptionType->id,
         ])->order('sorting ASC')->fetchPairs('key', 'value');
     }
 
-    public function exists(IRow $subscriptionType, string $key): bool
+    final public function exists(IRow $subscriptionType, string $key): bool
     {
         return $this->getMeta($subscriptionType, $key)->count('*') > 0;
     }
 
-    public function setMeta(IRow $subscriptionType, string $key, $value): IRow
+    final public function setMeta(IRow $subscriptionType, string $key, $value): IRow
     {
         if ($meta = $this->getMeta($subscriptionType, $key)->fetch()) {
             $this->update($meta, ['value' => $value]);
@@ -55,7 +55,7 @@ class SubscriptionTypesMetaRepository extends Repository
         }
     }
 
-    public function getMetaValue(IRow $subscriptionType, string $key): string
+    final public function getMetaValue(IRow $subscriptionType, string $key): string
     {
         return $this->getMeta($subscriptionType, $key)->fetchField('value');
     }

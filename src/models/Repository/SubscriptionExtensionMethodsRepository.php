@@ -9,12 +9,12 @@ class SubscriptionExtensionMethodsRepository extends Repository
 {
     protected $tableName = 'subscription_extension_methods';
 
-    public function all()
+    final public function all()
     {
         return $this->getTable()->order('sorting');
     }
 
-    public function add(string $method, string $title, string $description, ?int $sorting)
+    final public function add(string $method, string $title, string $description, ?int $sorting)
     {
         return $this->insert([
             'method' => $method,
@@ -25,7 +25,7 @@ class SubscriptionExtensionMethodsRepository extends Repository
         ]);
     }
 
-    public function exists($method)
+    final public function exists($method)
     {
         return $this->getTable()->where('method', $method)->count('*') > 0;
     }

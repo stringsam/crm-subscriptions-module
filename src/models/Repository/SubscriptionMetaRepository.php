@@ -11,7 +11,7 @@ class SubscriptionMetaRepository extends Repository
 {
     protected $tableName = 'subscriptions_meta';
 
-    public function add(IRow $subscription, string $key, $value, int $sorting = 100)
+    final public function add(IRow $subscription, string $key, $value, int $sorting = 100)
     {
         return $this->getTable()->insert([
             'subscription_id' => $subscription->id,
@@ -23,24 +23,24 @@ class SubscriptionMetaRepository extends Repository
         ]);
     }
 
-    public function getMeta(IRow $subscription, string $key): Selection
+    final public function getMeta(IRow $subscription, string $key): Selection
     {
         return $this->getTable()->where(['subscription_id' => $subscription->id, 'key' => $key]);
     }
 
-    public function subscriptionMeta(IRow $subscription): array
+    final public function subscriptionMeta(IRow $subscription): array
     {
         return $this->getTable()->where([
             'subscription_id' => $subscription->id,
         ])->order('sorting ASC')->fetchPairs('key', 'value');
     }
 
-    public function exists(IRow $subscription, string $key): bool
+    final public function exists(IRow $subscription, string $key): bool
     {
         return $this->getMeta($subscription, $key)->count('*') > 0;
     }
 
-    public function setMeta(IRow $subscription, string $key, $value): IRow
+    final public function setMeta(IRow $subscription, string $key, $value): IRow
     {
         if ($meta = $this->getMeta($subscription, $key)->fetch()) {
             $this->update($meta, ['value' => $value]);
@@ -50,12 +50,12 @@ class SubscriptionMetaRepository extends Repository
         }
     }
 
-    public function getMetaValue(IRow $subscription, string $key): string
+    final public function getMetaValue(IRow $subscription, string $key): string
     {
         return $this->getTable()->where(['subscription_id' => $subscription->id, 'key' => $key])->fetchField('value');
     }
 
-    public function findSubscriptionBy(string $key, string $value)
+    final public function findSubscriptionBy(string $key, string $value)
     {
         $meta = $this->getTable()->where(['key' => $key, 'value' => $value])->limit(1)->fetch();
         if ($meta) {
