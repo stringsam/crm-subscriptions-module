@@ -304,6 +304,14 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
+    final public function latestSubscriptionsByContentAccess(string ...$contentAccess)
+    {
+        return $this->getTable()->where([
+            'subscription_type:subscription_type_content_access.content_access.name' => $contentAccess,
+            'end_time > ?' => new DateTime(),
+        ])->order('end_time DESC');
+    }
+
     final public function createdOrModifiedSubscriptions(DateTime $fromTime, DateTime $toTime)
     {
         return $this->getTable()->where(
