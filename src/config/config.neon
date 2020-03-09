@@ -63,6 +63,7 @@ services:
 	- Crm\SubscriptionsModule\DataProvider\FilterUsersSelectionDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsSelectionDataProvider
 	- Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsFormDataProvider
+	- Crm\SubscriptionsModule\DataProvider\CanDeleteAddressDataProvider
 
 	extensionMethodFactory:
 		class: Crm\SubscriptionsModule\Extension\ExtensionMethodFactory

@@ -213,6 +213,9 @@ admin:
 			active: "We are generating %count% subscriptions for existing users with an active subscription."
 			skipped: "We have skipped generation of subscription for %count% users, as they don't match the selected criteria for subscription."
 
+	address:
+		cant_delete: 'This address is used in subscription: %subscriptions%|This address is used in subscriptions: %subscriptions%'
+
 	# componenty
 
 	actual_user_subscriptions:
