@@ -10,6 +10,7 @@ use Crm\ApplicationModule\Repository\AuditLogRepository;
 use Crm\SubscriptionsModule\Events\NewSubscriptionEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionEndsEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionStartsEvent;
+use Crm\SubscriptionsModule\Extension\Extension;
 use Crm\SubscriptionsModule\Extension\ExtensionMethodFactory;
 use Crm\SubscriptionsModule\Length\LengthMethodFactory;
 use DateTime;
@@ -94,8 +95,7 @@ class SubscriptionsRepository extends Repository
     ) {
         $isExtending = false;
         if ($startTime == null) {
-            $extensionMethod = $this->extensionMethodFactory->getExtension($subscriptionType->extension_method_id);
-            $extension = $extensionMethod->getStartTime($user, $subscriptionType);
+            $extension = $this->getSubscriptionExtension($subscriptionType, $user);
             $startTime = $extension->getDate();
             $isExtending = $extension->isExtending();
         }
@@ -146,6 +146,12 @@ class SubscriptionsRepository extends Repository
         ]));
 
         return $newSubscription;
+    }
+
+    final public function getSubscriptionExtension($subscriptionType, $user): Extension
+    {
+        $extensionMethod = $this->extensionMethodFactory->getExtension($subscriptionType->extension_method_id);
+        return $extensionMethod->getStartTime($user, $subscriptionType);
     }
 
     final public function all()
