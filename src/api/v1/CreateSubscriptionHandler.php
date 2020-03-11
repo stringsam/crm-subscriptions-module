@@ -46,6 +46,7 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
             new InputParam(InputParam::TYPE_POST, 'start_time', InputParam::OPTIONAL),
             new InputParam(InputParam::TYPE_POST, 'end_time', InputParam::OPTIONAL),
             new InputParam(InputParam::TYPE_POST, 'type', InputParam::OPTIONAL),
+            new InputParam(InputParam::TYPE_POST, 'note', InputParam::OPTIONAL),
         ];
     }
 
@@ -83,6 +84,7 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
         if (isset($params['end_time'])) {
             $endTime = DateTime::from($params['end_time']);
         }
+        $note = $params['note'] ?? null;
 
         $subscription = $this->subscriptionsRepository->add(
             $subscriptionType,
@@ -90,7 +92,8 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
             $user,
             $type,
             $startTime,
-            $endTime
+            $endTime,
+            $note
         );
 
         if ($this->idempotentKey()) {
