@@ -12,7 +12,6 @@ use Crm\SubscriptionsModule\Repository\SubscriptionMetaRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Crm\UsersModule\Auth\UserManager;
-use League\Event\Emitter;
 use Nette\Database\Table\IRow;
 use Nette\Http\Response;
 use Nette\Utils\DateTime;
@@ -27,24 +26,16 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
 
     private $userManager;
 
-    private $emitter;
-
-    private $hermesEmitter;
-
     public function __construct(
         SubscriptionTypesRepository $subscriptionTypesRepository,
         SubscriptionsRepository $subscriptionsRepository,
         SubscriptionMetaRepository $subscriptionMetaRepository,
-        UserManager $userManager,
-        Emitter $emitter,
-        \Tomaj\Hermes\Emitter $hermesEmitter
+        UserManager $userManager
     ) {
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->subscriptionsRepository = $subscriptionsRepository;
         $this->subscriptionMetaRepository = $subscriptionMetaRepository;
         $this->userManager = $userManager;
-        $this->emitter = $emitter;
-        $this->hermesEmitter = $hermesEmitter;
     }
 
     public function params()
@@ -53,6 +44,7 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
             new InputParam(InputParam::TYPE_POST, 'email', InputParam::REQUIRED),
             new InputParam(InputParam::TYPE_POST, 'subscription_type_id', InputParam::REQUIRED),
             new InputParam(InputParam::TYPE_POST, 'start_time', InputParam::OPTIONAL),
+            new InputParam(InputParam::TYPE_POST, 'end_time', InputParam::OPTIONAL),
             new InputParam(InputParam::TYPE_POST, 'type', InputParam::OPTIONAL),
         ];
     }
@@ -83,12 +75,22 @@ class CreateSubscriptionHandler extends ApiHandler implements IdempotentHandlerI
             $type = $params['type'];
         }
 
+        $startTime = null;
+        if (isset($params['start_time'])) {
+            $startTime = DateTime::from($params['start_time']);
+        }
+        $endTime = null;
+        if (isset($params['end_time'])) {
+            $endTime = DateTime::from($params['end_time']);
+        }
+
         $subscription = $this->subscriptionsRepository->add(
             $subscriptionType,
             false,
             $user,
             $type,
-            DateTime::from(strtotime($params['start_time']))
+            $startTime,
+            $endTime
         );
 
         if ($this->idempotentKey()) {
