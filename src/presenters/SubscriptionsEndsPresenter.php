@@ -79,7 +79,7 @@ class SubscriptionsEndsPresenter extends AdminPresenter
         }
 
         if ($this->contentAccessTypes) {
-            $subscriptions->where('subscription_type:subscription_type_content_access.content_access.id IN (?)', $this->contentAccessTypes);
+            $subscriptions->where('subscription_type:subscription_type_content_access.content_access.name IN (?)', $this->contentAccessTypes);
         }
 
         $data = $subscriptions->fetchAll();
@@ -111,7 +111,7 @@ class SubscriptionsEndsPresenter extends AdminPresenter
         $form->addCheckbox('withoutRecurrent', 'subscriptions.admin.subscriptions_ends.default.without_recurrent');
         $form->addCheckbox('freeSubscriptions', 'subscriptions.admin.subscriptions_ends.default.free_subscriptions');
 
-        $form->addMultiSelect('contentAccessTypes', 'subscriptions.admin.subscription_end_stats.content_access_types', $this->contentAccessRepository->all()->fetchPairs('id', 'name'))
+        $form->addMultiSelect('contentAccessTypes', 'subscriptions.admin.subscription_end_stats.content_access_types', $this->contentAccessRepository->all()->fetchPairs('name', 'name'))
             ->getControlPrototype()->addAttributes(['class' => 'select2']);
 
         $form->addSubmit('send', 'system.filter')
