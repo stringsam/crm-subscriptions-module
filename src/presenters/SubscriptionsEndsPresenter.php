@@ -22,48 +22,31 @@ class SubscriptionsEndsPresenter extends AdminPresenter
     /** @var ContentAccessRepository @inject */
     public $contentAccessRepository;
 
-    /** @persisted */
+    /** @persistent */
     public $startTime;
 
-    /** @persisted */
+    /** @persistent */
     public $endTime;
 
-    /** @persisted */
+    /** @persistent */
     public $withoutNext;
 
-    /** @persisted */
+    /** @persistent */
     public $withoutRecurrent;
 
-    /** @persisted */
+    /** @persistent */
     public $freeSubscriptions;
 
-    /** @persisted */
+    // array parameter cannot be persistent
     public $contentAccessTypes;
 
     public function startup()
     {
         parent::startup();
 
-        $this->startTime = DateTime::from(strtotime('-1 week'));
-        $this->endTime = new DateTime();
-        $this->freeSubscriptions = false;
-        if (isset($this->params['startTime'])) {
-            $this->startTime = DateTime::from(strtotime($this->params['startTime']));
-        }
-        if (isset($this->params['endTime'])) {
-            $this->endTime = DateTime::from(strtotime($this->params['endTime']));
-        }
-        $this->withoutNext = false;
-        if (isset($this->params['withoutNext']) && $this->params['withoutNext']) {
-            $this->withoutNext = true;
-        }
-        $this->withoutRecurrent = false;
-        if (isset($this->params['withoutRecurrent']) && $this->params['withoutRecurrent']) {
-            $this->withoutRecurrent = true;
-        }
-        if (isset($this->params['freeSubscriptions']) && $this->params['freeSubscriptions']) {
-            $this->freeSubscriptions = true;
-        }
+        $this->startTime = $this->startTime ?? DateTime::from(strtotime('-1 week'))->format('Y-m-d');
+        $this->endTime = $this->endTime ?? (new DateTime())->format('Y-m-d');
+
         if (isset($this->params['contentAccessTypes'])) {
             $this->contentAccessTypes = $this->params['contentAccessTypes'];
         }
@@ -71,8 +54,16 @@ class SubscriptionsEndsPresenter extends AdminPresenter
 
     public function renderDefault()
     {
-        $subscriptions = $this->subscriptionsRepository->subscriptionsEndBetween($this->startTime, $this->endTime, $this->withoutNext ? false : null);
-        $subscriptions1 = $this->subscriptionsRepository->subscriptionsEndBetween($this->startTime, $this->endTime, false);
+        $subscriptions = $this->subscriptionsRepository->subscriptionsEndBetween(
+            $this->startDateTime(),
+            $this->endDateTime(),
+            $this->withoutNext ? false : null
+        );
+        $subscriptions1 = $this->subscriptionsRepository->subscriptionsEndBetween(
+            $this->startDateTime(),
+            $this->endDateTime(),
+            false
+        );
 
         if (!$this->freeSubscriptions) {
             $subscriptions
@@ -98,8 +89,8 @@ class SubscriptionsEndsPresenter extends AdminPresenter
     protected function createComponentSubscriptionEndsStats(SubscriptionEndsStatsFactoryInterface $factory)
     {
         $control = $factory->create();
-        $control->setStartTime($this->startTime);
-        $control->setEndTime($this->endTime);
+        $control->setStartTime($this->startDateTime());
+        $control->setEndTime($this->endDateTime());
         $control->setWithoutNext($this->withoutNext);
         $control->setWithoutRecurrent($this->withoutRecurrent);
         $control->setFreeSubscriptions($this->freeSubscriptions);
@@ -111,16 +102,16 @@ class SubscriptionsEndsPresenter extends AdminPresenter
         $form = new Form();
         $form->setTranslator($this->translator);
         $form->setRenderer(new BootstrapRenderer());
-        $form->addText('start_time', 'subscriptions.data.subscriptions.fields.start_time')
+        $form->addText('startTime', 'subscriptions.data.subscriptions.fields.start_time')
             ->setAttribute('autofocus')
             ->setAttribute('class', 'flatpickr');
-        $form->addText('end_time', 'subscriptions.data.subscriptions.fields.end_time')
+        $form->addText('endTime', 'subscriptions.data.subscriptions.fields.end_time')
             ->setAttribute('class', 'flatpickr');
-        $form->addCheckbox('without_next', 'subscriptions.admin.subscriptions_ends.default.without_next');
-        $form->addCheckbox('without_recurrent', 'subscriptions.admin.subscriptions_ends.default.without_recurrent');
-        $form->addCheckbox('free_subscriptions', 'subscriptions.admin.subscriptions_ends.default.free_subscriptions');
+        $form->addCheckbox('withoutNext', 'subscriptions.admin.subscriptions_ends.default.without_next');
+        $form->addCheckbox('withoutRecurrent', 'subscriptions.admin.subscriptions_ends.default.without_recurrent');
+        $form->addCheckbox('freeSubscriptions', 'subscriptions.admin.subscriptions_ends.default.free_subscriptions');
 
-        $form->addMultiSelect('content_access_types', 'subscriptions.admin.subscription_end_stats.content_access_types', $this->contentAccessRepository->all()->fetchPairs('id', 'name'))
+        $form->addMultiSelect('contentAccessTypes', 'subscriptions.admin.subscription_end_stats.content_access_types', $this->contentAccessRepository->all()->fetchPairs('id', 'name'))
             ->getControlPrototype()->addAttributes(['class' => 'select2']);
 
         $form->addSubmit('send', 'system.filter')
@@ -133,26 +124,24 @@ class SubscriptionsEndsPresenter extends AdminPresenter
             $presenter->redirect('default', ['text' => '']);
         };
         $form->onSuccess[] = [$this, 'adminFilterSubmited'];
-        $form->setDefaults([
-            'start_time' => $_GET['startTime'] ?? date('d.m.Y', strtotime('-1 week')),
-            'end_time' => $_GET['endTime'] ?? date('d.m.Y'),
-            'without_next' => $_GET['withoutNext'] ?? '',
-            'without_recurrent' => $_GET['withoutRecurrent'] ?? '',
-            'free_subscriptions' => $_GET['freeSubscriptions'] ?? '',
-            'content_access_types' => $_GET['contentAccessTypes'] ?? [],
-        ]);
+        $form->setDefaults(array_merge((array)$this->params, [
+            'contentAccessTypes' => $_GET['contentAccessTypes'] ?? []
+        ]));
         return $form;
     }
 
     public function adminFilterSubmited($form, $values)
     {
-        $this->redirect('default', [
-            'startTime' => $values['start_time'],
-            'endTime' => $values['end_time'],
-            'withoutNext' => $values['without_next'],
-            'withoutRecurrent' => $values['without_recurrent'],
-            'freeSubscriptions' => $values['free_subscriptions'],
-            'contentAccessTypes' => $values['content_access_types'],
-        ]);
+        $this->redirect('default', (array) $values);
+    }
+
+    private function startDateTime(): DateTime
+    {
+        return DateTime::from($this->startTime . ' 00:00:00');
+    }
+
+    private function endDateTime(): DateTime
+    {
+        return DateTime::from($this->endTime . ' 23:59:59');
     }
 }
