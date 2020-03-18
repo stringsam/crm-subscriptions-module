@@ -37,8 +37,8 @@ class SubscriptionsEndsPresenter extends AdminPresenter
     /** @persistent */
     public $freeSubscriptions;
 
-    // array parameter cannot be persistent
-    public $contentAccessTypes;
+    /** @persistent */
+    public $contentAccessTypes = [];
 
     public function startup()
     {
@@ -46,10 +46,6 @@ class SubscriptionsEndsPresenter extends AdminPresenter
 
         $this->startTime = $this->startTime ?? DateTime::from(strtotime('-1 week'))->format('Y-m-d');
         $this->endTime = $this->endTime ?? (new DateTime())->format('Y-m-d');
-
-        if (isset($this->params['contentAccessTypes'])) {
-            $this->contentAccessTypes = $this->params['contentAccessTypes'];
-        }
     }
 
     public function renderDefault()
@@ -124,9 +120,7 @@ class SubscriptionsEndsPresenter extends AdminPresenter
             $presenter->redirect('default', ['text' => '']);
         };
         $form->onSuccess[] = [$this, 'adminFilterSubmited'];
-        $form->setDefaults(array_merge((array)$this->params, [
-            'contentAccessTypes' => $_GET['contentAccessTypes'] ?? []
-        ]));
+        $form->setDefaults((array) $this->params);
         return $form;
     }
 
