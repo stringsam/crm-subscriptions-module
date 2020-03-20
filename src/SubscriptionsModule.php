@@ -17,6 +17,7 @@ use Crm\ApplicationModule\Menu\MenuItem;
 use Crm\ApplicationModule\SeederManager;
 use Crm\ApplicationModule\User\UserDataRegistrator;
 use Crm\ApplicationModule\Widget\WidgetManagerInterface;
+use Crm\SubscriptionsModule\DataProvider\CanDeleteAddressDataProvider;
 use Crm\SubscriptionsModule\Events\PreNotificationEventHandler;
 use Crm\SubscriptionsModule\Repository\SubscriptionsRepository;
 use Crm\SubscriptionsModule\Scenarios\ContentAccessCriteria;
@@ -234,6 +235,14 @@ class SubscriptionsModule extends CrmModule
                 \Crm\ApiModule\Authorization\BearerTokenAuthorization::class
             )
         );
+
+        $apiRoutersContainer->attachRouter(
+            new ApiRoute(
+                new ApiIdentifier('1', 'content-access', 'list'),
+                \Crm\SubscriptionsModule\Api\v1\ListContentAccessHandler::class,
+                \Crm\ApiModule\Authorization\BearerTokenAuthorization::class
+            )
+        );
     }
 
     public function registerUserData(UserDataRegistrator $dataRegistrator)
@@ -304,6 +313,10 @@ class SubscriptionsModule extends CrmModule
         $dataProviderManager->registerDataProvider(
             'users.dataprovider.filter_user_actions_log_form',
             $this->getInstance(\Crm\SubscriptionsModule\DataProvider\FilterUserActionLogsFormDataProvider::class)
+        );
+        $dataProviderManager->registerDataProvider(
+            'users.dataprovider.address.can_delete',
+            $this->getInstance(CanDeleteAddressDataProvider::class)
         );
     }
 

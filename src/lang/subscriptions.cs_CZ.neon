@@ -198,6 +198,9 @@ admin:
 			active: "Vytváříme %count% předplatných pro aktivní předplatitele."
 			skipped: "Nevytváříme %count% předplatných, protože uživatelé nesplňují zvolené podmínky"
 
+	address:
+		cant_delete: 'Tato adresa se používá při předplatném: %subscriptions%|Tato adresa se používá při předplatných: %subscriptions%'
+
 	actual_user_subscriptions:
 		header: Předplatné
 		no_subscription: Nemá aktuální předplatné

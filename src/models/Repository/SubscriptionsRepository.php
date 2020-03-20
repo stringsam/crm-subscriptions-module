@@ -10,6 +10,7 @@ use Crm\ApplicationModule\Repository\AuditLogRepository;
 use Crm\SubscriptionsModule\Events\NewSubscriptionEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionEndsEvent;
 use Crm\SubscriptionsModule\Events\SubscriptionStartsEvent;
+use Crm\SubscriptionsModule\Extension\Extension;
 use Crm\SubscriptionsModule\Extension\ExtensionMethodFactory;
 use Crm\SubscriptionsModule\Length\LengthMethodFactory;
 use DateTime;
@@ -64,7 +65,7 @@ class SubscriptionsRepository extends Repository
         $this->hermesEmitter = $hermesEmitter;
     }
 
-    public function totalCount($allowCached = false, $forceCacheUpdate = false)
+    final public function totalCount($allowCached = false, $forceCacheUpdate = false)
     {
         $callable = function () {
             return parent::totalCount();
@@ -80,7 +81,7 @@ class SubscriptionsRepository extends Repository
         return $callable();
     }
 
-    public function add(
+    final public function add(
         IRow $subscriptionType,
         bool $isRecurrent,
         IRow $user,
@@ -94,8 +95,7 @@ class SubscriptionsRepository extends Repository
     ) {
         $isExtending = false;
         if ($startTime == null) {
-            $extensionMethod = $this->extensionMethodFactory->getExtension($subscriptionType->extension_method_id);
-            $extension = $extensionMethod->getStartTime($user, $subscriptionType);
+            $extension = $this->getSubscriptionExtension($subscriptionType, $user);
             $startTime = $extension->getDate();
             $isExtending = $extension->isExtending();
         }
@@ -148,12 +148,18 @@ class SubscriptionsRepository extends Repository
         return $newSubscription;
     }
 
-    public function all()
+    final public function getSubscriptionExtension($subscriptionType, $user): Extension
+    {
+        $extensionMethod = $this->extensionMethodFactory->getExtension($subscriptionType->extension_method_id);
+        return $extensionMethod->getStartTime($user, $subscriptionType);
+    }
+
+    final public function all()
     {
         return $this->getTable();
     }
 
-    public function availableTypes()
+    final public function availableTypes()
     {
         return [
             self::TYPE_REGULAR => self::TYPE_REGULAR,
@@ -166,12 +172,12 @@ class SubscriptionsRepository extends Repository
         ];
     }
 
-    public function activeSubscriptionTypes()
+    final public function activeSubscriptionTypes()
     {
         return $this->database->table('subscription_type_names')->where(['is_active' => true])->order('sorting');
     }
 
-    public function hasUserSubscriptionType($userId, $subscriptionTypesCode, DateTime $after = null, int $count = null)
+    final public function hasUserSubscriptionType($userId, $subscriptionTypesCode, DateTime $after = null, int $count = null)
     {
         $subscription_type = $this->database->table('subscription_types')
             ->where('code = ?', $subscriptionTypesCode)->fetch();
@@ -194,7 +200,7 @@ class SubscriptionsRepository extends Repository
      * @param int $userId
      * @return \Nette\Database\Table\Selection
      */
-    public function userSubscriptions($userId): Selection
+    final public function userSubscriptions($userId): Selection
     {
         return $this->getTable()
             ->where(['subscriptions.user_id' => $userId])
@@ -205,7 +211,7 @@ class SubscriptionsRepository extends Repository
      * @param int $userId
      * @return \Nette\Database\Table\Selection
      */
-    public function userSubscription($userId)
+    final public function userSubscription($userId)
     {
         return $this->getTable()->where(['user_id' => $userId])->limit(1);
     }
@@ -214,7 +220,7 @@ class SubscriptionsRepository extends Repository
      * @param int $userId
      * @return \Nette\Database\Table\Selection
      */
-    public function userMobileSubscriptions($userId)
+    final public function userMobileSubscriptions($userId)
     {
         return $this->userSubscriptions($userId)->where(['subscription_type.mobile' => true]);
     }
@@ -223,7 +229,7 @@ class SubscriptionsRepository extends Repository
      * @param int $userId
      * @return \Nette\Database\Table\ActiveRow
      */
-    public function actualUserSubscription($userId)
+    final public function actualUserSubscription($userId)
     {
         return $this->getTable()->where([
             'user_id' => $userId,
@@ -232,7 +238,7 @@ class SubscriptionsRepository extends Repository
         ])->order('subscription_type.mobile DESC, end_time DESC')->fetch();
     }
 
-    public function actualUserSubscriptions($userId): Selection
+    final public function actualUserSubscriptions($userId): Selection
     {
         return $this->getTable()->where([
             'subscriptions.user_id' => $userId,
@@ -241,18 +247,18 @@ class SubscriptionsRepository extends Repository
         ])->order('subscription_type.mobile DESC, end_time DESC');
     }
 
-    public function actualUserSubscriptionsByContentAccess(DateTime $date, $userId, string ...$contentAccess)
+    final public function actualUserSubscriptionsByContentAccess(DateTime $date, $userId, string ...$contentAccess)
     {
         return $this->actualSubscriptionsByContentAccess($date, ...$contentAccess)
             ->where(['user_id' => $userId]);
     }
 
-    public function hasSubscriptionEndAfter($userId, DateTime $endTime)
+    final public function hasSubscriptionEndAfter($userId, DateTime $endTime)
     {
         return $this->getTable()->where(['user_id' => $userId, 'end_time > ?' => $endTime])->count('*') > 0;
     }
 
-    public function hasPrintSubscriptionEndAfter($userId, DateTime $endTime)
+    final public function hasPrintSubscriptionEndAfter($userId, DateTime $endTime)
     {
         return $this->getTable()->where([
                     'user_id' => $userId,
@@ -262,7 +268,7 @@ class SubscriptionsRepository extends Repository
                 ->count('*') > 0;
     }
 
-    public function update(IRow &$row, $data)
+    final public function update(IRow &$row, $data)
     {
         $values['modified_at'] = new DateTime();
         $result = parent::update($row, $data);
@@ -283,7 +289,7 @@ class SubscriptionsRepository extends Repository
      * @param $date
      * @return \Nette\Database\Table\Selection
      */
-    public function actualSubscriptions(DateTime $date = null)
+    final public function actualSubscriptions(DateTime $date = null)
     {
         if ($date == null) {
             $date = new DateTime();
@@ -295,7 +301,7 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function actualSubscriptionsByContentAccess(DateTime $date, string ...$contentAccess)
+    final public function actualSubscriptionsByContentAccess(DateTime $date, string ...$contentAccess)
     {
         return $this->getTable()->where([
             'subscription_type:subscription_type_content_access.content_access.name' => $contentAccess,
@@ -304,7 +310,15 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function createdOrModifiedSubscriptions(DateTime $fromTime, DateTime $toTime)
+    final public function latestSubscriptionsByContentAccess(string ...$contentAccess)
+    {
+        return $this->getTable()->where([
+            'subscription_type:subscription_type_content_access.content_access.name' => $contentAccess,
+            'end_time > ?' => new DateTime(),
+        ])->order('end_time DESC');
+    }
+
+    final public function createdOrModifiedSubscriptions(DateTime $fromTime, DateTime $toTime)
     {
         return $this->getTable()->where(
             '(
@@ -319,7 +333,7 @@ class SubscriptionsRepository extends Repository
         );
     }
 
-    public function actualClubSubscriptions($date = null)
+    final public function actualClubSubscriptions($date = null)
     {
         // toto by treba zistit ci sa pouziva a kde lebo to nejak dost divne vyzera
 
@@ -331,14 +345,14 @@ class SubscriptionsRepository extends Repository
 //          ->where('end_time > ?', $date->format(DateTime::ATOM));
     }
 
-    public function subscriptionsByContentAccess(string ...$contentAccess)
+    final public function subscriptionsByContentAccess(string ...$contentAccess)
     {
         return $this->getTable()->where([
             'subscription_type:subscription_type_content_access.content_access.name' => $contentAccess,
         ])->group('user_id');
     }
 
-    public function subscriptionsEndBetween(DateTime $endTimeFrom, DateTime $endTimeTo, $withNextSubscription = null)
+    final public function subscriptionsEndBetween(DateTime $endTimeFrom, DateTime $endTimeTo, $withNextSubscription = null)
     {
         $where = [
             'subscriptions.end_time >=' => $endTimeFrom,
@@ -355,7 +369,7 @@ class SubscriptionsRepository extends Repository
         return $this->getTable()->where($where)->order('end_time ASC');
     }
 
-    public function getNewSubscriptionsBetweenDates($from, $to)
+    final public function getNewSubscriptionsBetweenDates($from, $to)
     {
         return $this->getTable()->where([
             'subscriptions.start_time >=' => $from,
@@ -363,12 +377,12 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function allSubscribers()
+    final public function allSubscribers()
     {
         return $this->getTable()->group('subscriptions.user_id')->order('subscriptions.start_time ASC');
     }
 
-    public function getNotRenewedSubscriptions($date)
+    final public function getNotRenewedSubscriptions($date)
     {
         $notRenewedUsers = $this->getTable();
 
@@ -383,7 +397,7 @@ class SubscriptionsRepository extends Repository
         return $notRenewedUsers;
     }
 
-    public function getExpiredSubscriptions(DateTime $dateTime = null)
+    final public function getExpiredSubscriptions(DateTime $dateTime = null)
     {
         if (!$dateTime) {
             $dateTime = new DateTime();
@@ -397,7 +411,7 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function setExpired($subscription, $endTime = null, string $note = null)
+    final public function setExpired($subscription, $endTime = null, string $note = null)
     {
         $data = [
             'internal_status' => SubscriptionsRepository::INTERNAL_STATUS_AFTER_END,
@@ -416,7 +430,7 @@ class SubscriptionsRepository extends Repository
         ]));
     }
 
-    public function getStartedSubscriptions(DateTime $dateTime = null)
+    final public function getStartedSubscriptions(DateTime $dateTime = null)
     {
         if (!$dateTime) {
             $dateTime = new DateTime();
@@ -431,20 +445,20 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function setStarted($subscription)
+    final public function setStarted($subscription)
     {
         $this->update($subscription, ['internal_status' => SubscriptionsRepository::INTERNAL_STATUS_ACTIVE]);
         $this->emitter->emit(new SubscriptionStartsEvent($subscription));
     }
 
-    public function getPreviousSubscription($subscriptionId)
+    final public function getPreviousSubscription($subscriptionId)
     {
         return $this->getTable()->where([
             'next_subscription_id' => $subscriptionId,
         ])->fetch();
     }
 
-    public function getCount($subscriptionTypeId, $userId)
+    final public function getCount($subscriptionTypeId, $userId)
     {
         return $this->getTable()
             ->where('subscription_type_id', $subscriptionTypeId)
@@ -452,7 +466,7 @@ class SubscriptionsRepository extends Repository
             ->count('*');
     }
 
-    public function currentSubscribersCount($allowCached = false, $forceCacheUpdate = false)
+    final public function currentSubscribersCount($allowCached = false, $forceCacheUpdate = false)
     {
         $callable = function () {
             return $this->getTable()
@@ -480,7 +494,7 @@ class SubscriptionsRepository extends Repository
      * @param DateTime $to
      * @return Selection
      */
-    public function subscriptionsCreatedBetween(DateTime $from, DateTime $to)
+    final public function subscriptionsCreatedBetween(DateTime $from, DateTime $to)
     {
         return $this->getTable()->where([
             'created_at > ?' => $from,
@@ -488,7 +502,7 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function hasAccess($userId, $access)
+    final public function hasAccess($userId, $access)
     {
         return $this->getTable()->where([
             'start_time <= ?' => new DateTime(),
@@ -503,7 +517,7 @@ class SubscriptionsRepository extends Repository
      * @param DateTime $endTime
      * @return Selection
      */
-    public function subscriptionsEndingBetween(DateTime $startTime, DateTime $endTime)
+    final public function subscriptionsEndingBetween(DateTime $startTime, DateTime $endTime)
     {
         return $this->database->table('subscriptions')
             ->where('subscriptions.id IS NOT NULL')
@@ -516,7 +530,7 @@ class SubscriptionsRepository extends Repository
      * @param DateTime $endTime
      * @return \Crm\ApplicationModule\Selection
      */
-    public function renewedSubscriptionsEndingBetween(DateTime $startTime, DateTime $endTime)
+    final public function renewedSubscriptionsEndingBetween(DateTime $startTime, DateTime $endTime)
     {
         return $this->getTable()->where([
             'end_time >= ?' => $startTime,
@@ -525,7 +539,7 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    public function userSubscriptionTypesCounts($userId, ?array $subscriptionTypeIds)
+    final public function userSubscriptionTypesCounts($userId, ?array $subscriptionTypeIds)
     {
         $query = $this->getTable()
             ->select('subscription_type_id, COUNT(*) AS count')
@@ -539,8 +553,19 @@ class SubscriptionsRepository extends Repository
         return $query->fetchPairs('subscription_type_id', 'count');
     }
 
-    public function allWithAddress($addressId)
+    final public function allWithAddress($addressId)
     {
         return $this->all()->where(['address_id' => $addressId]);
+    }
+
+    public function lastActiveUserSubscription($userId): Selection
+    {
+        return $this->getTable()
+            ->where([
+                'user_id = ?' => $userId,
+                'end_time > ?' => new DateTime()
+            ])
+            ->order('end_time DESC')
+            ->limit(1);
     }
 }
