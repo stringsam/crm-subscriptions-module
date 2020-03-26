@@ -44,8 +44,8 @@ class SubscriptionsEndsPresenter extends AdminPresenter
     {
         parent::startup();
 
-        $this->startTime = $this->startTime ?? DateTime::from(strtotime('-1 week'))->format('Y-m-d');
-        $this->endTime = $this->endTime ?? (new DateTime())->format('Y-m-d');
+        $this->startTime = $this->startTime ?? DateTime::from(strtotime('-1 week'))->format('Y-m-d 00:00:00');
+        $this->endTime = $this->endTime ?? (new DateTime())->format('Y-m-d 23:59:59');
     }
 
     public function renderDefault()
@@ -131,11 +131,11 @@ class SubscriptionsEndsPresenter extends AdminPresenter
 
     private function startDateTime(): DateTime
     {
-        return DateTime::from($this->startTime . ' 00:00:00');
+        return DateTime::from($this->startTime);
     }
 
     private function endDateTime(): DateTime
     {
-        return DateTime::from($this->endTime . ' 23:59:59');
+        return DateTime::from($this->endTime);
     }
 }
