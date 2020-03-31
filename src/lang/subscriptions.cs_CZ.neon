@@ -59,7 +59,6 @@ data:
 			disable_notifications: Vypnuté notifikace
 			extension_method_id: Způsob prodloužení předplatného
 			recurrent_charge_before: "Realizace následující platby (počet hodin před vypršením)"
-			meta: Meta
 			items: Položky
 		required:
 			name: Název je povinný
@@ -256,6 +255,26 @@ admin:
 	actual_subscribers_stat_widget:
 		title: Aktivní předplatitelé
 		help: "Unikátní předplatitelé, platící i neplatící."
+
+	subscription_types_meta:
+		header: Meta
+		title:
+			create: Nový meta záznam
+			update: Úprava meta
+		value_removed: Hodnota byla smazána
+		value_added: Hodnota byla přidána
+		form:
+			key:
+				label: Klíč
+				required: Klíč je povinný
+			value:
+				label: Hodnota
+				required: Hodnota je povinná
+			submit: Ulož
+		no_record_description: Tento typ předplatného neobsahuje žádné meta data.
+		error:
+		    internal: Nastala chyba. Prosím kontaktujte administrátora.
+		    duplicate: Meta se stejným klíčem již existuje.
 
 	subscriptions_graph:
 		title: Nové předplatné

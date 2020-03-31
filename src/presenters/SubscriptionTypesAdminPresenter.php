@@ -7,6 +7,7 @@ use Crm\ApplicationModule\Components\Graphs\GoogleLineGraphGroupControlFactoryIn
 use Crm\ApplicationModule\Graphs\Criteria;
 use Crm\ApplicationModule\Graphs\GraphDataItem;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypeItemsFormFactory;
+use Crm\SubscriptionsModule\Forms\SubscriptionTypeMetaFormFactory;
 use Crm\SubscriptionsModule\Forms\SubscriptionTypesFormFactory;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesMetaRepository;
@@ -24,12 +25,17 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
 
     private $subscriptionTypesMetaRepository;
 
+    private $subscriptionTypeMetaFormFactory;
+
+    private $subscriptionType;
+
     public function __construct(
         SubscriptionTypesRepository $subscriptionTypesRepository,
         SubscriptionTypesFormFactory $subscriptionTypeFactory,
         SubscriptionTypeItemsRepository $subscriptionTypeItemsRepository,
         SubscriptionTypeItemsFormFactory $subscriptionTypeItemsFormFactory,
-        SubscriptionTypesMetaRepository $subscriptionTypesMetaRepository
+        SubscriptionTypesMetaRepository $subscriptionTypesMetaRepository,
+        SubscriptionTypeMetaFormFactory $subscriptionTypeMetaFormFactory
     ) {
         parent::__construct();
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
@@ -37,6 +43,7 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         $this->subscriptionTypeItemsRepository = $subscriptionTypeItemsRepository;
         $this->subscriptionTypeItemsFormFactory = $subscriptionTypeItemsFormFactory;
         $this->subscriptionTypesMetaRepository = $subscriptionTypesMetaRepository;
+        $this->subscriptionTypeMetaFormFactory = $subscriptionTypeMetaFormFactory;
     }
 
     public function renderDefault()
@@ -67,16 +74,16 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
     {
     }
 
-    public function renderShow($id)
+    public function actionShow($id)
     {
-        $subscriptionType = $this->subscriptionTypesRepository->find($id);
-        if (!$subscriptionType) {
+        $this->subscriptionType = $this->subscriptionTypesRepository->find($id);
+        if (!$this->subscriptionType) {
             $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_types.messages.subscription_type_not_found'));
             $this->redirect('default');
         }
-        $this->template->type = $subscriptionType;
-        $this->template->subscriptionTypeItems = $this->subscriptionTypeItemsRepository->subscriptionTypeItems($subscriptionType);
-        $this->template->meta = $this->subscriptionTypesMetaRepository->subscriptionTypeMeta($subscriptionType);
+        $this->template->type = $this->subscriptionType;
+        $this->template->subscriptionTypeItems = $this->subscriptionTypeItemsRepository->subscriptionTypeItems($this->subscriptionType);
+        $this->template->meta = $this->subscriptionTypesMetaRepository->getAllBySubscriptionType($this->subscriptionType)->order('key ASC');
     }
 
     protected function createComponentSubscriptionTypeItemsForm()
@@ -97,6 +104,38 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_type.messages.subscription_type_item_deleted'));
         if ($this->isAjax()) {
             $this->redrawControl('subscriptionTypeItemsSnippet');
+        } else {
+            $this->redirect('show', $subscriptionTypeId);
+        }
+    }
+
+    protected function createComponentSubscriptionTypeMetaForm()
+    {
+        $form = $this->subscriptionTypeMetaFormFactory->create($this->subscriptionType);
+        $this->subscriptionTypeMetaFormFactory->onSave = function ($meta) {
+            $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_types_meta.value_added'));
+            if ($this->isAjax()) {
+                $this->redrawControl('subscriptionTypeMetaSnippet');
+            } else {
+                $this->redirect('show', $meta['subscription_type_id']);
+            }
+        };
+        $this->subscriptionTypeMetaFormFactory->onError = function () {
+            if ($this->isAjax()) {
+                $this->redrawControl('metaFormSnippet');
+            }
+        };
+        return $form;
+    }
+
+    public function handleRemoveSubscriptionTypeMeta($metaId)
+    {
+        $meta = $this->subscriptionTypesMetaRepository->find($metaId);
+        $subscriptionTypeId = $meta['subscription_type_id'];
+        $this->subscriptionTypesMetaRepository->delete($meta);
+        $this->flashMessage($this->translator->translate('subscriptions.admin.subscription_types_meta.value_removed'));
+        if ($this->isAjax()) {
+            $this->redrawControl('subscriptionTypeMetaSnippet');
         } else {
             $this->redirect('show', $subscriptionTypeId);
         }

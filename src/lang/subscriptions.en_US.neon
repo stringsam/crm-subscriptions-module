@@ -62,7 +62,6 @@ data:
 			length_method_id: Subscription length calculcation method
 			recurrent_charge_before: "Recurrent charge before (hours)"
 			subscription_type_items: Subscripton items
-			meta: Meta
 			items: Items
 		required:
 			name: Name is required
@@ -276,6 +275,26 @@ admin:
 	actual_subscribers_stat_widget:
 		title: Active Subscribers
 		help: "Unique subscribers, paying and non-paying."
+
+	subscription_types_meta:
+		header: Meta
+		title:
+			create: Create new subscription type meta
+			update: Update subscription type meta
+		value_removed: Value was removed
+		value_added: Value was added
+		form:
+			key:
+				label: Key
+				required: Key is required
+			value:
+				label: Value
+				required: Value is required
+			submit: Save
+		no_record_description: This subscription type doesn't contain any meta values.
+		error:
+		    internal: Internal error. Please contact administrator.
+		    duplicate: Meta key with same key already exists.
 
 	subscriptions_graph:
 		title: New subscriptions

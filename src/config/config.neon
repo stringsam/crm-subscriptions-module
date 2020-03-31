@@ -19,6 +19,7 @@ services:
 	- Crm\SubscriptionsModule\Forms\SubscriptionFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionsGeneratorFormFactory
 	- Crm\SubscriptionsModule\Forms\SubscriptionTypeItemsFormFactory
+	- Crm\SubscriptionsModule\Forms\SubscriptionTypeMetaFormFactory
 	- Crm\SubscriptionsModule\Generator\SubscriptionsGenerator
 	- Crm\SubscriptionsModule\Components\SubscriptionButton
 	- Crm\SubscriptionsModule\Components\ActualUserSubscriptions
