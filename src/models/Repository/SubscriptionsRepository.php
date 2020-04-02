@@ -301,7 +301,7 @@ class SubscriptionsRepository extends Repository
         ]);
     }
 
-    final public function actualSubscriptionsByContentAccess(DateTime $date, string ...$contentAccess)
+    final public function actualSubscriptionsByContentAccess(DateTime $date, string ...$contentAccess): Selection
     {
         return $this->getTable()->where([
             'subscription_type:subscription_type_content_access.content_access.name' => $contentAccess,
