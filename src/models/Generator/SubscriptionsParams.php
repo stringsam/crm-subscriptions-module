@@ -17,7 +17,7 @@ class SubscriptionsParams
 
     private $type;
 
-    public function __construct(IRow $subscriptionType, IRow $user, $type, DateTime $startTime, DateTime $endTime)
+    public function __construct(IRow $subscriptionType, IRow $user, $type, DateTime $startTime, ?DateTime $endTime)
     {
         $this->subscriptionType = $subscriptionType;
         $this->user = $user;
