@@ -17,7 +17,9 @@
 </div>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 col-sm-6">
+    <h2 class="page-header">{_subscriptions.admin.subscription_types.show.general_settings}</h2>
+
     <ul class="list-group">
       <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.code}:</b> <code>{$type->code}</code></li>
       <li class="list-group-item">
@@ -36,10 +38,6 @@
       <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.limit_per_user}:</b> {$type->limit_per_user}</li>
       <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.recurrent_charge_before}:</b> {if $type->recurrent_charge_before}{$type->recurrent_charge_before} hours{else}<small>--</small>{/if}</li>
       <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.next_subscription_type_id}:</b> {if $type->next_subscription_type_id}<a n:href="show $type->next_subscription_type_id">{$type->next_subscription_type->name}</a>{else}<small>--</small>{/if}</li>
-    </ul>
-  </div>
-  <div class="col-md-6">
-    <ul class="list-group">
       <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.content}:</b> {$type|typeContent|noescape}</li>
       <li class="list-group-item">
         <b>{_subscriptions.data.subscription_types.fields.active}:</b>
@@ -90,6 +88,80 @@
       <li class="list-group-item"><b>{_subscriptions.data.subscription_types.fields.user_label}:</b> {$type->user_label}</li>
     </ul>
   </div>
+  <div class="col-md-6 col-sm-6">
+    {snippet subscriptionTypeItemsSnippet}
+
+      {var $calculatedItemsSum = 0}
+      {foreach $subscriptionTypeItems as $item}
+        {var $calculatedItemsSum = $calculatedItemsSum + $item->amount}
+      {/foreach}
+
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="page-header">{_subscriptions.data.subscription_types.fields.subscription_type_items}</h2>
+
+          {if $calculatedItemsSum != $type->price}
+            <div class="alert alert-danger">
+              <h4><i class="fa fa-exclamation-circle"></i> {_'system.message.warning'}</h4>
+              <p>{_'subscriptions.admin.subscription_types.messages.subscription_types_wrong_amount', ['price' => $type->price-$calculatedItemsSum]|noescape}</p>
+            </div>
+          {/if}
+
+          {if $subscriptionTypeItems->count('*') > 0}
+            <ul class="list-group">
+              <li n:foreach="$subscriptionTypeItems as $item" class="list-group-item">
+                {$item->name}
+                <span class="label label-default">{$item->vat} % {_'system.vat'}</span>
+                <strong>{$item->amount|price}</strong>
+                <a n:href="removeSubscriptionTypeItem! $item->id" class="pull-right btn btn-xs btn-danger ajax"><i class="fa fa-trash"></i></a>
+                <a href="#"
+                   data-toggle="modal"
+                   data-target="#subscription-type-item-modal"
+                   data-name="{$item->name}"
+                   data-amount="{$item->amount}"
+                   data-vat="{$item->vat}"
+                   data-action="edit"
+                   data-subscription_type_item_id="{$item->id}"
+                   data-subscription_type_id="{$item->subscription_type_id}"
+                   class="pull-right btn btn-xs btn-warning open-type-item-modal"
+                   style="margin-right: 5px;">
+                  <i class="fa fa-edit"></i>
+                </a>
+
+                <small class="text-muted pull-right" style="margin-right:20px;">{$item->created_at}</small>
+              </li>
+            </ul>
+          {else}
+            <p class="text-muted well text-center">
+              {_subscriptions.admin.subscription_types.show.no_subscription_type_items}<br>
+            </p>
+          {/if}
+
+          <p class="text-center">
+            <a href="#"
+               data-toggle="modal"
+               data-target="#subscription-type-item-modal"
+               data-subscription_type_id="{$type->id}"
+               data-action="add"
+               class="btn btn-default btn-xs open-type-item-modal">
+              <i class="fa fa-plus-circle"></i>
+            </a>
+          </p>
+        </div>
+      </div>
+
+      {control simpleWidget 'subscription_types_admin.show.right', $type}
+
+    {/snippet}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h2 class="page-header">{_subscriptions.admin.subscription_types.show.new_subscriptions}</h2>
+
+    {control subscriptionsGraph}
+  </div>
 </div>
 
 {control simpleWidget 'subscription_types_admin.show.middle', $type}
@@ -105,70 +177,6 @@
     </ul>
   </div>
 </div>
-
-
-{snippet subscriptionTypeItemsSnippet}
-
-{var $calculatedItemsSum = 0}
-{foreach $subscriptionTypeItems as $item}
-  {var $calculatedItemsSum = $calculatedItemsSum + $item->amount}
-{/foreach}
-
-<div class="row">
-  <div class="col-md-12">
-    <h2 class="page-header">{_subscriptions.data.subscription_types.fields.subscription_type_items}</h2>
-
-    {if $calculatedItemsSum != $type->price}
-      <div class="alert alert-danger">
-        <h4><i class="fa fa-exclamation-circle"></i> {_'system.message.warning'}</h4>
-        <p>{_'subscriptions.admin.subscription_types.messages.subscription_types_wrong_amount', ['price' => $type->price-$calculatedItemsSum]|noescape}</p>
-      </div>
-    {/if}
-
-    {if $subscriptionTypeItems->count('*') > 0}
-      <ul class="list-group">
-        <li n:foreach="$subscriptionTypeItems as $item" class="list-group-item">
-          {$item->name}
-          <span class="label label-default">{$item->vat} % {_'system.vat'}</span>
-          <strong>{$item->amount|price}</strong>
-          <a n:href="removeSubscriptionTypeItem! $item->id" class="pull-right btn btn-xs btn-danger ajax"><i class="fa fa-trash"></i></a>
-          <a href="#"
-             data-toggle="modal"
-             data-target="#subscription-type-item-modal"
-             data-name="{$item->name}"
-             data-amount="{$item->amount}"
-             data-vat="{$item->vat}"
-             data-action="edit"
-             data-subscription_type_item_id="{$item->id}"
-             data-subscription_type_id="{$item->subscription_type_id}"
-             class="pull-right btn btn-xs btn-warning open-type-item-modal"
-             style="margin-right: 5px;">
-            <i class="fa fa-edit"></i>
-          </a>
-
-          <small class="text-muted pull-right" style="margin-right:20px;">{$item->created_at}</small>
-        </li>
-      </ul>
-    {else}
-      <p class="text-muted well text-center">
-        {_subscriptions.admin.subscription_types.show.no_subscription_type_items}<br>
-      </p>
-    {/if}
-
-    <p class="text-center">
-      <a href="#"
-         data-toggle="modal"
-         data-target="#subscription-type-item-modal"
-         data-subscription_type_id="{$type->id}"
-         data-action="add"
-         class="btn btn-default btn-xs open-type-item-modal">
-        <i class="fa fa-plus-circle"></i>
-      </a>
-    </p>
-  </div>
-</div>
-
-{/snippet}
 
 <div class="modal fade" id="subscription-type-item-modal">
   <div class="modal-dialog modal-lg" style="width: 800px">
@@ -211,8 +219,4 @@
 
 {control simpleWidget 'admin.subscription_types.show.bottom_stats', $type->id}
 
-<div class="row">
-  <div class="col-md-12">
-    {control subscriptionsGraph}
-  </div>
-</div>
+

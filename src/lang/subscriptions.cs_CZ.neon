@@ -60,6 +60,7 @@ data:
 			extension_method_id: Způsob prodloužení předplatného
 			recurrent_charge_before: "Realizace následující platby (počet hodin před vypršením)"
 			meta: Meta
+			items: Položky
 		required:
 			name: Název je povinný
 			length: "Délka (ve dnech) je povinná"
@@ -156,10 +157,32 @@ admin:
 		show:
 			back: Zpět na seznam
 			edit: Uprav typ předplatného
+			general_settings: Základní nastavení
+			new_subscriptions: Nové předplatné
 		messages:
 			subscription_type_created: Typ předplatného byl vytvořen.
 			subscription_type_updated: Typ předplatného byl upraven.
 			subscription_type_not_found: Typ předplatného se nepodařilo nalézt.
+		save: Uložit typ předplatného
+		form:
+			groups:
+				price: Cena a následující předplatné
+				items: Položky typu předplatného
+				length_extension: Délka a prodloužení předplatného
+				other: Ostatní
+				content_access: Přístup k obsahu
+			required: Toto pole je povinné.
+			number: Toto pole musí obsahovat číselnou hodnotu.
+			name: Název
+			amount: Cena
+			vat: DPH
+
+	subscription_type_items:
+		add: Přidat položku
+		remove: Odstranit položku
+		vat: DPH
+		sum_error: Součet cen položek předplatného musí být rovný ceně typu předplatného.
+
 	subscription_generator:
 		form:
 			header: Generátor předplatného
@@ -233,6 +256,10 @@ admin:
 	actual_subscribers_stat_widget:
 		title: Aktivní předplatitelé
 		help: "Unikátní předplatitelé, platící i neplatící."
+
+	subscriptions_graph:
+		title: Nové předplatné
+		help: Novovytvorené predplatné v zvolenom odbobí
 
 data_provider:
 	delete:

@@ -63,6 +63,7 @@ data:
 			recurrent_charge_before: "Realizácia nasledujúcej platby (počet hodín pred vypršaním)"
 			subscription_type_items: Položky predplatného
 			meta: Meta
+			items: Položky
 		required:
 			name: Názov je povinný
 			length: "Dĺžka (v dňoch) je povinný"
@@ -167,6 +168,8 @@ admin:
 		show:
 			back: Späť na zoznam
 			edit: Uprav typ predplatného
+			general_settings: Základné nastavenia
+			new_subscriptions: Nové predplatné
 		messages:
 			subscription_type_created: Typ predplatného bol vytvorený.
 			subscription_type_updated: Typ predplatného bol upravený.
@@ -175,6 +178,25 @@ admin:
 			subscription_type_item_deleted: Položka predplatného bola vymazaná
 			subscription_types_wrong_amount: 'Nesedí suma za položky so sumou predplatného. Rozdiel <strong>%price%</strong>'
 			no_subscription_type_items: Žiadne položky k predplatnému zatiaľ neboli vytvorené
+		save: Uložiť typ predplatného
+		form:
+			groups:
+				price: Cena a nasledujúce predplatné
+				items: Položky typu predplatného
+				length_extension: Dĺžka a predĺženie predplatného
+				other: Ostatné
+				content_access: Prístup k obsahu
+			required: Toto pole je povinné.
+			number: Toto pole musí obsahovať číselnú hodnotu.
+			name: Názov
+			amount: Cena
+			vat: DPH
+
+	subscription_type_items:
+		add: Pridať položku
+		remove: Odstrániť položku
+		vat: DPH
+		sum_error: Súčet cien položiek predplatného musí byť rovný cene typu predplatného.
 
 	subscription_generator:
 		form:
@@ -255,6 +277,10 @@ admin:
 	actual_subscribers_stat_widget:
 		title: Aktívni predplatitelia
 		help: "Unikátny predplatitelia, platiaci aj neplatiaci."
+
+	subscriptions_graph:
+		title: Nové predplatné
+		help: Novovytvorené predplatné v zvolenom odbobí
 
 data_provider:
 	delete:

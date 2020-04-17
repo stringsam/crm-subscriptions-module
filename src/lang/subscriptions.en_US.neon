@@ -63,6 +63,7 @@ data:
 			recurrent_charge_before: "Recurrent charge before (hours)"
 			subscription_type_items: Subscripton items
 			meta: Meta
+			items: Items
 		required:
 			name: Name is required
 			length: "Length (in days) is required"
@@ -167,6 +168,8 @@ admin:
 		show:
 			back: back to listing
 			edit: Edit subscription type
+			general_settings: General settings
+			new_subscriptions: New subscriptions
 		messages:
 			subscription_type_created: Subscription type was created.
 			subscription_type_updated: Subscription type was updated.
@@ -175,6 +178,25 @@ admin:
 			subscription_type_item_deleted: Subscription item was deleted.
 			subscription_types_wrong_amount: 'Wrong subscription items amounts sum. Difference <strong>%price%</strong>'
 			no_subscription_type_items: This subscripton type doesn't contains any items.
+		save: Save subscription type
+		form:
+			groups:
+				price: Price and next subscription
+				items: Subscription type items
+				length_extension: Length and extension settings
+				other: Other
+				content_access: Content access
+			required: This field is required.
+			number: This field must contain a numeric value.
+			name: Name
+			amount: Amount
+			vat: VAT
+
+	subscription_type_items:
+		add: Add item
+		remove: Remove item
+		vat: VAT
+		sum_error: The sum of subscription item prices must be equal to the subscription type price.
 
 	subscription_generator:
 		form:
@@ -254,6 +276,10 @@ admin:
 	actual_subscribers_stat_widget:
 		title: Active Subscribers
 		help: "Unique subscribers, paying and non-paying."
+
+	subscriptions_graph:
+		title: New subscriptions
+		help: Newly created subscriptions within selected time range
 
 data_provider:
 	delete:

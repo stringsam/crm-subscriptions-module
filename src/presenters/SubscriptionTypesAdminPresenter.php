@@ -138,14 +138,14 @@ class SubscriptionTypesAdminPresenter extends AdminPresenter
         $graphDataItem1->setCriteria((new Criteria())
             ->setTableName('subscriptions')
             ->setTimeField('created_at')
-            ->setWhere('AND subscription_type_id=' . intval($this->params['id']))
+            ->setWhere('AND subscription_type_id=' . (int)$this->params['id'])
             ->setValueField('COUNT(*)')
             ->setStart('-1 month'))
             ->setName('Created subscriptions');
 
         $control = $factory->create()
-            ->setGraphTitle('New subscriptions')
-            ->setGraphHelp('New subscriptions created in time')
+            ->setGraphTitle($this->translator->translate('subscriptions.admin.subscriptions_graph.title'))
+            ->setGraphHelp($this->translator->translate('subscriptions.admin.subscriptions_graph.help'))
             ->addGraphDataItem($graphDataItem1);
 
         return $control;

@@ -6,15 +6,19 @@ use Crm\SubscriptionsModule\Builder\SubscriptionTypeBuilder;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionExtensionMethodsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository;
+use Crm\SubscriptionsModule\Repository\SubscriptionTypeItemsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
+use Nette\Forms\Container;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
 class SubscriptionTypesFormFactory
 {
     private $subscriptionTypesRepository;
+
+    private $subscriptionTypeItemsRepository;
 
     private $subscriptionTypeBuilder;
 
@@ -32,6 +36,7 @@ class SubscriptionTypesFormFactory
 
     public function __construct(
         SubscriptionTypesRepository $subscriptionTypesRepository,
+        SubscriptionTypeItemsRepository $subscriptionTypeItemsRepository,
         SubscriptionTypeBuilder $subscriptionTypeBuilder,
         SubscriptionExtensionMethodsRepository $subscriptionExtensionMethodsRepository,
         SubscriptionLengthMethodsRepository $subscriptionLengthMethodsRepository,
@@ -44,6 +49,7 @@ class SubscriptionTypesFormFactory
         $this->subscriptionLengthMethodsRepository = $subscriptionLengthMethodsRepository;
         $this->contentAccessRepository = $contentAccess;
         $this->translator = $translator;
+        $this->subscriptionTypeItemsRepository = $subscriptionTypeItemsRepository;
     }
 
     /**
@@ -58,6 +64,15 @@ class SubscriptionTypesFormFactory
 
             foreach ($subscriptionType->related("subscription_type_content_access") as $subscriptionTypeContentAccess) {
                 $defaults[$subscriptionTypeContentAccess->content_access->name] = true;
+            }
+
+            $items = $this->subscriptionTypeItemsRepository->subscriptionTypeItems($subscriptionType)->fetchAll();
+            foreach ($items as $item) {
+                $defaults['items'][] = [
+                    'name' => $item->name,
+                    'amount' => $item->amount,
+                    'vat' => $item->vat,
+                ];
             }
         }
 
@@ -83,6 +98,41 @@ class SubscriptionTypesFormFactory
             ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.user_label')
             ->setOption('description', 'subscriptions.data.subscription_types.description.user_label');
 
+        $form->addTextArea('description', 'subscriptions.data.subscription_types.fields.description');
+
+        $form->addGroup('subscriptions.admin.subscription_types.form.groups.price');
+
+        $form->addText('price', 'subscriptions.data.subscription_types.fields.price')
+            ->setRequired('subscriptions.data.subscription_types.required.price')
+            ->addRule(Form::FLOAT, 'subscriptions.admin.subscription_types.form.number')
+            ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.price');
+
+        $form->addSelect('next_subscription_type_id', 'subscriptions.data.subscription_types.fields.next_subscription_type_id', $this->subscriptionTypesRepository->all()->fetchPairs('id', 'name'))
+            ->setPrompt('--');
+
+        $form->addGroup('subscriptions.admin.subscription_types.form.groups.items');
+
+        $items = $form->addMultiplier('items', function (Container $container, \Nette\Forms\Form $form) {
+            $container->addText('name', 'subscriptions.admin.subscription_types.form.name')
+                ->setRequired('subscriptions.admin.subscription_types.form.required')
+                ->setHtmlAttribute('placeholder', 'subscriptions.data.subscription_type_items.placeholder.name');
+
+            $container->addText('amount', 'subscriptions.admin.subscription_types.form.amount')
+                ->setRequired('subscriptions.admin.subscription_types.form.required')
+                ->addRule(Form::FLOAT, 'subscriptions.admin.subscription_types.form.number')
+                ->setHtmlAttribute('placeholder', 'subscriptions.data.subscription_type_items.placeholder.amount');
+
+            $container->addText('vat', 'subscriptions.admin.subscription_types.form.vat')
+                ->setRequired('subscriptions.admin.subscription_types.form.required')
+                ->addRule(Form::FLOAT, 'subscriptions.admin.subscription_types.form.number')
+                ->setHtmlAttribute('placeholder', 'subscriptions.data.subscription_type_items.placeholder.vat');
+        }, 1, 20);
+
+        $items->addCreateButton('subscriptions.admin.subscription_type_items.add')->setValidationScope([])->addClass('btn btn-sm btn-default');
+        $items->addRemoveButton('subscriptions.admin.subscription_type_items.remove')->addClass('btn btn-sm btn-default');
+
+        $form->addGroup('subscriptions.admin.subscription_types.form.groups.length_extension');
+
         $form->addSelect('extension_method_id', 'subscriptions.data.subscription_types.fields.extension_method_id', $this->subscriptionExtensionMethodsRepository->all()->fetchPairs('method', 'title'))
             ->setRequired();
 
@@ -102,6 +152,15 @@ class SubscriptionTypesFormFactory
         $form->addText('fixed_end', 'subscriptions.data.subscription_types.fields.fixed_end')
             ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.fixed_end');
 
+        $form->addGroup('subscriptions.admin.subscription_types.form.groups.content_access');
+
+        $contentAccesses = $this->contentAccessRepository->all();
+        foreach ($contentAccesses as $contentAccess) {
+            $form->addCheckbox($contentAccess->name, $contentAccess->name . ($contentAccess->description ? " ({$contentAccess->description})" : ''));
+        }
+
+        $form->addGroup('subscriptions.admin.subscription_types.form.groups.other');
+
         $form->addText('recurrent_charge_before', 'subscriptions.data.subscription_types.fields.recurrent_charge_before')
             ->setType('number');
 
@@ -110,21 +169,7 @@ class SubscriptionTypesFormFactory
             ->addRule(Form::INTEGER, 'subscriptions.data.subscription_types.validation.integer.limit_per_user')
             ->addRule(Form::MIN, 'subscriptions.data.subscription_types.validation.minimum.limit_per_user', 1);
 
-        $contentAccesses = $this->contentAccessRepository->all();
-        foreach ($contentAccesses as $contentAccess) {
-            $form->addCheckbox($contentAccess->name, $contentAccess->name . ($contentAccess->description ? " ({$contentAccess->description})" : ''));
-        }
-
-        $form->addText('price', 'subscriptions.data.subscription_types.fields.price')
-            ->setRequired('subscriptions.data.subscription_types.required.price')
-            ->setAttribute('placeholder', 'subscriptions.data.subscription_types.placeholder.price');
-
         $form->addCheckbox('ask_address', 'subscriptions.data.subscription_types.fields.ask_address');
-
-        $form->addSelect('next_subscription_type_id', 'subscriptions.data.subscription_types.fields.next_subscription_type_id', $this->subscriptionTypesRepository->all()->fetchPairs('id', 'name'))
-            ->setPrompt('--');
-
-        $form->addTextArea('description', 'subscriptions.data.subscription_types.fields.description');
 
         $form->addCheckbox('active', 'subscriptions.data.subscription_types.fields.active');
         $form->addCheckbox('visible', 'subscriptions.data.subscription_types.fields.visible');
@@ -135,7 +180,7 @@ class SubscriptionTypesFormFactory
         $form->addSubmit('send', 'system.save')
             ->getControlPrototype()
             ->setName('button')
-            ->setHtml('<i class="fa fa-save"></i> ' . $this->translator->translate('system.save'));
+            ->setHtml('<i class="fa fa-save"></i> ' . $this->translator->translate('subscriptions.admin.subscription_types.save'));
 
         if ($subscriptionTypeId) {
             $form->addHidden('subscription_type_id', $subscriptionTypeId);
@@ -143,9 +188,25 @@ class SubscriptionTypesFormFactory
 
         $form->setDefaults($defaults);
 
+        $form->onValidate[] = [$this, 'validateItemsAmount'];
+
         $form->onSuccess[] = [$this, 'formSucceeded'];
 
         return $form;
+    }
+
+    public function validateItemsAmount(Form $form)
+    {
+        $totalSum = 0;
+        $values = $form->getValues();
+
+        foreach ($values['items'] as $item) {
+            $totalSum += (float) $item->amount;
+        }
+
+        if ($totalSum != $values->price) {
+            $form->addError('subscriptions.admin.subscription_type_items.sum_error');
+        }
     }
 
     public function formSucceeded($form, $values)
@@ -186,7 +247,16 @@ class SubscriptionTypesFormFactory
                 }
             }
 
+            $items = $values['items'];
+            unset($values['items']);
+
             $this->subscriptionTypesRepository->update($subscriptionType, $values);
+
+            $this->subscriptionTypeItemsRepository->subscriptionTypeItems($subscriptionType)->delete();
+            foreach ($items as $item) {
+                $this->subscriptionTypeItemsRepository->add($subscriptionType, $item['name'], $item['amount'], $item['vat']);
+            }
+
             $this->onUpdate->__invoke($subscriptionType);
         } else {
             $subscriptionType = $this->subscriptionTypeBuilder->createNew()
@@ -217,6 +287,10 @@ class SubscriptionTypesFormFactory
                 }
             }
             $subscriptionType->setContentAccessOption(...$contentAccessValues);
+
+            foreach ($values['items'] as $item) {
+                $subscriptionType->addSubscriptionTypeItem($item['name'], $item['amount'], $item['vat']);
+            }
 
             $subscriptionType = $subscriptionType->save();
 
