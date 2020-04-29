@@ -102,6 +102,42 @@ class DashboardPresenter extends AdminPresenter
         return $control;
     }
 
+    public function createComponentGoogleSubscriptionsReccurencyStatsGraph(GoogleLineGraphGroupControlFactoryInterface $factory)
+    {
+        $items = [];
+
+        $graphDataItem = new GraphDataItem();
+        $graphDataItem->setCriteria((new Criteria())
+            ->setTableName('subscriptions')
+            ->setRangeFields('start_time', 'end_time')
+            ->setValueField('count(distinct subscriptions.user_id)')
+            ->setWhere('AND is_recurrent = 1')
+            ->setStart($this->dateFrom)
+            ->setEnd($this->dateTo));
+        $graphDataItem->setName($this->translator->translate('subscriptions.dashboard.subscriptions_reccurency.reccurent_subscriptors'));
+        $items[] = $graphDataItem;
+
+        $graphDataItem = new GraphDataItem();
+        $graphDataItem->setCriteria((new Criteria())
+            ->setTableName('subscriptions')
+            ->setRangeFields('start_time', 'end_time')
+            ->setValueField('count(distinct subscriptions.user_id)')
+            ->setWhere('AND is_recurrent = 0')
+            ->setStart($this->dateFrom)
+            ->setEnd($this->dateTo));
+        $graphDataItem->setName($this->translator->translate('subscriptions.dashboard.subscriptions_reccurency.regular_subscriptors'));
+        $items[] = $graphDataItem;
+
+        $control = $factory->create()
+            ->setGraphTitle($this->translator->translate('subscriptions.dashboard.subscriptions_reccurency.title'))
+            ->setGraphHelp($this->translator->translate('subscriptions.dashboard.subscriptions_reccurency.tooltip'));
+
+        foreach ($items as $graphDataItem) {
+            $control->addGraphDataItem($graphDataItem);
+        }
+        return $control;
+    }
+
     public function createComponentGoogleSubscriptionsGraph(GoogleLineGraphGroupControlFactoryInterface $factory)
     {
         $items = [];
