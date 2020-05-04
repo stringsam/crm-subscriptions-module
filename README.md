@@ -29,7 +29,7 @@ Widgets are small reusable components that can be used on different places withi
 
 #### `SubscribersWithMissingAddressWidget`
 
-![Subscribers with missing address widget](src/docs/subscribers_with_missing_address_widget.png)
+![Subscribers with missing address widget](docs/subscribers_with_missing_address_widget.png)
 
 Widget displays list of all subscribers with specified content access that don't have specified address type entered in the system. It is placed at the `admin.payments.top` placeholder, above the payments listing.
 
@@ -189,7 +189,7 @@ Response:
 
 Admin dashboard stats graph widget.
 
-![alt text](docs/_static/registration_source_active_subscription.png "ActualSubscribersRegistrationSourceStatsWidget")
+![alt text](docs/registration_source_active_subscription.png "ActualSubscribersRegistrationSourceStatsWidget")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/ActualSubscribersRegistrationSourceStatsWidget/ActualSubscribersRegistrationSourceStatsWidget.php#L1)
 
@@ -199,7 +199,7 @@ Admin dashboard stats graph widget.
 
 Admin dashboard stats widget.
 
-![alt text](docs/_static/active_subscribers.png "ActualSubscribersStatWidget")
+![alt text](docs/active_subscribers.png "ActualSubscribersStatWidget")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/ActualSubscribersStatWidget/ActualSubscribersStatWidget.php#L1)
 
@@ -209,7 +209,7 @@ Admin dashboard stats widget.
 
 Admin user listing component.
 
-![alt text](docs/_static/actual_subscription.png "ActualSubscriptionLabel")
+![alt text](docs/actual_subscription.png "ActualSubscriptionLabel")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/ActualSubscriptionLabel/ActualSubscriptionLabel.php#L1)
 
@@ -225,7 +225,7 @@ Admin dashboard actual subscriptions count widget.
 
 Admin user detail stats widget.
 
-![alt text](docs/_static/user_actual_subscriptions.png "ActualUserSubscriptions")
+![alt text](docs/user_actual_subscriptions.png "ActualUserSubscriptions")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/ActualUserSubscriptions/ActualUserSubscriptions.php#L1)
 
@@ -235,7 +235,7 @@ Admin user detail stats widget.
 
 Admin ending subscriptions listing widget.
 
-![alt text](docs/_static/ending_subscriptions.png "EndingSubscriptionsWidget")
+![alt text](docs/ending_subscriptions.png "EndingSubscriptionsWidget")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/EndingSubscriptionsWidget/EndingSubscriptionsWidget.php#L1)
 
@@ -245,7 +245,7 @@ Admin ending subscriptions listing widget.
 
 Admin users header graph widget.
 
-![alt text](docs/_static/subscriptions_graph.png "MonthSubscriptionsSmallBarGraphWidget")
+![alt text](docs/subscriptions_graph.png "MonthSubscriptionsSmallBarGraphWidget")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/MonthSubscriptionsSmallBarGraphWidget/MonthSubscriptionsSmallBarGraphWidget.php#L1)
 
@@ -255,7 +255,7 @@ Admin users header graph widget.
 
 Admin dashboard single stat widget.
 
-![alt text](docs/_static/new_subscriptions.png "MonthSubscriptionStatWidget")
+![alt text](docs/new_subscriptions.png "MonthSubscriptionStatWidget")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/MonthSubscriptionStatWidget/MonthSubscriptionsStatWidget.php#L1)
 
@@ -269,7 +269,7 @@ Admin dashboard single stat widget.
 
 Admin payments listing header widget.
 
-![alt text](docs/_static/subscribers_with_missing_address.png "PrintSubscribersWithoutPrintAddressWidget")
+![alt text](docs/subscribers_with_missing_address.png "PrintSubscribersWithoutPrintAddressWidget")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/PrintSubscribersWithoutPrintAddressWidget/SubscribersWithMissingAddressWidget.php#L1)
 
@@ -279,7 +279,7 @@ Admin payments listing header widget.
 
 Admin dashboard stats widget.
 
-![alt text](docs/_static/ending_subscriptions_1.png "RenewedSubscriptionsEndingWithinPeriodWidget")
+![alt text](docs/ending_subscriptions_1.png "RenewedSubscriptionsEndingWithinPeriodWidget")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/RenewedSubscriptionsEndingWithinPeriodWidget/RenewedSubscriptionsEndingWithinPeriodWidget.php#L1)
 
@@ -289,7 +289,7 @@ Admin dashboard stats widget.
 
 Admin listing edit subscription button widget.
 
-![alt text](docs/_static/edit_subscription_btn.png "SubscriptionButton")
+![alt text](docs/edit_subscription_btn.png "SubscriptionButton")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/SubscriptionButton/SubscriptionButton.php#L1)
 
@@ -299,7 +299,7 @@ Admin listing edit subscription button widget.
 
 Admin ending subscriptions types and content access listing component.
 
-![alt text](docs/_static/ending_subscriptions_table.png "SubscriptionEndsStats")
+![alt text](docs/ending_subscriptions_table.png "SubscriptionEndsStats")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/SubscriptionEndsStats/SubscriptionEndsStats.php#L1)
 
@@ -309,7 +309,7 @@ Admin ending subscriptions types and content access listing component.
 
 Admin dashboard ending subscriptions stats widget.
 
-![alt text](docs/_static/ending_within_period.png "SubscriptionsEndingWithinPeriodWidget")
+![alt text](docs/ending_within_period.png "SubscriptionsEndingWithinPeriodWidget")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/SubscriptionsEndingWithinPeriodWidget/SubscriptionsEndingWithinPeriodWidget.php#L1)
 
@@ -319,7 +319,7 @@ Admin dashboard ending subscriptions stats widget.
 
 Admin dashboard single stat widget.
 
-![alt text](docs/_static/new_subscriptions_today.png "TodaySubscriptionsStatWidget")
+![alt text](docs/new_subscriptions_today.png "TodaySubscriptionsStatWidget")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/TodaySubscriptionsStatWidget/TodaySubscriptionsStatWidget.php#L1)
 
@@ -329,7 +329,7 @@ Admin dashboard single stat widget.
 
 Admin dashboard single stat widget.
 
-![alt text](docs/_static/total_subscriptions.png "TotalSubscriptionsStatWidget")
+![alt text](docs/total_subscriptions.png "TotalSubscriptionsStatWidget")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/TotalSubscriptionsStatWidget/TotalSubscriptionsStatWidget.php#L1)
 
@@ -339,7 +339,7 @@ Admin dashboard single stat widget.
 
 Admin user detail subscriptions listing widget.
 
-![alt text](docs/_static/user_subscriptions.png "UserSubscriptions")
+![alt text](docs/user_subscriptions.png "UserSubscriptions")
 
 [Source code](https://github.com/remp2020/crm-subscriptions-module/blob/7f5c0f97ad3b0effc0d49326fb35dabcad300d98/src/components/UserSubscriptions/UserSubscriptionsListing.php#L1)
 
