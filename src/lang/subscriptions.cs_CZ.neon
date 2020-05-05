@@ -11,6 +11,11 @@ dashboard:
             regular_subscriptors: Nerekurentní předplatitelé
             title: Rekurentnost předplatitelů
             tooltip: Počet rekurentních respektive nerekurentních předplatitelů
+        subscriptions_length:
+            days: dní
+            and_more_days: a více dní
+            title: Délka předplatného
+            tooltip: Délka předplatného na uživatele
 data:
 	subscriptions:
 		fields:

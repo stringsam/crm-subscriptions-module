@@ -11,6 +11,11 @@ dashboard:
             regular_subscriptors: Non-reccurent subscriptors
             title: Reccurency of subscriptors
             tooltip: "Number of subscriptors with recurent and non-reccurent subscription, respectively."
+        subscriptions_length:
+            days: days
+            and_more_days: and more days
+            title: Length of subscriptions
+            tooltip: Length of subscriptions per user
 data:
 	subscriptions:
 		fields:
