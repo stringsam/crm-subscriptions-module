@@ -2,7 +2,9 @@
 
 namespace Crm\SubscriptionsModule\Forms;
 
+use Crm\ApplicationModule\DataProvider\DataProviderManager;
 use Crm\SubscriptionsModule\Builder\SubscriptionTypeBuilder;
+use Crm\SubscriptionsModule\DataProvider\SubscriptionTypeFormProviderInterface;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionExtensionMethodsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository;
@@ -11,6 +13,7 @@ use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
 use Nette\Forms\Container;
+use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
@@ -30,6 +33,8 @@ class SubscriptionTypesFormFactory
 
     private $contentAccessRepository;
 
+    private $dataProviderManager;
+
     public $onSave;
 
     public $onUpdate;
@@ -41,7 +46,8 @@ class SubscriptionTypesFormFactory
         SubscriptionExtensionMethodsRepository $subscriptionExtensionMethodsRepository,
         SubscriptionLengthMethodsRepository $subscriptionLengthMethodsRepository,
         ContentAccessRepository $contentAccess,
-        Translator $translator
+        Translator $translator,
+        DataProviderManager $dataProviderManager
     ) {
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->subscriptionTypeBuilder = $subscriptionTypeBuilder;
@@ -50,6 +56,7 @@ class SubscriptionTypesFormFactory
         $this->contentAccessRepository = $contentAccess;
         $this->translator = $translator;
         $this->subscriptionTypeItemsRepository = $subscriptionTypeItemsRepository;
+        $this->dataProviderManager = $dataProviderManager;
     }
 
     /**
@@ -58,6 +65,7 @@ class SubscriptionTypesFormFactory
     public function create($subscriptionTypeId)
     {
         $defaults = [];
+        $subscriptionType = null;
         if (isset($subscriptionTypeId)) {
             $subscriptionType = $this->subscriptionTypesRepository->find($subscriptionTypeId);
             $defaults = $subscriptionType->toArray();
@@ -177,6 +185,12 @@ class SubscriptionTypesFormFactory
 
         $form->addtext('sorting', 'subscriptions.data.subscription_types.fields.sorting');
 
+        /** @var SubscriptionTypeFormProviderInterface[] $providers */
+        $providers = $this->dataProviderManager->getProviders('subscriptions.dataprovider.subscription_type_form', SubscriptionTypeFormProviderInterface::class);
+        foreach ($providers as $sorting => $provider) {
+            $form = $provider->provide(array_filter(['form' => $form, 'subscriptionType' => $subscriptionType]));
+        }
+
         $form->addSubmit('send', 'system.save')
             ->getControlPrototype()
             ->setName('button')
@@ -211,6 +225,13 @@ class SubscriptionTypesFormFactory
 
     public function formSucceeded($form, $values)
     {
+        // If dataprovider adds container, ignore its values
+        foreach ($values as $i => $item) {
+            if ($i !== 'items' && $item instanceof ArrayHash) {
+                unset($values[$i]);
+            }
+        }
+
         if ($values['limit_per_user'] == '') {
             $values['limit_per_user'] = null;
         }
