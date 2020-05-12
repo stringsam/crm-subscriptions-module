@@ -3,6 +3,7 @@
 namespace Crm\SubscriptionsModule\Forms;
 
 use Crm\ApplicationModule\DataProvider\DataProviderManager;
+use Crm\MobiletechModule\DataProvider\SubscriptionTypeFormProvider;
 use Crm\SubscriptionsModule\Builder\SubscriptionTypeBuilder;
 use Crm\SubscriptionsModule\DataProvider\SubscriptionTypeFormProviderInterface;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
@@ -225,13 +226,6 @@ class SubscriptionTypesFormFactory
 
     public function formSucceeded($form, $values)
     {
-        // If dataprovider adds container, ignore its values
-        foreach ($values as $i => $item) {
-            if ($i !== 'items' && $item instanceof ArrayHash) {
-                unset($values[$i]);
-            }
-        }
-
         if ($values['limit_per_user'] == '') {
             $values['limit_per_user'] = null;
         }
@@ -270,6 +264,12 @@ class SubscriptionTypesFormFactory
 
             $items = $values['items'];
             unset($values['items']);
+
+            /** @var SubscriptionTypeFormProvider[] $providers */
+            $providers = $this->dataProviderManager->getProviders('subscriptions.dataprovider.subscription_type_form', SubscriptionTypeFormProvider::class);
+            foreach ($providers as $sorting => $provider) {
+                [$form, $values] = $provider->formSucceeded($form, $values);
+            }
 
             $this->subscriptionTypesRepository->update($subscriptionType, $values);
 
@@ -314,6 +314,12 @@ class SubscriptionTypesFormFactory
             }
 
             $subscriptionType = $subscriptionType->save();
+
+            /** @var SubscriptionTypeFormProvider[] $providers */
+            $providers = $this->dataProviderManager->getProviders('subscriptions.dataprovider.subscription_type_form', SubscriptionTypeFormProvider::class);
+            foreach ($providers as $sorting => $provider) {
+                [$form, $values] = $provider->formSucceeded($form, $values);
+            }
 
             if (!$subscriptionType) {
                 $form['name']->addError(implode("\n", $this->subscriptionTypeBuilder->getErrors()));

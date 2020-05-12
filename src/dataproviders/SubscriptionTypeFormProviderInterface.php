@@ -8,4 +8,6 @@ use Nette\Application\UI\Form;
 interface SubscriptionTypeFormProviderInterface extends DataProviderInterface
 {
     public function provide(array $params): Form;
+
+    public function formSucceeded($form, $values);
 }
