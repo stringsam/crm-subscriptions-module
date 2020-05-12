@@ -14,7 +14,6 @@ use Crm\SubscriptionsModule\Repository\SubscriptionTypesRepository;
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Form;
 use Nette\Forms\Container;
-use Nette\Utils\ArrayHash;
 use Nette\Utils\DateTime;
 use Tomaj\Form\Renderer\BootstrapRenderer;
 
