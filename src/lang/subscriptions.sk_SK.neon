@@ -6,11 +6,11 @@ menu:
 	subscription_types: Typy predplatného
 	subscriptions_generator: Generátor predplatného
 dashboard:
-        subscriptions_reccurency:
-            reccurent_subscriptors: Rekurentní predplatitelia
-            regular_subscriptors: Nerekurentní predplatitelia
-            title: Rekurentnosť predplatiteľov
-            tooltip: Počet rekurentných respektíve nerekurentných predplatiteľov
+        subscriptions_length:
+            days: dní
+            and_more_days: a viac dní
+            title: Dĺžka predplatného
+            tooltip: Dĺžka predplatného na užívateľa
 data:
 	subscriptions:
 		fields:
@@ -67,7 +67,6 @@ data:
 			length_method_id: Spôsob výpočtu dĺžky predplatného
 			recurrent_charge_before: "Realizácia nasledujúcej platby (počet hodín pred vypršaním)"
 			subscription_type_items: Položky predplatného
-			meta: Meta
 			items: Položky
 		required:
 			name: Názov je povinný
@@ -286,6 +285,26 @@ admin:
 	subscriptions_graph:
 		title: Nové predplatné
 		help: Novovytvorené predplatné v zvolenom odbobí
+
+	subscription_types_meta:
+		header: Meta
+		title:
+		    create: Nový meta záznam
+		    update: Úprava meta
+		value_removed: Hodnota bola zmazaná
+		value_added: Hodnota bola pridaná
+		form:
+			key:
+				label: Kľúč
+				required: Kľúč je povinný
+			value:
+				label: Hodnota
+				required: Hodnota je povinná
+			submit: Ulož
+		no_record_description: Tento typ predplatného neobsahuje žiadne meta dáta.
+		error:
+		    internal: Nastala chyba. Prosím kontaktujte administrátora.
+		    duplicate: Meta s rovnakým kľúčom už existuje.
 
 data_provider:
 	delete:
