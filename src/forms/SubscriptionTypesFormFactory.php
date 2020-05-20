@@ -2,7 +2,10 @@
 
 namespace Crm\SubscriptionsModule\Forms;
 
+use Crm\ApplicationModule\DataProvider\DataProviderManager;
+use Crm\MobiletechModule\DataProvider\SubscriptionTypeFormProvider;
 use Crm\SubscriptionsModule\Builder\SubscriptionTypeBuilder;
+use Crm\SubscriptionsModule\DataProvider\SubscriptionTypeFormProviderInterface;
 use Crm\SubscriptionsModule\Repository\ContentAccessRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionExtensionMethodsRepository;
 use Crm\SubscriptionsModule\Repository\SubscriptionLengthMethodsRepository;
@@ -30,6 +33,8 @@ class SubscriptionTypesFormFactory
 
     private $contentAccessRepository;
 
+    private $dataProviderManager;
+
     public $onSave;
 
     public $onUpdate;
@@ -41,7 +46,8 @@ class SubscriptionTypesFormFactory
         SubscriptionExtensionMethodsRepository $subscriptionExtensionMethodsRepository,
         SubscriptionLengthMethodsRepository $subscriptionLengthMethodsRepository,
         ContentAccessRepository $contentAccess,
-        Translator $translator
+        Translator $translator,
+        DataProviderManager $dataProviderManager
     ) {
         $this->subscriptionTypesRepository = $subscriptionTypesRepository;
         $this->subscriptionTypeBuilder = $subscriptionTypeBuilder;
@@ -50,6 +56,7 @@ class SubscriptionTypesFormFactory
         $this->contentAccessRepository = $contentAccess;
         $this->translator = $translator;
         $this->subscriptionTypeItemsRepository = $subscriptionTypeItemsRepository;
+        $this->dataProviderManager = $dataProviderManager;
     }
 
     /**
@@ -58,6 +65,7 @@ class SubscriptionTypesFormFactory
     public function create($subscriptionTypeId)
     {
         $defaults = [];
+        $subscriptionType = null;
         if (isset($subscriptionTypeId)) {
             $subscriptionType = $this->subscriptionTypesRepository->find($subscriptionTypeId);
             $defaults = $subscriptionType->toArray();
@@ -177,6 +185,12 @@ class SubscriptionTypesFormFactory
 
         $form->addtext('sorting', 'subscriptions.data.subscription_types.fields.sorting');
 
+        /** @var SubscriptionTypeFormProviderInterface[] $providers */
+        $providers = $this->dataProviderManager->getProviders('subscriptions.dataprovider.subscription_type_form', SubscriptionTypeFormProviderInterface::class);
+        foreach ($providers as $sorting => $provider) {
+            $form = $provider->provide(array_filter(['form' => $form, 'subscriptionType' => $subscriptionType]));
+        }
+
         $form->addSubmit('send', 'system.save')
             ->getControlPrototype()
             ->setName('button')
@@ -250,6 +264,12 @@ class SubscriptionTypesFormFactory
             $items = $values['items'];
             unset($values['items']);
 
+            /** @var SubscriptionTypeFormProvider[] $providers */
+            $providers = $this->dataProviderManager->getProviders('subscriptions.dataprovider.subscription_type_form', SubscriptionTypeFormProvider::class);
+            foreach ($providers as $sorting => $provider) {
+                [$form, $values] = $provider->formSucceeded($form, $values);
+            }
+
             $this->subscriptionTypesRepository->update($subscriptionType, $values);
 
             $this->subscriptionTypeItemsRepository->subscriptionTypeItems($subscriptionType)->delete();
@@ -293,6 +313,12 @@ class SubscriptionTypesFormFactory
             }
 
             $subscriptionType = $subscriptionType->save();
+
+            /** @var SubscriptionTypeFormProvider[] $providers */
+            $providers = $this->dataProviderManager->getProviders('subscriptions.dataprovider.subscription_type_form', SubscriptionTypeFormProvider::class);
+            foreach ($providers as $sorting => $provider) {
+                [$form, $values] = $provider->formSucceeded($form, $values);
+            }
 
             if (!$subscriptionType) {
                 $form['name']->addError(implode("\n", $this->subscriptionTypeBuilder->getErrors()));

@@ -43,6 +43,7 @@
           </td>
           <td>
             <div class="list-group">
+              {var $itemSum = 0}
               {foreach $type->related('subscription_type_items') as $subscriptionTypeItem}
                 <div class="list-group-item">
                   <div class="row">
@@ -50,6 +51,7 @@
                       {$subscriptionTypeItem->name}
                     </div>
                     <div class="col-md-3">
+                      {var $itemSum += $subscriptionTypeItem->amount}
                       <div>{$subscriptionTypeItem->amount|price}</div>
                       <div><small><span class="text-muted">{$subscriptionTypeItem->vat}% {_subscriptions.admin.subscription_type_items.vat}</span></small></div>
                     </div>
@@ -58,7 +60,7 @@
               {/foreach}
             </div>
           </td>
-          <td>{$type->price|price}</td>
+          <td n:class="$itemSum !== $type->price ? alert-danger">{$type->price|price}</td>
           <td>{$type->length}</td>
           <td>{$type|typeContent|noescape}</td>
           <td>
